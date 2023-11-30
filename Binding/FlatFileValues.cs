@@ -1,0 +1,50 @@
+namespace FubuCore.Binding
+{
+    public class FlatFileValues : IKeyValues
+    {
+        private readonly string _concatenator;
+        private readonly Cache<string, int> _indices = new Cache<string, int>();
+        private string[] _values;
+
+        public FlatFileValues(string concatenator, string headerLine)
+        {
+            _concatenator = concatenator;
+            var headers = headerLine.Split(new[] { _concatenator }, StringSplitOptions.None);
+            for (var i = 0; i < headers.Length; i++) _indices[headers[i]] = i;
+        }
+
+        public string Get(string key)
+        {
+            return _values[_indices[key]];
+        }
+
+        public bool Has(string key)
+        {
+            return _indices.Has(key);
+        }
+
+        public IEnumerable<string> GetKeys()
+        {
+            return _indices.GetAllKeys();
+        }
+
+        public bool ForValue(string key, Action<string, string> callback)
+        {
+            if (!Has(key)) return false;
+
+            callback(key, Get(key));
+
+            return true;
+        }
+
+        public void ReadLine(string line)
+        {
+            _values = line.Split(new[] { _concatenator }, StringSplitOptions.None);
+        }
+
+        public void Alias(string header, string alias)
+        {
+            _indices.WithValue(header, i => _indices[alias] = i);
+        }
+    }
+}
