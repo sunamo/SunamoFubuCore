@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Version>23.11.26.1</Version>
+    <Version>23.12.25.1</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
@@ -17,13 +17,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="SunamoCl" Version="23.11.19.2" />
-    <PackageReference Include="SunamoExceptions" Version="23.11.19.2" />
+    <PackageReference Include="SunamoCl" Version="23.12.9.2" />
+    <PackageReference Include="SunamoExceptions" Version="23.12.25.1" />
+    <PackageReference Include="SunamoExtensions" Version="23.12.25.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0">
     </PackageReference>
     <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SunamoDateTime\SunamoDateTime.csproj" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>

@@ -26,14 +26,15 @@ namespace FubuCore.Binding.Values
 
         public SettingsData GetParentSource(SettingsData source)
         {
-            ParentParts.Each(x =>
+            ParentParts.Each(x2 =>
             {
+                var x = (string)x2;
                 if (x.Contains("["))
                 {
                     var parts = x.TrimEnd(']').Split('[');
                     var index = int.Parse(parts.Last());
 
-                    source = source.GetChildrenElement(parts.First(), index);
+                    source = source.GetChildrenElement(parts.First<string>(), index);
                 }
                 else
                 {

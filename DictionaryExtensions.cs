@@ -38,8 +38,7 @@ namespace FubuCore
 
                 var nextKey = parts.Skip(1).Join("/");
 
-                var child = dictionary.Get<IDictionary<string, object>>(parts.First());
-
+                var child = dictionary.Get<IDictionary<string, object>>(parts.First<string>());
 
                 return child.Get<T>(nextKey);
             }
