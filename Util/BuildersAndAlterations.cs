@@ -3,7 +3,7 @@ namespace SunamoFubuCore.Util;
 public class Builder<TInput, TOutput>
 {
     private readonly List<BuilderStrategy<TInput, TOutput>> _builders
-        = new List<BuilderStrategy<TInput, TOutput>>();
+    = new List<BuilderStrategy<TInput, TOutput>>();
 
     private readonly Func<TInput, TOutput> _defaultBuilder;
 
@@ -42,7 +42,7 @@ public class BuilderStrategy<TInput, TOutput>
 public class Alteration<TBigObject, TLittleObject>
 {
     private readonly List<AlterationStrategy<TBigObject, TLittleObject>> _alterations
-        = new List<AlterationStrategy<TBigObject, TLittleObject>>();
+    = new List<AlterationStrategy<TBigObject, TLittleObject>>();
 
     private readonly Action<TBigObject, TLittleObject> _defaultAlteration;
 

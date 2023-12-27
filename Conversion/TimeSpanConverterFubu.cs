@@ -4,7 +4,7 @@ namespace SunamoFubuCore.Conversion;
 public class TimeSpanConverterFubu : StatelessConverter<TimeSpan>
 {
     private const string TIMESPAN_PATTERN =
-        @"
+    @"
 ^(?<quantity>\d+    # quantity is expressed as some digits
 (\.\d+)?)           # optionally followed by a decimal point or colon and more digits
 \s*                 # optional whitespace

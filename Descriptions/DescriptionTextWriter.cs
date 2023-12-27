@@ -1,7 +1,8 @@
-using FubuCore;
-using FubuCore.Descriptions;
+using SunamoFubuCore.Util.TextWriting;
 
 namespace SunamoFubuCore.Descriptions;
+
+
 
 public static class DescriptionExtensions
 {
@@ -85,7 +86,7 @@ public class DescriptionTextWriter : IDescriptionVisitor
             addUnorderedPrefix();
 
         _report.StartColumns(new Column(ColumnJustification.right, 0, 0),
-            new Column(ColumnJustification.left, 0, 5), new Column(ColumnJustification.left, 0, 0));
+        new Column(ColumnJustification.left, 0, 5), new Column(ColumnJustification.left, 0, 0));
     }
 
     void IDescriptionVisitor.EndList()
@@ -122,7 +123,7 @@ public class DescriptionTextWriter : IDescriptionVisitor
         _level++;
 
         _report.StartColumns(new Column(ColumnJustification.left, indent, 5),
-            new Column(ColumnJustification.left, 0, 5), new Column(ColumnJustification.left, 0, 0));
+        new Column(ColumnJustification.left, 0, 5), new Column(ColumnJustification.left, 0, 0));
 
 
         description.Children.Each((name, child) =>

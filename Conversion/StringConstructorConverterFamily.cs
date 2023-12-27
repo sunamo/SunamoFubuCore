@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Conversion;
+
+
 
 [Description("Converts to type T by calling new T(string) if that constructor signature exists")]
 public class StringConstructorConverterFamily : IObjectConverterFamily
@@ -27,7 +27,7 @@ public class StringConstructorConverterFamily : IObjectConverterFamily
         public FuncBuilder()
         {
             _func = ConstructorBuilder.CreateSingleStringArgumentConstructor(typeof(T))
-                .Compile().As<Func<string, T>>();
+            .Compile().As<Func<string, T>>();
         }
 
         public object Convert(IConversionRequest request)

@@ -1,6 +1,6 @@
-using SunamoFubuCore.Configuration;
-
 namespace SunamoFubuCore.Configuration;
+
+
 
 public static class XmlSettingsParser
 {
@@ -25,9 +25,9 @@ public static class XmlSettingsParser
     public static SettingsData Parse(XmlElement element)
     {
         var category = (SettingCategory)(element.HasAttribute("category")
-            ? Enum.Parse(typeof(SettingCategory),
-                element.GetAttribute("category"))
-            : SettingCategory.core);
+        ? Enum.Parse(typeof(SettingCategory),
+        element.GetAttribute("category"))
+        : SettingCategory.core);
 
         var data = new SettingsData(category);
 
@@ -48,7 +48,7 @@ public static class XmlSettingsParser
         root.SetAttribute("category", data.Category.ToString());
 
         data.AllKeys.Each(
-            key => { root.AddElement("add").WithAtt("key", key).WithAtt("value", data[key].ToString()); });
+        key => { root.AddElement("add").WithAtt("key", key).WithAtt("value", data[key].ToString()); });
 
         document.Save(filename);
     }
@@ -152,7 +152,7 @@ public static class XmlExtensions
     }
 
     public static void SetAttributeOnChild(this XmlElement element, string childName, string attName,
-        string attValue)
+    string attValue)
     {
         var childElement = element[childName];
         if (childElement == null) childElement = element.AddElement(childName);

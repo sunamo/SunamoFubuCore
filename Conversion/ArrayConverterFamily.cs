@@ -1,11 +1,12 @@
-using FubuCore;
-
-using SunamoFubuCore;
+using SunamoFubuCore.Csv;
 
 namespace SunamoFubuCore.Conversion;
 
+
+
+
 [Description(
-    "Builds an array of a type from a comma delimited string, applying the conversion against each value for the element type")]
+"Builds an array of a type from a comma delimited string, applying the conversion against each value for the element type")]
 public class ArrayConverterFamily : IObjectConverterFamily
 {
     public bool Matches(Type type, ConverterLibrary converter)

@@ -1,28 +1,28 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
 
 public static class TypeExtensions
 {
     private static readonly IList<Type> _integerTypes = new List<Type>
-    {
-        typeof(byte),
-        typeof(short),
-        typeof(int),
-        typeof(long),
-        typeof(sbyte),
-        typeof(ushort),
-        typeof(uint),
-        typeof(ulong),
-        typeof(byte?),
-        typeof(short?),
-        typeof(int?),
-        typeof(long?),
-        typeof(sbyte?),
-        typeof(ushort?),
-        typeof(uint?),
-        typeof(ulong?)
-    };
+{
+typeof(byte),
+typeof(short),
+typeof(int),
+typeof(long),
+typeof(sbyte),
+typeof(ushort),
+typeof(uint),
+typeof(ulong),
+typeof(byte?),
+typeof(short?),
+typeof(int?),
+typeof(long?),
+typeof(sbyte?),
+typeof(ushort?),
+typeof(uint?),
+typeof(ulong?)
+};
 
     /// <summary>
     ///     Does a hard cast of the object to T.  *Will* throw InvalidCastException
@@ -51,7 +51,7 @@ public static class TypeExtensions
     {
         var otherType = typeof(T);
         return theType == otherType ||
-               theType.IsNullableOfT() && theType.GetGenericArguments()[0].Equals(otherType);
+        theType.IsNullableOfT() && theType.GetGenericArguments()[0].Equals(otherType);
     }
 
     public static bool CanBeCastTo<T>(this Type type)
@@ -130,8 +130,8 @@ public static class TypeExtensions
 
 
         return type.BaseType == typeof(object)
-            ? null
-            : type.BaseType.FindInterfaceThatCloses(openType);
+        ? null
+        : type.BaseType.FindInterfaceThatCloses(openType);
     }
 
     public static Type FindParameterTypeTo(this Type type, Type openType)
@@ -341,6 +341,6 @@ public static class TypeExtensions
 
 
         throw new Exception("I don't know how to figure out what this is a collection of. Can you tell me? {0}"
-            .ToFormat(type));
+        .ToFormat(type));
     }
 }

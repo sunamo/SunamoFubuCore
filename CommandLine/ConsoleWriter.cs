@@ -49,7 +49,7 @@ public static class ConsoleWriter
     {
         CL.ForegroundColor = color;
         BreakIntoLines(indent, content)
-            .Each(l => Console.WriteLine(l));
+        .Each(l => Console.WriteLine(l));
         CL.ResetColor();
     }
 
@@ -57,7 +57,7 @@ public static class ConsoleWriter
     {
         CL.ForegroundColor = color;
         BreakIntoLines(content)
-            .Each(l => CL.WriteLine(l));
+        .Each(l => CL.WriteLine(l));
         CL.ResetColor();
     }
 

@@ -22,17 +22,17 @@ public class Cache<TKey, TValue> : IEnumerable<TValue>
     };
 
     public Cache()
-        : this(new Dictionary<TKey, TValue>())
+    : this(new Dictionary<TKey, TValue>())
     {
     }
 
     public Cache(Func<TKey, TValue> onMissing)
-        : this(new Dictionary<TKey, TValue>(), onMissing)
+    : this(new Dictionary<TKey, TValue>(), onMissing)
     {
     }
 
     public Cache(IDictionary<TKey, TValue> dictionary, Func<TKey, TValue> onMissing)
-        : this(dictionary)
+    : this(dictionary)
     {
         _onMissing = onMissing;
     }

@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Binding;
+
+
 
 [Serializable]
 public class ConvertProblem
@@ -13,18 +13,18 @@ public class ConvertProblem
     public override string ToString()
     {
         return
-            @"Item type:       {0}
+        @"Item type:       {0}
 Property:        {1}
 Property Type:   {2}
 Attempted Value: {3}
 Exception:
-{4} 
+{4}
 "
-                .ToFormat(
-                    Item != null ? Item.GetType().FullName : "(null)",
-                    Property.Name,
-                    Property.PropertyType,
-                    Value,
-                    ExceptionText);
+        .ToFormat(
+        Item != null ? Item.GetType().FullName : "(null)",
+        Property.Name,
+        Property.PropertyType,
+        Value,
+        ExceptionText);
     }
 }

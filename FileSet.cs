@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
 
 public class FileSet
 {
@@ -71,8 +71,8 @@ public class FileSet
         var directory = new DirectoryInfo(path);
 
         return directory.Exists
-            ? getAllDistinctFiles(path, Include.IsEmpty() ? "*.*" : Include)
-            : new string[0];
+        ? getAllDistinctFiles(path, Include.IsEmpty() ? "*.*" : Include)
+        : new string[0];
     }
 
     private IEnumerable<string> getAllDistinctFiles(string path, string pattern)
@@ -98,8 +98,8 @@ public class FileSet
             try
             {
                 return directory.Exists
-                    ? Directory.GetFiles(fullPath, filePattern, searchOption)
-                    : new string[0];
+        ? Directory.GetFiles(fullPath, filePattern, searchOption)
+        : new string[0];
             }
             catch (DirectoryNotFoundException)
             {
@@ -138,7 +138,7 @@ public class FileSet
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
         return Equals(other.Include, Include) && Equals(other.Exclude, Exclude) &&
-               other.DeepSearch.Equals(DeepSearch);
+        other.DeepSearch.Equals(DeepSearch);
     }
 
     public override bool Equals(object obj)

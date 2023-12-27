@@ -1,7 +1,7 @@
-namespace FubuCore
+namespace SunamoFubuCore;
 {
-    public class WannaKillAttribute : Attribute
-    {
-        
-    }
+public class WannaKillAttribute : Attribute
+{
+
+}
 }

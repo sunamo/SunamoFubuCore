@@ -7,8 +7,8 @@ public class DictionaryPath
         var parts = path.Trim().Split('.');
         ParentParts = parts.Reverse().Skip(1).Reverse();
         Parent = parts.Any()
-            ? ParentParts.Join(".")
-            : string.Empty;
+        ? ParentParts.Join(".")
+        : string.Empty;
 
         Key = parts.Last();
     }

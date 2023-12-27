@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
 
 public static class TemplateParser
 {
@@ -11,7 +11,7 @@ public static class TemplateParser
     {
         TemplateGroup = "Template";
         TemplateExpression = new Regex(@"\{(?!\{)(?<" + TemplateGroup + @">[A-Za-z0-9_-]+)\}(?!\})",
-            RegexOptions.Compiled);
+        RegexOptions.Compiled);
     }
 
     public static string Parse(string template, IDictionary<string, string> substitutions)
@@ -61,7 +61,7 @@ public static class TemplateParser
                 builder.Append(values.Get(key));
             else
                 builder.Append("{{" + key +
-                               "}}"); // escape the missing key so that the while loop ContainsTemplate will terminate
+                "}}"); // escape the missing key so that the while loop ContainsTemplate will terminate
 
             lastIndex = match.Index + match.Length;
         }

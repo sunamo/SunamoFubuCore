@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Conversion;
+
+
 
 public class ObjectConverter : IObjectConverter
 {
@@ -10,16 +10,16 @@ public class ObjectConverter : IObjectConverter
 
 
     public ObjectConverter()
-        : this(
-            type =>
-            {
-                throw new NotSupportedException("You must regsiter an IServiceLocator to resolve dependencies.");
-            }, new ConverterLibrary(new IObjectConverterFamily[0]))
+    : this(
+    type =>
+    {
+        throw new NotSupportedException("You must regsiter an IServiceLocator to resolve dependencies.");
+    }, new ConverterLibrary(new IObjectConverterFamily[0]))
     {
     }
 
     public ObjectConverter(IServiceLocator services, ConverterLibrary library)
-        : this(type => services.GetInstance(type), library)
+    : this(type => services.GetInstance(type), library)
     {
     }
 

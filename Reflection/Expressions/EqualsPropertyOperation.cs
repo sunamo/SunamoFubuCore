@@ -3,7 +3,7 @@ namespace SunamoFubuCore.Reflection.Expressions;
 public class EqualsPropertyOperation : BinaryComparisonPropertyOperation
 {
     public EqualsPropertyOperation()
-        : base(ExpressionType.Equal)
+    : base(ExpressionType.Equal)
     {
     }
 

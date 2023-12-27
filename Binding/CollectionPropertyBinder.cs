@@ -26,7 +26,7 @@ public class CollectionPropertyBinder : IPropertyBinder
         var elementType = type.FindInterfaceThatCloses(typeof(IEnumerable<>)).GetGenericArguments().Single();
 
         var builder =
-            typeof(EnumerableBuilder<>).CloseAndBuildAs<IEnumerableBuilder>(_conversionPropertyBinder, elementType);
+        typeof(EnumerableBuilder<>).CloseAndBuildAs<IEnumerableBuilder>(_conversionPropertyBinder, elementType);
         builder.FillValues(property, context);
     }
 
@@ -46,7 +46,7 @@ public class CollectionPropertyBinder : IPropertyBinder
             if (_conversionPropertyBinder.CanBeParsed(property.PropertyType))
             {
                 var convertedAsIs = context.Data.ValueAs<string>(property.Name,
-                    value => _conversionPropertyBinder.Bind(property, context));
+                value => _conversionPropertyBinder.Bind(property, context));
                 if (convertedAsIs) return;
             }
 

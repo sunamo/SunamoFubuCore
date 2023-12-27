@@ -3,7 +3,7 @@ namespace SunamoFubuCore.Util;
 public class DictionaryKeyValues<T> : IKeyValues<T>
 {
     public DictionaryKeyValues()
-        : this(new Dictionary<string, T>())
+    : this(new Dictionary<string, T>())
     {
     }
 

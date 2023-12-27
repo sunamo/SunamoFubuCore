@@ -9,7 +9,7 @@ public class GetStringRequest
     }
 
     public GetStringRequest(PropertyInfo property, object rawValue) : this(new SingleProperty(property), rawValue,
-        null)
+    null)
     {
     }
 
@@ -99,7 +99,7 @@ public class GetStringRequest
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
         return Equals(other.OwnerType, OwnerType) && Equals(other.Property, Property) &&
-               Equals(other.RawValue, RawValue) && Equals(other.Format, Format);
+        Equals(other.RawValue, RawValue) && Equals(other.Format, Format);
     }
 
     public override bool Equals(object obj)

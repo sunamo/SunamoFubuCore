@@ -5,7 +5,7 @@ public class ConversionRequest : IConversionRequest
     private readonly Func<Type, object> _finder;
 
     public ConversionRequest(string text)
-        : this(text, type => { throw new NotSupportedException("You have not registered a finder"); })
+    : this(text, type => { throw new NotSupportedException("You have not registered a finder"); })
     {
         Text = text;
     }

@@ -21,8 +21,8 @@ public abstract class BinaryComparisonPropertyOperation : IPropertyOperation
             Debug.WriteLine("Building expression for " + _comparisonType);
 
             var expectedHolder = propertyPath.Member is PropertyInfo
-                ? Expression.Constant(expected, propertyPath.Member.As<PropertyInfo>().PropertyType)
-                : Expression.Constant(expected);
+    ? Expression.Constant(expected, propertyPath.Member.As<PropertyInfo>().PropertyType)
+    : Expression.Constant(expected);
 
             var comparison = Expression.MakeBinary(_comparisonType, propertyPath, expectedHolder);
             var lambdaParameter = propertyPath.GetParameter<T>();

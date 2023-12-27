@@ -13,17 +13,17 @@ public static class ReflectionHelper
 
         // "class" constraint and this is a value type
         if ((constraints & GenericParameterAttributes.ReferenceTypeConstraint) != 0
-            && proposedSpecificType.IsValueType)
+        && proposedSpecificType.IsValueType)
             return false;
 
         // "struct" constraint and this is not a value type
         if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0
-            && !proposedSpecificType.IsValueType)
+        && !proposedSpecificType.IsValueType)
             return false;
 
         // "new()" constraint and this type has no default constructor
         if ((constraints & GenericParameterAttributes.DefaultConstructorConstraint) != 0
-            && proposedSpecificType.GetConstructor(Type.EmptyTypes) == null)
+        && proposedSpecificType.GetConstructor(Type.EmptyTypes) == null)
             return false;
 
         return true;
@@ -73,7 +73,7 @@ public static class ReflectionHelper
     }
 
     public static MemberExpression GetMemberExpression(this LambdaExpression expression,
-        bool enforceMemberExpression)
+    bool enforceMemberExpression)
     {
         MemberExpression memberExpression = null;
         if (expression.Body.NodeType == ExpressionType.Convert)

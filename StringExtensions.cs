@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
 
 public static class StringExtensions
 {
@@ -48,9 +48,9 @@ public static class StringExtensions
     public static string AppendPath(this string path, params string[] parts)
     {
         var list = new List<string>
-        {
-            path
-        };
+{
+path
+};
 
         list.AddRange(parts);
         return FileSystem.Combine(list.ToArray());
@@ -167,11 +167,11 @@ public static class StringExtensions
     public static bool IsValidNumber(this string number, CultureInfo culture)
     {
         var _validNumberPattern =
-            @"^-?(?:\d+|\d{1,3}(?:"
-            + culture.NumberFormat.NumberGroupSeparator +
-            @"\d{3})+)?(?:\"
-            + culture.NumberFormat.NumberDecimalSeparator +
-            @"\d+)?$";
+        @"^-?(?:\d+|\d{1,3}(?:"
+        + culture.NumberFormat.NumberGroupSeparator +
+        @"\d{3})+)?(?:\"
+        + culture.NumberFormat.NumberDecimalSeparator +
+        @"\d+)?$";
 
         return new Regex(_validNumberPattern, RegexOptions.ECMAScript).IsMatch(number);
     }

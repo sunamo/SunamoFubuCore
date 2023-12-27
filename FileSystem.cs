@@ -1,8 +1,7 @@
-using FubuCore;
-
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
+
 
 public enum CopyBehavior
 {
@@ -89,7 +88,7 @@ public class FileSystem : IFileSystem
 #if ASYNC
         await
 #endif
-                TFSE.WriteAllText(filename, text);
+        TFSE.WriteAllText(filename, text);
     }
 
     public async Task AppendStringToFile(string filename, string text)
@@ -98,23 +97,23 @@ public class FileSystem : IFileSystem
 #if ASYNC
         await
 #endif
-                TFSE.AppendAllText(filename, text);
+        TFSE.AppendAllText(filename, text);
     }
 
 
     public
 #if ASYNC
-async Task<string>
+    async Task<string>
 #else
 string
 #endif
-ReadStringFromFile(string filename)
+    ReadStringFromFile(string filename)
     {
         return
 #if ASYNC
-await
+        await
 #endif
-TFSE.ReadAllText(filename);
+        TFSE.ReadAllText(filename);
     }
 
     public string GetFileName(string path)
@@ -176,7 +175,7 @@ TFSE.ReadAllText(filename);
     {
         if (!FileExists(filename))
             throw new ApplicationException(
-                "Unable to deserialize the contents of file {0}. It does not exist or we do not have read access to it.");
+            "Unable to deserialize the contents of file {0}. It does not exist or we do not have read access to it.");
 
         return LoadFromFile<T>(filename);
     }
@@ -196,7 +195,7 @@ TFSE.ReadAllText(filename);
             catch (Exception e)
             {
                 var message = "Unable to deserialize the contents of file {0} into an instance of type {1}"
-                    .ToFormat(filename, typeof(T).FullName);
+                .ToFormat(filename, typeof(T).FullName);
                 throw new ApplicationException(message, e);
             }
         }
@@ -312,7 +311,7 @@ TFSE.ReadAllText(filename);
         catch (Exception ex)
         {
             var msg = "Was trying to copy '{0}' to '{1}' and encountered an error. :(".ToFormat(fullSourcePath,
-                fullDestPath);
+            fullDestPath);
             throw new Exception(msg, ex);
         }
     }
@@ -330,7 +329,7 @@ TFSE.ReadAllText(filename);
     private bool destinationIsFile(string destination)
     {
         if (FileExists(destination) || DirectoryExists(destination))
-            //it exists 
+            //it exists
             return IsFile(destination);
 
         if (destination.Last() == Path.DirectorySeparatorChar)

@@ -1,6 +1,6 @@
-using FubuCore;
-
 namespace SunamoFubuCore.Csv;
+
+
 
 public class CsvRequest<T>
 {

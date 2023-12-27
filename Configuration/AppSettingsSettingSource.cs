@@ -14,7 +14,7 @@ public class AppSettingsSettingSource : ISettingsSource
         var data = new SettingsData(_category);
 
         ConfigurationManager.AppSettings.AllKeys.Each(
-            key => { data[key] = ConfigurationManager.AppSettings[key]; });
+        key => { data[key] = ConfigurationManager.AppSettings[key]; });
 
         yield return data;
     }

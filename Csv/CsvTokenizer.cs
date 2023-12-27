@@ -15,11 +15,11 @@ public class CsvTokenizer
         _tokens = new List<string>();
         _characters = new List<char>();
         _read = new Dictionary<Mode, Action<char>>
-        {
-            { Mode.Normal, normalRead },
-            { Mode.Escape, escapeRead },
-            { Mode.ExitingEscape, exitingEscapeRead }
-        };
+{
+{ Mode.Normal, normalRead },
+{ Mode.Escape, escapeRead },
+{ Mode.ExitingEscape, exitingEscapeRead }
+};
     }
 
     public IEnumerable<string> Tokens => _tokens;

@@ -38,7 +38,7 @@ public class Column : IColumn
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
         return Equals(other._justification, _justification) && other.RightPadding == RightPadding &&
-               other.LeftPadding == LeftPadding;
+        other.LeftPadding == LeftPadding;
     }
 
     public override bool Equals(object obj)
@@ -63,7 +63,7 @@ public class Column : IColumn
     public override string ToString()
     {
         return string.Format("Justification: {0}, RightPadding: {1}, LeftPadding: {2}", _justification,
-            RightPadding, LeftPadding);
+        RightPadding, LeftPadding);
     }
 
     public virtual string GetText(string text)

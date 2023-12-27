@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.CommandLine;
+
+
 
 public class UsageGraph
 {
@@ -184,9 +184,9 @@ public class UsageGraph
         public UsageExpression<T> Arguments(params Expression<Func<T, object>>[] properties)
         {
             _commandUsage.Arguments =
-                properties.Select(
-                    expr => _parent.Handlers.FirstOrDefault(x => x.PropertyName == expr.ToAccessor().Name)).OfType
-                    <Argument>();
+            properties.Select(
+            expr => _parent.Handlers.FirstOrDefault(x => x.PropertyName == expr.ToAccessor().Name)).OfType
+            <Argument>();
 
             return this;
         }
@@ -199,9 +199,9 @@ public class UsageGraph
         public void ValidFlags(params Expression<Func<T, object>>[] properties)
         {
             _commandUsage.ValidFlags =
-                properties.Select(
-                        expr => _parent.Handlers.FirstOrDefault(x => x.PropertyName == expr.ToAccessor().Name))
-                    .ToArray();
+            properties.Select(
+            expr => _parent.Handlers.FirstOrDefault(x => x.PropertyName == expr.ToAccessor().Name))
+            .ToArray();
         }
     }
 }

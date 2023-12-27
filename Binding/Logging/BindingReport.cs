@@ -1,7 +1,6 @@
-using SunamoFubuCore;
-using SunamoFubuCore.Binding;
-
 namespace SunamoFubuCore.Binding.Logging;
+
+
 
 public class BindingReport
 {
@@ -28,18 +27,18 @@ public class BindingReport
     public IEnumerable<PropertyBindingReport> OrderedProperties()
     {
         foreach (var prop in Properties
-                     .Where(x => x.Nested == null && !x.Elements.Any())
-                     .OrderBy(x => x.Property.Name))
+        .Where(x => x.Nested == null && !x.Elements.Any())
+        .OrderBy(x => x.Property.Name))
             yield return prop;
 
         foreach (var prop in Properties
-                     .Where(x => x.Nested != null)
-                     .OrderBy(x => x.Property.Name))
+        .Where(x => x.Nested != null)
+        .OrderBy(x => x.Property.Name))
             yield return prop;
 
         foreach (var prop in Properties
-                     .Where(x => x.Elements.Any())
-                     .OrderBy(x => x.Property.Name))
+        .Where(x => x.Elements.Any())
+        .OrderBy(x => x.Property.Name))
             yield return prop;
     }
 

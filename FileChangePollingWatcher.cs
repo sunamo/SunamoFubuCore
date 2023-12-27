@@ -18,16 +18,16 @@ public class FileChangePollingWatcher : IDisposable
             }
 
             actionList.Each(x =>
-            {
-                try
-                {
-                    x();
-                }
-                catch (Exception)
-                {
-                    // TODO do something here, or at least get visibility
-                }
-            });
+    {
+        try
+        {
+            x();
+        }
+        catch (Exception)
+        {
+            // TODO do something here, or at least get visibility
+        }
+    });
 
             if (PollingCallback != null) PollingCallback();
         };

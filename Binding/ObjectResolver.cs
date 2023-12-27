@@ -1,6 +1,8 @@
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Binding;
+
+
 
 public class ObjectResolver : IObjectResolver
 {
@@ -70,15 +72,15 @@ public class ObjectResolver : IObjectResolver
 
         if (binder == null)
             throw new FubuException(2200,
-                "Could not determine an IModelBinder for input type {0}. No model binders matched on this type. The standard model binder requires a parameterless constructor for the model type. Alternatively, you could implement your own IModelBinder which can process this model type.",
-                type.AssemblyQualifiedName);
+            "Could not determine an IModelBinder for input type {0}. No model binders matched on this type. The standard model binder requires a parameterless constructor for the model type. Alternatively, you could implement your own IModelBinder which can process this model type.",
+            type.AssemblyQualifiedName);
 
 
         return binder;
     }
 
     private static BindResult executeModelBinder(Type type, IBindingContext context, IModelBinder binder,
-        Func<object> source)
+    Func<object> source)
     {
         try
         {
@@ -96,7 +98,7 @@ public class ObjectResolver : IObjectResolver
         catch (Exception e)
         {
             throw new FubuException(2201, e, "Fatal error while binding model of type {0}.  See inner exception",
-                type.AssemblyQualifiedName);
+            type.AssemblyQualifiedName);
         }
         finally
         {

@@ -10,7 +10,7 @@ public class TypeResolver : ITypeResolver
     private readonly ITypeResolverStrategy _default = new DefaultStrategy();
 
     private readonly IList<ITypeResolverStrategy> _strategies
-        = new List<ITypeResolverStrategy>();
+    = new List<ITypeResolverStrategy>();
 
     public Type ResolveType(object model)
     {

@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Binding;
+
+
 
 public class BindingContext : IBindingContext
 {
@@ -15,11 +15,11 @@ public class BindingContext : IBindingContext
     static BindingContext()
     {
         _namingStrategies = new List<Func<string, string>>
-        {
-            p => p,
-            p => p.Replace("_", "-"),
-            p => "[{0}]".ToFormat(p) // This was necessary 
-        };
+{
+p => p,
+p => p.Replace("_", "-"),
+p => "[{0}]".ToFormat(p) // This was necessary
+};
     }
 
     public BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger)
@@ -44,8 +44,8 @@ public class BindingContext : IBindingContext
     }
 
     private BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger,
-        IList<ConvertProblem> problems)
-        : this(requestData, locator, logger)
+    IList<ConvertProblem> problems)
+    : this(requestData, locator, logger)
     {
         Problems = problems;
     }

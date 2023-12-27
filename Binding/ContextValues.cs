@@ -8,7 +8,7 @@ public class ContextValues : IContextValues
     private readonly IRequestData _rawData;
 
     public ContextValues(IObjectConverter converter, List<Func<string, string>> namingStrategies,
-        IRequestData rawData, IBindingLogger logger)
+    IRequestData rawData, IBindingLogger logger)
     {
         _converter = converter;
         _namingStrategies = namingStrategies;
@@ -76,10 +76,10 @@ public class ContextValues : IContextValues
         {
             var n = naming(name);
             return _rawData.Value(n, value =>
-            {
-                _logger.UsedValue(value);
-                continuation(value);
-            });
+    {
+        _logger.UsedValue(value);
+        continuation(value);
+    });
         });
     }
 }

@@ -24,7 +24,7 @@ public abstract class ValueReportBase : IValueReport
     private readonly Stack<string> _prefixes = new Stack<string>();
 
     protected readonly Cache<string, DiagnosticValue> _values =
-        new Cache<string, DiagnosticValue>(key => new DiagnosticValue(key));
+    new Cache<string, DiagnosticValue>(key => new DiagnosticValue(key));
 
     private string _prefix;
     protected string _source;

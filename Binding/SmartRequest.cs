@@ -1,6 +1,6 @@
-using FubuCore;
-
 namespace SunamoFubuCore.Binding;
+
+
 
 [MarkedForTermination("Don't think it's necessary, but awaiting approval from the list")]
 public class SmartRequest : ISmartRequest

@@ -1,8 +1,10 @@
-//using System.Data;
-
-using FubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Binding;
+
+//using System.Data;
+
+
 
 public class RowProcessingRequest<T>
 {
@@ -57,7 +59,7 @@ public class ReaderBinder
         // TODO -- awkward!  Let's do some convenience methods here and make this easier
         var request = new DataReaderValues(reader, _aliases);
         var context = new BindingContext(new RequestData(new FlatValueSource(request)), _services,
-            new NulloBindingLogger());
+        new NulloBindingLogger());
 
         while (reader.Read())
         {

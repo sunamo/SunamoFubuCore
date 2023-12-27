@@ -1,6 +1,6 @@
-using FubuCore.Reflection;
-
 namespace SunamoFubuCore.Reflection;
+
+
 
 public class SingleMethod : Accessor
 {
@@ -46,8 +46,8 @@ public class SingleMethod : Accessor
     public Accessor Prepend(PropertyInfo property)
     {
         return
-            new PropertyChain(new IValueGetter[]
-                { new PropertyValueGetter(property), _getter });
+        new PropertyChain(new IValueGetter[]
+        { new PropertyValueGetter(property), _getter });
     }
 
     public IEnumerable<IValueGetter> Getters()

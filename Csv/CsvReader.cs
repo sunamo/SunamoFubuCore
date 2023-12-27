@@ -1,6 +1,8 @@
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Csv;
+
+
 
 // See the CsvReaderHarness for integration tests against this
 public class CsvReader : ICsvReader
@@ -74,7 +76,7 @@ public class CsvReader : ICsvReader
     {
         var data = new CsvData(values);
         return headers == null
-            ? mapping.ValueSource(data)
-            : mapping.ValueSource(data, headers);
+        ? mapping.ValueSource(data)
+        : mapping.ValueSource(data, headers);
     }
 }

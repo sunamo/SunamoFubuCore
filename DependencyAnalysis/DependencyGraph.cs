@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.DependencyAnalysis;
+
+
 
 public class DependencyGraph<T> where T : class
 {
@@ -82,9 +82,9 @@ public class DependencyGraph<T> where T : class
         {
             var cycleDescription = cycles.Select(x => x.Name).Join(Environment.NewLine);
             throw new InvalidOperationException(
-                @"This graph has dependency cycles and cannot be ordered!
-                    The following cycles exist:
-                    {0}".ToFormat(cycleDescription));
+            @"This graph has dependency cycles and cannot be ordered!
+The following cycles exist:
+{0}".ToFormat(cycleDescription));
         }
 
         foreach (var node in _cycleDetector.Order()) yield return node.Name;

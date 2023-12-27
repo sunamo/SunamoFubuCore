@@ -1,14 +1,14 @@
-using SunamoFubuCore.Reflection;
-
 namespace SunamoFubuCore.Reflection.Expressions;
+
+
 
 public class StringDoesNotStartWithPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
 {
     private static readonly MethodInfo _method =
-        ReflectionHelper.GetMethod<string>(s => s.StartsWith("", StringComparison.CurrentCulture));
+    ReflectionHelper.GetMethod<string>(s => s.StartsWith("", StringComparison.CurrentCulture));
 
     public StringDoesNotStartWithPropertyOperation()
-        : base(_method, true)
+    : base(_method, true)
     {
     }
 

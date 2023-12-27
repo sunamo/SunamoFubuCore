@@ -1,8 +1,10 @@
-using FubuCore.Binding;
-
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Logging;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Binding.InMemory;
+
+
+
 
 public class BindingScenario<T> where T : class, new()
 {
@@ -102,18 +104,18 @@ public class BindingScenario<T> where T : class, new()
                     if (Model != null)
                         return new Action<IBindingContext>[]
                         {
-                            context =>
-                                new ObjectResolver(Services, Registry, new NulloBindingLogger()).BindProperties(
-                                    typeof(T), Model, context)
+context =>
+new ObjectResolver(Services, Registry, new NulloBindingLogger()).BindProperties(
+typeof(T), Model, context)
                         };
 
                     return new Action<IBindingContext>[]
                     {
-                        context =>
-                        {
-                            var resolver = new ObjectResolver(Services, Registry, Logger);
-                            Model = (T)resolver.BindModel(typeof(T), context).Value;
-                        }
+context =>
+{
+var resolver = new ObjectResolver(Services, Registry, Logger);
+Model = (T)resolver.BindModel(typeof(T), context).Value;
+}
                     };
                 }
 
@@ -163,13 +165,13 @@ public class BindingScenario<T> where T : class, new()
         }
 
         public void BindPropertyWith<TBinder>(Expression<Func<T, object>> property, string rawValue = null)
-            where TBinder : IPropertyBinder, new()
+        where TBinder : IPropertyBinder, new()
         {
             BindPropertyWith(new TBinder(), property, rawValue);
         }
 
         public void BindPropertyWith(IPropertyBinder binder, Expression<Func<T, object>> property,
-            string rawValue = null)
+        string rawValue = null)
         {
             if (rawValue != null) Data(property, rawValue);
             var prop = property.ToAccessor().InnerProperty;
@@ -178,11 +180,11 @@ public class BindingScenario<T> where T : class, new()
                 if (Model == null) Model = new T();
 
                 context.ForObject(Model, () =>
-                {
-                    Logger.Chose(typeof(T), new PropertyModelBinderStandin());
-                    StandardModelBinder.PopulatePropertyWithBinder(prop, context, binder);
-                    Logger.FinishedModel();
-                });
+    {
+        Logger.Chose(typeof(T), new PropertyModelBinderStandin());
+        StandardModelBinder.PopulatePropertyWithBinder(prop, context, binder);
+        Logger.FinishedModel();
+    });
             });
         }
     }

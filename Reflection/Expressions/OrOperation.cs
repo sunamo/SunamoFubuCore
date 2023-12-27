@@ -1,13 +1,11 @@
-using SunamoFubuCore;
-using SunamoFubuCore.Reflection;
-using SunamoFubuCore.Reflection.Expressions;
-
 namespace SunamoFubuCore.Reflection.Expressions;
+
+
 
 public class ComposableOrOperation
 {
     private readonly List<Tuple<IPropertyOperation, MemberExpression, object>> _listOfOperations =
-        new List<Tuple<IPropertyOperation, MemberExpression, object>>();
+    new List<Tuple<IPropertyOperation, MemberExpression, object>>();
 
     public void Set<T>(Expression<Func<T, object>> path, object value)
     {
@@ -15,7 +13,7 @@ public class ComposableOrOperation
         var memberExpression = path.GetMemberExpression(true);
         var operation = new EqualsPropertyOperation();
         _listOfOperations.Add(
-            new Tuple<IPropertyOperation, MemberExpression, object>(operation, memberExpression, value));
+        new Tuple<IPropertyOperation, MemberExpression, object>(operation, memberExpression, value));
     }
 
 
@@ -24,15 +22,15 @@ public class ComposableOrOperation
         var memberExpression = path.GetMemberExpression(true);
         var operation = new CollectionContainsPropertyOperation();
         _listOfOperations.Add(
-            new Tuple<IPropertyOperation, MemberExpression, object>(operation, memberExpression, value));
+        new Tuple<IPropertyOperation, MemberExpression, object>(operation, memberExpression, value));
     }
 
     public Expression<Func<T, bool>> GetPredicateBuilder<T>()
     {
         if (_listOfOperations.Count() == 0)
             throw new Exception(
-                "You must have at least one operation registered for an 'or' operation (you have {0})".ToFormat(
-                    _listOfOperations.Count));
+            "You must have at least one operation registered for an 'or' operation (you have {0})".ToFormat(
+            _listOfOperations.Count));
 
         //the parameter to use
         var lambdaParameter = Expression.Parameter(typeof(T));
@@ -63,7 +61,7 @@ public class ComposableOrOperation
 public class OrOperation
 {
     public Expression<Func<T, bool>> GetPredicateBuilder<T>(Expression<Func<T, object>> leftPath, object leftValue,
-        Expression<Func<T, object>> rightPath, object rightValue)
+    Expression<Func<T, object>> rightPath, object rightValue)
     {
         var comp = new ComposableOrOperation();
         comp.Set(leftPath, leftValue);
@@ -72,7 +70,7 @@ public class OrOperation
     }
 
     public Expression<Func<T, bool>> GetPredicateBuilder<T>(Expression<Func<T, object>> leftPath,
-        IEnumerable<object> leftValue, Expression<Func<T, object>> rightPath, object rightValue)
+    IEnumerable<object> leftValue, Expression<Func<T, object>> rightPath, object rightValue)
     {
         var comp = new ComposableOrOperation();
         comp.Set(leftPath, leftValue);
@@ -81,7 +79,7 @@ public class OrOperation
     }
 
     public Expression<Func<T, bool>> GetPredicateBuilder<T>(Expression<Func<T, object>> leftPath, object leftValue,
-        Expression<Func<T, object>> rightPath, IEnumerable<object> rightValue)
+    Expression<Func<T, object>> rightPath, IEnumerable<object> rightValue)
     {
         var comp = new ComposableOrOperation();
         comp.Set(leftPath, leftValue);

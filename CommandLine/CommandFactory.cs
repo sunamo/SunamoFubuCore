@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.CommandLine;
+
+
 
 public class CommandFactory : ICommandFactory
 {
@@ -51,9 +51,9 @@ public class CommandFactory : ICommandFactory
     public void RegisterCommands(Assembly assembly)
     {
         assembly
-            .GetExportedTypes()
-            .Where(x => x.Closes(typeof(FubuCommand<>)) && x.IsConcrete())
-            .Each(t => { _commandTypes[CommandNameFor(t)] = t; });
+        .GetExportedTypes()
+        .Where(x => x.Closes(typeof(FubuCommand<>)) && x.IsConcrete())
+        .Each(t => { _commandTypes[CommandNameFor(t)] = t; });
     }
 
     public IEnumerable<IFubuCommand> BuildAllCommands()

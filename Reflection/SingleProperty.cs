@@ -1,6 +1,6 @@
-using FubuCore.Reflection;
-
 namespace SunamoFubuCore.Reflection;
+
+
 
 public class SingleProperty : Accessor
 {
@@ -31,7 +31,7 @@ public class SingleProperty : Accessor
     {
         var property = ReflectionHelper.GetProperty(expression);
         return new PropertyChain(
-            new[] { new PropertyValueGetter(InnerProperty), new PropertyValueGetter(property) });
+        new[] { new PropertyValueGetter(InnerProperty), new PropertyValueGetter(property) });
     }
 
     public string[] PropertyNames
@@ -53,8 +53,8 @@ public class SingleProperty : Accessor
     public Accessor Prepend(PropertyInfo property)
     {
         return
-            new PropertyChain(new IValueGetter[]
-                { new PropertyValueGetter(property), new PropertyValueGetter(InnerProperty) });
+        new PropertyChain(new IValueGetter[]
+        { new PropertyValueGetter(property), new PropertyValueGetter(InnerProperty) });
     }
 
     public IEnumerable<IValueGetter> Getters()
@@ -107,7 +107,7 @@ public class SingleProperty : Accessor
     public override int GetHashCode()
     {
         return InnerProperty != null
-            ? (InnerProperty.DeclaringType.FullName + "." + InnerProperty.Name).GetHashCode()
-            : 0;
+        ? (InnerProperty.DeclaringType.FullName + "." + InnerProperty.Name).GetHashCode()
+        : 0;
     }
 }

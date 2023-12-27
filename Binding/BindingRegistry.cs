@@ -1,37 +1,37 @@
-using FubuCore.Binding;
-
 namespace SunamoFubuCore.Binding;
+
+
 
 public class BindingRegistry : IModelBinderCache, IValueConverterRegistry, IPropertyBinderCache, DescribesItself
 {
     private readonly IList<IModelBinder> _binders = new List<IModelBinder>();
 
     private readonly List<IConverterFamily> _defaultFamilies = new List<IConverterFamily>
-    {
-        new ExpandEnvironmentVariablesFamily(),
-        new ResolveConnectionStringFamily(),
-        new BooleanFamily(),
-        new NumericTypeFamily(),
-        new ObjectTypeFamily()
-    };
+{
+new ExpandEnvironmentVariablesFamily(),
+new ResolveConnectionStringFamily(),
+new BooleanFamily(),
+new NumericTypeFamily(),
+new ObjectTypeFamily()
+};
 
     private readonly IList<IConverterFamily> _families = new List<IConverterFamily>();
     private readonly Cache<Type, IModelBinder> _modelBinderCache = new Cache<Type, IModelBinder>();
 
     private readonly Cache<PropertyInfo, IPropertyBinder> _propertyBinderCache =
-        new Cache<PropertyInfo, IPropertyBinder>();
+    new Cache<PropertyInfo, IPropertyBinder>();
 
     private readonly IList<IPropertyBinder> _propertyBinders = new List<IPropertyBinder>();
     private Lazy<IEnumerable<IPropertyBinder>> _defaultPropertyBinders;
     private Lazy<StandardModelBinder> _standardBinder;
 
     public BindingRegistry() : this(new ConverterLibrary(), Enumerable.Empty<IModelBinder>(),
-        Enumerable.Empty<IPropertyBinder>(), Enumerable.Empty<IConverterFamily>())
+    Enumerable.Empty<IPropertyBinder>(), Enumerable.Empty<IConverterFamily>())
     {
     }
 
     public BindingRegistry(ConverterLibrary converters, IEnumerable<IModelBinder> binders,
-        IEnumerable<IPropertyBinder> propertyBinders, IEnumerable<IConverterFamily> converterFamilies)
+    IEnumerable<IPropertyBinder> propertyBinders, IEnumerable<IConverterFamily> converterFamilies)
     {
         configureModelBinders(binders);
         configurePropertyBinders(propertyBinders);

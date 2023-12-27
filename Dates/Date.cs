@@ -11,7 +11,7 @@ public class Date
     }
 
     public Date(DateTime date)
-        : this(date.ToString(TimeFormat))
+    : this(date.ToString(TimeFormat))
     {
     }
 

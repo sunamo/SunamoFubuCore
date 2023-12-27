@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Binding;
+
+
 
 [Description("Delegates to IObjectConverter for the conversion")]
 public class BasicConverterFamily : IConverterFamily, DescribesItself
@@ -53,7 +53,7 @@ public class BasicValueConverter : ValueConverter, DescribesItself
     {
         description.Title = "IObjectConverter:" + _propertyType.Name;
         description.ShortDescription =
-            "IObjectConverter.FromString(text, typeof({0}))".ToFormat(_propertyType.FullName);
+        "IObjectConverter.FromString(text, typeof({0}))".ToFormat(_propertyType.FullName);
     }
 
     public object Convert(IPropertyContext context)
@@ -63,8 +63,8 @@ public class BasicValueConverter : ValueConverter, DescribesItself
 
 
         return context.RawValueFromRequest.RawValue.GetType().CanBeCastTo(_propertyType)
-            ? context.RawValueFromRequest.RawValue
-            : _strategy.Convert(context);
+        ? context.RawValueFromRequest.RawValue
+        : _strategy.Convert(context);
     }
 
     public bool Equals(BasicValueConverter other)
@@ -87,7 +87,7 @@ public class BasicValueConverter : ValueConverter, DescribesItself
         unchecked
         {
             return (_propertyType != null ? _propertyType.GetHashCode() : 0) * 397 ^
-                   (_strategy != null ? _strategy.GetHashCode() : 0);
+            (_strategy != null ? _strategy.GetHashCode() : 0);
         }
     }
 

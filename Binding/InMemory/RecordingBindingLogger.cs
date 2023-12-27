@@ -1,6 +1,8 @@
-using SunamoFubuCore.Binding;
+using SunamoFubuCore.Binding.Logging;
 
 namespace SunamoFubuCore.Binding.InMemory;
+
+
 
 public interface IBindingHistory
 {

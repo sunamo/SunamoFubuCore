@@ -1,6 +1,6 @@
-using SunamoFubuCore.Reflection;
-
 namespace SunamoFubuCore.Reflection;
+
+
 
 public class PropertyChain : Accessor
 {
@@ -105,9 +105,9 @@ public class PropertyChain : Accessor
     public Accessor Prepend(PropertyInfo property)
     {
         var list = new List<IValueGetter>
-        {
-            new PropertyValueGetter(property)
-        };
+{
+new PropertyValueGetter(property)
+};
         list.AddRange(ValueGetters);
 
         return new PropertyChain(list.ToArray());

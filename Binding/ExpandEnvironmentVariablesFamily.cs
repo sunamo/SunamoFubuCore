@@ -1,7 +1,7 @@
 namespace SunamoFubuCore.Binding;
 
 [Description(
-    "Uses Environment.ExpandEnvironmentVariables(text) if the property is marked with [ExpandEnvironmentVariables]")]
+"Uses Environment.ExpandEnvironmentVariables(text) if the property is marked with [ExpandEnvironmentVariables]")]
 public class ExpandEnvironmentVariablesFamily : StatelessConverter
 {
     public override bool Matches(PropertyInfo property)
@@ -15,7 +15,7 @@ public class ExpandEnvironmentVariablesFamily : StatelessConverter
         var strVal = bindingValue.RawValue as string;
 
         return strVal.IsNotEmpty()
-            ? Environment.ExpandEnvironmentVariables(strVal)
-            : strVal;
+        ? Environment.ExpandEnvironmentVariables(strVal)
+        : strVal;
     }
 }

@@ -10,7 +10,7 @@ public class ExceptionReport : LogRecord, DescribesItself
     }
 
     public ExceptionReport(Exception exception)
-        : this(exception.Message, exception)
+    : this(exception.Message, exception)
     {
     }
 
@@ -36,7 +36,7 @@ public class ExceptionReport : LogRecord, DescribesItself
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
         return Equals(other.Message, Message) && Equals(other.ExceptionText, ExceptionText) &&
-               Equals(other.CorrelationId, CorrelationId);
+        Equals(other.CorrelationId, CorrelationId);
     }
 
     public override bool Equals(object obj)
@@ -61,6 +61,6 @@ public class ExceptionReport : LogRecord, DescribesItself
     public override string ToString()
     {
         return string.Format("Message: {0}, ExceptionText: {1}, CorrelationId: {2}", Message, ExceptionText,
-            CorrelationId);
+        CorrelationId);
     }
 }

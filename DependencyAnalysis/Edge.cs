@@ -34,7 +34,7 @@ public class Edge
         unchecked
         {
             return (Source != null ? Source.GetHashCode() : 0) * 397 ^
-                   (Target != null ? Target.GetHashCode() : 0);
+            (Target != null ? Target.GetHashCode() : 0);
         }
     }
 

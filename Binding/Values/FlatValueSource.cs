@@ -1,7 +1,6 @@
-using SunamoFubuCore;
-using SunamoFubuCore.Binding;
-
 namespace SunamoFubuCore.Binding.Values;
+
+
 
 public class FlatValueSource<T> : IValueSource
 {
@@ -9,7 +8,7 @@ public class FlatValueSource<T> : IValueSource
 
 
     public FlatValueSource(IDictionary<string, T> dictionary, string provenance = "Anonymous") : this(
-        new DictionaryKeyValues<T>(dictionary), provenance)
+    new DictionaryKeyValues<T>(dictionary), provenance)
     {
     }
 
@@ -102,12 +101,12 @@ public class FlatValueSource<T> : IValueSource
 public class FlatValueSource : FlatValueSource<string>
 {
     public FlatValueSource(IDictionary<string, string> dictionary, string name = "Anonymous") : this(
-        new DictionaryKeyValues(dictionary), name)
+    new DictionaryKeyValues(dictionary), name)
     {
     }
 
     public FlatValueSource(IKeyValues values, string name = "Anonymous")
-        : base(values, name)
+    : base(values, name)
     {
     }
 }

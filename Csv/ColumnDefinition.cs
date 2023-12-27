@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Csv;
+
+
 
 public class ColumnDefinition
 {

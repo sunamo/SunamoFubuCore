@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
+
 
 public static class GenericEnumerableExtensions
 {
@@ -86,7 +83,7 @@ public static class GenericEnumerableExtensions
     }
 
     public static TReturn FirstValue<TItem, TReturn>(this IEnumerable<TItem> enumerable, Func<TItem, TReturn> func)
-        where TReturn : class
+    where TReturn : class
     {
         foreach (var item in enumerable)
         {

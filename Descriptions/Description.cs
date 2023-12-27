@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.Descriptions;
+
+
 
 public class Description
 {
@@ -75,7 +75,7 @@ public class Description
     public static bool HasExplicitDescription(Type type)
     {
         return type.CanBeCastTo<DescribesItself>() || type.HasAttribute<DescriptionAttribute>() ||
-               type.HasAttribute<TitleAttribute>();
+        type.HasAttribute<TitleAttribute>();
     }
 
     public override string ToString()

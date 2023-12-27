@@ -1,14 +1,14 @@
-using FubuCore;
-
 namespace SunamoFubuCore.Reflection.Expressions;
+
+
 
 public class StringStartsWithPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
 {
     private static readonly MethodInfo _method =
-        ReflectionHelper.GetMethod<string>(s => s.StartsWith("", StringComparison.CurrentCulture));
+    ReflectionHelper.GetMethod<string>(s => s.StartsWith("", StringComparison.CurrentCulture));
 
     public StringStartsWithPropertyOperation()
-        : base(_method)
+    : base(_method)
     {
     }
 
@@ -21,8 +21,8 @@ public class CollectionContainsPropertyOperation : IPropertyOperation
     private const string _description = "contains";
 
     private readonly MethodInfo method =
-        typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(
-            m => m.Name.EqualsIgnoreCase("Contains")).First();
+    typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(
+    m => m.Name.EqualsIgnoreCase("Contains")).First();
 
     public string OperationName => _operationName;
 
@@ -87,7 +87,7 @@ public abstract class StringContainsPropertyOperationBase : IPropertyOperation
     static StringContainsPropertyOperationBase()
     {
         _indexOfMethod =
-            ReflectionHelper.GetMethod<string>(s => s.IndexOf("", StringComparison.InvariantCultureIgnoreCase));
+        ReflectionHelper.GetMethod<string>(s => s.IndexOf("", StringComparison.InvariantCultureIgnoreCase));
     }
 
     protected StringContainsPropertyOperationBase(string operation, string description, bool negate)
@@ -107,13 +107,13 @@ public abstract class StringContainsPropertyOperationBase : IPropertyOperation
         {
             var valueToCheckConstant = Expression.Constant(valueToCheck);
             var indexOfCall =
-                Expression.Call(Expression.Coalesce(propertyPath, Expression.Constant(string.Empty)),
-                    _indexOfMethod,
-                    valueToCheckConstant,
-                    Expression.Constant(StringComparison.InvariantCultureIgnoreCase));
+    Expression.Call(Expression.Coalesce(propertyPath, Expression.Constant(string.Empty)),
+    _indexOfMethod,
+    valueToCheckConstant,
+    Expression.Constant(StringComparison.InvariantCultureIgnoreCase));
             var operation = _negate ? ExpressionType.LessThan : ExpressionType.GreaterThanOrEqual;
             var comparison = Expression.MakeBinary(operation, indexOfCall,
-                Expression.Constant(0));
+    Expression.Constant(0));
             var lambdaParameter = propertyPath.GetParameter<T>();
             return Expression.Lambda<Func<T, bool>>(comparison, lambdaParameter);
         };

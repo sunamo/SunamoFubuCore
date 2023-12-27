@@ -1,11 +1,11 @@
-using SunamoFubuCore.Reflection;
-
 namespace SunamoFubuCore.Reflection;
+
+
 
 public static class ReflectionExtensions
 {
     public static U ValueOrDefault<T, U>(this T root, Expression<Func<T, U>> expression)
-        where T : class
+    where T : class
     {
         if (root == null) return default;
 
@@ -44,7 +44,7 @@ public static class ReflectionExtensions
     }
 
     public static void ForAttribute<T>(this ICustomAttributeProvider provider, Action<T> action, Action elseDo)
-        where T : Attribute
+    where T : Attribute
     {
         var found = false;
         foreach (T attribute in provider.GetCustomAttributes(typeof(T), true))

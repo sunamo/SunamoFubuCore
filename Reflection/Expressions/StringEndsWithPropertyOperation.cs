@@ -3,10 +3,10 @@ namespace SunamoFubuCore.Reflection.Expressions;
 public class StringEndsWithPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
 {
     private static readonly MethodInfo _method =
-        ReflectionHelper.GetMethod<string>(s => s.EndsWith("", StringComparison.CurrentCulture));
+    ReflectionHelper.GetMethod<string>(s => s.EndsWith("", StringComparison.CurrentCulture));
 
     public StringEndsWithPropertyOperation()
-        : base(_method)
+    : base(_method)
     {
     }
 

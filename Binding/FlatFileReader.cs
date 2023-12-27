@@ -1,8 +1,9 @@
-using FubuCore;
-
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Binding;
+
+
+
 
 public class FlatFileReader<T>
 {
@@ -33,15 +34,15 @@ public class FlatFileReader<T>
         var data = new FlatFileValues(request.Concatenator, headers);
         _aliases.Each((header, alias) => data.Alias(header, alias));
 
-        var context = new BindingContext(new RequestData(new FlatValueSource(data)), _services,
-            new NulloBindingLogger());
+        BindingContext context = new BindingContext(new RequestData(new FlatValueSource(data)), _services,
+        new NulloBindingLogger());
 
         string line;
         while ((line = reader.ReadLine()) != null) readTargetFromLine(request, data, line, context);
     }
 
     private void readTargetFromLine(FlatFileRequest<T> request, FlatFileValues data, string line,
-        BindingContext context)
+    BindingContext context)
     {
         data.ReadLine(line);
 

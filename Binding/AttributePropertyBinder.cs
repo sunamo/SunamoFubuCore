@@ -1,6 +1,6 @@
-using FubuCore.Binding;
-
 namespace SunamoFubuCore.Binding;
+
+
 
 [Description("Delegates to a BindingAttribute class on the property for one-off binding policies")]
 public class AttributePropertyBinder : IPropertyBinder

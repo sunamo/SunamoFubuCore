@@ -1,7 +1,8 @@
-using SunamoFubuCore;
-using SunamoFubuCore.Binding;
+using SunamoFubuCore.Util.TextWriting;
 
 namespace SunamoFubuCore.Binding.Logging;
+
+
 
 public class BindingReportTextWriter : IBindingReportVisitor
 {
@@ -82,8 +83,8 @@ public class BindingReportTextWriter : IBindingReportVisitor
         if (_showValues)
         {
             var valueString = values == null
-                ? string.Empty
-                : values.Select(x => "'{0}' from '{1}'/{2}".ToFormat(x.RawValue, x.Source, x.RawKey)).Join(", ");
+            ? string.Empty
+            : values.Select(x => "'{0}' from '{1}'/{2}".ToFormat(x.RawValue, x.Source, x.RawKey)).Join(", ");
             Report.AddColumnData(propertyName, description, valueString);
         }
         else

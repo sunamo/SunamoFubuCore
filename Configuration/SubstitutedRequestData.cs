@@ -1,3 +1,5 @@
+using SunamoFubuCore.Binding.Values;
+
 namespace SunamoFubuCore.Configuration;
 
 public class SubstitutedRequestData : IRequestData
@@ -46,7 +48,7 @@ public class SubstitutedRequestData : IRequestData
     public IEnumerable<IRequestData> GetEnumerableRequests(string prefixOrChild)
     {
         return _inner.GetEnumerableRequests(prefixOrChild)
-            .Select(x => new SubstitutedRequestData(x, _substitutions));
+        .Select(x => new SubstitutedRequestData(x, _substitutions));
     }
 
     public void AddValues(string name, IKeyValues values)

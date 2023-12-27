@@ -1,6 +1,6 @@
-using SunamoFubuCore.Formatting;
-
 namespace SunamoFubuCore.Formatting;
+
+
 
 public static class DisplayFormatterExtensions
 {
@@ -16,7 +16,7 @@ public static class DisplayFormatterExtensions
     /// <param name="value">The data to format</param>
     /// <param name="format">The custom format specifier</param>
     public static string FormatValue(this IDisplayFormatter formatter, Type modelType, Accessor accessor,
-        object value, string format)
+    object value, string format)
     {
         var request = new GetStringRequest(accessor, value, null)
         {
@@ -42,7 +42,7 @@ public static class DisplayFormatterExtensions
     /// <param name="property">The property that holds the given value</param>
     /// <param name="value">The data to format</param>
     public static string FormatValue(this IDisplayFormatter formatter, Type modelType, Accessor property,
-        object value)
+    object value)
     {
         return formatter.GetDisplay(new GetStringRequest(property, value, null)
         {
@@ -61,7 +61,7 @@ public static class DisplayFormatterExtensions
     /// <param name="property">The property of <paramref name="entity" /> whose value should be formatted</param>
     /// <param name="entity">The instance containing the data to format</param>
     public static string FormatProperty(this IDisplayFormatter formatter, Type modelType, Accessor property,
-        object entity)
+    object entity)
     {
         var raw = property.GetValue(entity);
         return formatter.FormatValue(modelType, property, raw);

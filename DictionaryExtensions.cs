@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore;
+
+
 
 public static class DictionaryExtensions
 {
@@ -54,7 +54,7 @@ public static class DictionaryExtensions
     }
 
     public static IEnumerable<IDictionary<string, object>> Children(this IDictionary<string, object> dictionary,
-        string key)
+    string key)
     {
         return dictionary.Get<IEnumerable<IDictionary<string, object>>>(key);
     }

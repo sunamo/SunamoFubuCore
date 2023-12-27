@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.CommandLine;
+
+
 
 public static class InputParser
 {
@@ -17,9 +17,9 @@ public static class InputParser
     public static List<ITokenHandler> GetHandlers(Type inputType)
     {
         return inputType.GetProperties()
-            .Where(prop => prop.CanWrite)
-            .Where(prop => !prop.HasAttribute<IgnoreOnCommandLineAttribute>())
-            .Select(BuildHandler).ToList();
+        .Where(prop => prop.CanWrite)
+        .Where(prop => !prop.HasAttribute<IgnoreOnCommandLineAttribute>())
+        .Select(BuildHandler).ToList();
     }
 
     public static ITokenHandler BuildHandler(PropertyInfo property)

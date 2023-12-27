@@ -6,7 +6,7 @@ public interface IPropertySetter
 }
 
 [Description(
-    "The standard model binding using no-arg constructors, property binding policies, and value conversion policies")]
+"The standard model binding using no-arg constructors, property binding policies, and value conversion policies")]
 public class StandardModelBinder : IModelBinder, DescribesItself, IPropertySetter
 {
     private readonly IPropertyBinderCache _propertyBinders;
@@ -61,7 +61,7 @@ public class StandardModelBinder : IModelBinder, DescribesItself, IPropertySette
     }
 
     public static void PopulatePropertyWithBinder(PropertyInfo property, IBindingContext context,
-        IPropertyBinder propertyBinder)
+    IPropertyBinder propertyBinder)
     {
         context.Logger.Chose(property, propertyBinder);
         context.ForProperty(property, propertyContext => { propertyBinder.Bind(property, context); });

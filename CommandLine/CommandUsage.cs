@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.CommandLine;
+
+
 
 public class CommandUsage
 {
@@ -20,8 +20,8 @@ public class CommandUsage
     public string ToUsage(string appName, string commandName)
     {
         return "{0} {1} {2}".ToFormat(appName, commandName,
-            Arguments.Union(ValidFlags).Select(x => x.ToUsageDescription())
-                .Join(" "));
+        Arguments.Union(ValidFlags).Select(x => x.ToUsageDescription())
+        .Join(" "));
     }
 
 

@@ -13,7 +13,7 @@ public static class ConstructorBuilder
         var constructor = concreteType.GetConstructor(new[] { typeof(string) });
         if (constructor == null)
             throw new ArgumentOutOfRangeException("concreteType", concreteType,
-                "Only types with a ctor(string) can be used here");
+            "Only types with a ctor(string) can be used here");
 
         var argument = Expression.Parameter(typeof(string), "x");
 
@@ -32,8 +32,8 @@ public class ConstructorFunctionBuilder<T>
 
 
         var arguments =
-            constructor.GetParameters().Select(
-                param => ToParameterValueGetter(args, param.ParameterType, param.Name));
+        constructor.GetParameters().Select(
+        param => ToParameterValueGetter(args, param.ParameterType, param.Name));
 
         var ctorCall = Expression.New(constructor, arguments);
 

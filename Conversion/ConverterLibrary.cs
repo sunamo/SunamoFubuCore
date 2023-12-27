@@ -1,6 +1,6 @@
-using FubuCore.Conversion;
-
 namespace SunamoFubuCore.Conversion;
+
+
 
 /// <summary>
 ///     Acts as an improved version of the System.ComponentModel.TypeDescriptor class
@@ -65,7 +65,7 @@ public class ConverterLibrary : DescribesItself
     /// <typeparam name="TService"></typeparam>
     /// <param name="converter"></param>
     public void RegisterConverter<TReturnType, TService>(Func<TService, string, TReturnType> converter,
-        string description = null)
+    string description = null)
     {
         _froms[typeof(TReturnType)] = new LambdaConverterStrategy<TReturnType, TService>(converter, description);
     }

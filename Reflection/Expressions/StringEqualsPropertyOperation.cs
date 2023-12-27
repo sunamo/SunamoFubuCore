@@ -1,14 +1,14 @@
-using SunamoFubuCore.Reflection;
-
 namespace SunamoFubuCore.Reflection.Expressions;
+
+
 
 public class StringEqualsPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
 {
     private static readonly MethodInfo _method =
-        ReflectionHelper.GetMethod<string>(s => s.Equals("", StringComparison.CurrentCulture));
+    ReflectionHelper.GetMethod<string>(s => s.Equals("", StringComparison.CurrentCulture));
 
     public StringEqualsPropertyOperation()
-        : base(_method)
+    : base(_method)
     {
     }
 

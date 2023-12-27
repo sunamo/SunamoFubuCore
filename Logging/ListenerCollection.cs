@@ -22,7 +22,7 @@ public class ListenerCollection : IEnumerable<ILogListener>
     }
 
     private Action<Func<T>> findAction<T>(Func<ILogListener, bool> filter, Func<ILogModifier, bool> modifierFilter,
-        Action<ILogListener, T> proceed)
+    Action<ILogListener, T> proceed)
     {
         var listeners = _listeners.Where(filter).ToList();
         if (listeners.Any())
@@ -37,17 +37,17 @@ public class ListenerCollection : IEnumerable<ILogListener>
                     modifiers.Each(x => x.Modify(msg));
 
                     listeners.Each(x =>
-                    {
-                        try
-                        {
-                            proceed(x, msg);
-                        }
-                        catch (Exception e)
-                        {
-                            // It's just logging
-                            CL.WriteLine(e);
-                        }
-                    });
+        {
+            try
+            {
+                proceed(x, msg);
+            }
+            catch (Exception e)
+            {
+                // It's just logging
+                CL.WriteLine(e);
+            }
+        });
                 }
                 catch (Exception e)
                 {
@@ -72,12 +72,12 @@ public class ListenerCollection : IEnumerable<ILogListener>
     public Action<Func<object>> DebugFor(Type type)
     {
         return findAction<object>(x => x.IsDebugEnabled && x.ListensFor(type), x => x.Matches(type),
-            (l, o) => l.DebugMessage(o));
+        (l, o) => l.DebugMessage(o));
     }
 
     public Action<Func<object>> InfoFor(Type type)
     {
         return findAction<object>(x => x.IsInfoEnabled && x.ListensFor(type), x => x.Matches(type),
-            (l, o) => l.InfoMessage(o));
+        (l, o) => l.InfoMessage(o));
     }
 }

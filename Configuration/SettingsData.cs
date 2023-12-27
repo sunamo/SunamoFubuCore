@@ -1,6 +1,8 @@
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Configuration;
+
+
 
 public class SettingsData : IValueSource
 {
@@ -73,8 +75,8 @@ public class SettingsData : IValueSource
     public bool HasChild(string key)
     {
         return Has(key)
-            ? _dictionary[key] is IDictionary<string, object>
-            : false;
+        ? _dictionary[key] is IDictionary<string, object>
+        : false;
     }
 
 
@@ -116,8 +118,8 @@ public class SettingsData : IValueSource
             else if (value is IEnumerable<IDictionary<string, object>>)
             {
                 var children = value.As<IEnumerable<IDictionary<string, object>>>()
-                    .Select(x => new SettingsData(x))
-                    .ToList();
+        .Select(x => new SettingsData(x))
+        .ToList();
 
 
                 for (var i = 0; i < children.Count; i++)
@@ -167,7 +169,7 @@ public class SettingsData : IValueSource
     public SettingsData Child(string key)
     {
         return _lock.MaybeWrite(() => new SettingsData(_dictionary.Child(key), Provenance + "." + key),
-            () => !HasChild(key), () => _dictionary.Add(key, new Dictionary<string, object>()));
+        () => !HasChild(key), () => _dictionary.Add(key, new Dictionary<string, object>()));
     }
 
     public bool Equals(SettingsData other)
@@ -190,7 +192,7 @@ public class SettingsData : IValueSource
         unchecked
         {
             return (_dictionary != null ? _dictionary.GetHashCode() : 0) * 397 ^
-                   (Provenance != null ? Provenance.GetHashCode() : 0);
+            (Provenance != null ? Provenance.GetHashCode() : 0);
         }
     }
 

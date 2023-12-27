@@ -1,6 +1,6 @@
-using SunamoFubuCore;
-
 namespace SunamoFubuCore.CommandLine;
+
+
 
 public class EnumerableFlag : Flag
 {
@@ -8,7 +8,7 @@ public class EnumerableFlag : Flag
     private readonly PropertyInfo _property;
 
     public EnumerableFlag(PropertyInfo property, ObjectConverter converter)
-        : base(property, converter)
+    : base(property, converter)
     {
         _property = property;
         _converter = converter;
@@ -46,6 +46,6 @@ public class EnumerableFlag : Flag
         var flagAliases = InputParser.ToFlagAliases(_property);
 
         return "[{0} [<{1}1 {1}2 {1}3 ...>]]".ToFormat(flagAliases,
-            _property.Name.ToLower().TrimEnd('f', 'l', 'a', 'g'));
+        _property.Name.ToLower().TrimEnd('f', 'l', 'a', 'g'));
     }
 }

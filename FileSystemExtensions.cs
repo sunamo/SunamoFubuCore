@@ -1,8 +1,9 @@
-using FubuCore;
-
-using SunamoFubuCore;
+using SunamoFubuCore.CommandLine;
 
 namespace SunamoFubuCore;
+
+
+
 
 public static class FileSystemExtensions
 {
@@ -18,23 +19,23 @@ public static class FileSystemExtensions
     }
 
     public static string FindFileInDirectories(this IFileSystem fileSystem, IEnumerable<string> directories,
-        string fileName)
+    string fileName)
     {
         return directories
-            .Select(dir => dir.AppendPath(fileName))
-            .FirstOrDefault(fileSystem.FileExists);
+        .Select(dir => dir.AppendPath(fileName))
+        .FirstOrDefault(fileSystem.FileExists);
     }
 
     public static string FindDirectoryInDirectories(this IFileSystem fileSystem, IEnumerable<string> directories,
-        string directory)
+    string directory)
     {
         return directories
-            .Select(dir => dir.AppendPath(directory))
-            .FirstOrDefault(fileSystem.DirectoryExists);
+        .Select(dir => dir.AppendPath(directory))
+        .FirstOrDefault(fileSystem.DirectoryExists);
     }
 
     public static string FindFileInDirectoryArray(this IFileSystem fileSystem, string filename,
-        params string[] directories)
+    params string[] directories)
     {
         return fileSystem.FindFileInDirectories(directories, filename);
     }
@@ -93,24 +94,24 @@ public static class FileSystemExtensions
     }
 
     public static IEnumerable<string> FileNamesFor(this IFileSystem fileSystem, FileSet set,
-        params string[] pathParts)
+    params string[] pathParts)
     {
         return fileSystem.FindFiles(FileSystem.Combine(pathParts), set);
     }
 
     public static
 #if ASYNC
-async Task<string>
+    async Task<string>
 #else
 string
 #endif
-ReadStringFromFile(this IFileSystem fileSystem, params string[] pathParts)
+    ReadStringFromFile(this IFileSystem fileSystem, params string[] pathParts)
     {
         return
 #if ASYNC
-await
+        await
 #endif
-fileSystem.ReadStringFromFile(FileSystem.Combine(pathParts));
+        fileSystem.ReadStringFromFile(FileSystem.Combine(pathParts));
     }
 
     public static void PersistToFile(this IFileSystem fileSystem, object target, params string[] pathParts)
@@ -129,7 +130,7 @@ fileSystem.ReadStringFromFile(FileSystem.Combine(pathParts));
     }
 
     public static string SearchUpForDirectory(this IFileSystem fileSystem, string startingPoint,
-        string directoryToFind)
+    string directoryToFind)
     {
         var dirs = fileSystem.ChildDirectoriesFor(startingPoint).Select(dir => new DirectoryInfo(dir));
         if (!dirs.Any(dir => dir.Name.EqualsIgnoreCase(directoryToFind)))

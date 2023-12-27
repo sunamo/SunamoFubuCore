@@ -22,6 +22,6 @@ public static class BooleanExtensions
         }
 
         throw new ArgumentException(
-            "The modelBooleanValue parameter should be a single property, validation logic is not allowed, only 'x => x.BooleanValue' usage is allowed, if more is needed do that in the Controller");
+        "The modelBooleanValue parameter should be a single property, validation logic is not allowed, only 'x => x.BooleanValue' usage is allowed, if more is needed do that in the Controller");
     }
 }

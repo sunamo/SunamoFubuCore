@@ -65,9 +65,9 @@ public class DisplayConversionRegistry
     public MakeDisplayExpression<T> IfPropertyMatches<T>(Func<PropertyInfo, bool> matches)
     {
         return
-            makeDisplay<T>(
-                request =>
-                    request.Property != null && request.PropertyType == typeof(T) && matches(request.Property));
+        makeDisplay<T>(
+        request =>
+        request.Property != null && request.PropertyType == typeof(T) && matches(request.Property));
     }
 
     #region Nested type: MakeDisplayExpressionBase
@@ -94,7 +94,7 @@ public class DisplayConversionRegistry
     public class MakeDisplayExpression : MakeDisplayExpressionBase
     {
         public MakeDisplayExpression(Action<Func<GetStringRequest, string>> callback)
-            : base(callback)
+        : base(callback)
         {
         }
 
@@ -112,7 +112,7 @@ public class DisplayConversionRegistry
     public class MakeDisplayExpression<T> : MakeDisplayExpressionBase
     {
         public MakeDisplayExpression(Action<Func<GetStringRequest, string>> callback)
-            : base(callback)
+        : base(callback)
         {
         }
 

@@ -27,7 +27,7 @@ public abstract class CaseInsensitiveStringMethodPropertyOperation : IPropertyOp
             var binaryExpression = Expression.Coalesce(propertyPath, Expression.Constant(string.Empty));
             var invariantCulture = Expression.Constant(StringComparison.InvariantCultureIgnoreCase);
             Expression expression =
-                Expression.Call(binaryExpression, _method, valueToCheckConstant, invariantCulture);
+    Expression.Call(binaryExpression, _method, valueToCheckConstant, invariantCulture);
             if (_negate) expression = Expression.Not(expression);
 
             var lambdaParameter = propertyPath.GetParameter<T>();

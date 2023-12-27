@@ -22,17 +22,17 @@ public class ConcurrentCache<TKey, TValue> : IEnumerable<TValue>
     };
 
     public ConcurrentCache()
-        : this(new ConcurrentDictionary<TKey, TValue>())
+    : this(new ConcurrentDictionary<TKey, TValue>())
     {
     }
 
     public ConcurrentCache(Func<TKey, TValue> onMissing)
-        : this(new ConcurrentDictionary<TKey, TValue>(), onMissing)
+    : this(new ConcurrentDictionary<TKey, TValue>(), onMissing)
     {
     }
 
     public ConcurrentCache(IDictionary<TKey, TValue> dictionary, Func<TKey, TValue> onMissing)
-        : this(dictionary)
+    : this(dictionary)
     {
         _onMissing = onMissing;
     }
@@ -62,7 +62,7 @@ public class ConcurrentCache<TKey, TValue> : IEnumerable<TValue>
 
     [Obsolete("Use First() or FirstOrDefault().")]
     public TValue First =>
-        throw new NotSupportedException("This property is Obsolete.  Use First() or FirstOrDefault().");
+    throw new NotSupportedException("This property is Obsolete.  Use First() or FirstOrDefault().");
 
     public TValue this[TKey key]
     {
@@ -103,11 +103,11 @@ public class ConcurrentCache<TKey, TValue> : IEnumerable<TValue>
     {
         var newValue = false;
         var value = _values.GetOrAdd(key,
-            k =>
-            {
-                newValue = true;
-                return onMissing(k);
-            });
+        k =>
+        {
+            newValue = true;
+            return onMissing(k);
+        });
 
         if (newValue)
             _onAddition(value);

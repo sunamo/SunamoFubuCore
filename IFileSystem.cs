@@ -21,7 +21,7 @@ public interface IFileSystem
 #if ASYNC
     Task<string>
 #else
-    string
+string
 #endif
     ReadStringFromFile(string filename);
     void WriteObjectToFile(string filename, object target);

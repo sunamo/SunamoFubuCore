@@ -1,8 +1,9 @@
-using FubuCore;
-
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Csv;
+
+
+
 
 public abstract class ColumnMapping<T> : IColumnMapping
 {
@@ -23,25 +24,25 @@ public abstract class ColumnMapping<T> : IColumnMapping
         return _columns.SingleOrDefault(x => x.Accessor.Equals(accessor));
     }
 
-    IValueSource IColumnMapping.ValueSource(CsvData data)
+    public IValueSource ValueSource(CsvData data)
     {
         return data.ToValueSource(_columns);
     }
 
-    IValueSource IColumnMapping.ValueSource(CsvData data, CsvData headers)
+    public IValueSource ValueSource(CsvData data, CsvData headers)
     {
         var mapping = this.As<IColumnMapping>();
         var badColumns = new List<string>();
 
         var columns = headers
-            .Values
-            .Select(x =>
-            {
-                var column = mapping.ColumnFor(x);
-                if (column == null) badColumns.Add(x);
+        .Values
+        .Select(x =>
+        {
+            var column = mapping.ColumnFor(x);
+            if (column == null) badColumns.Add(x);
 
-                return column;
-            }).ToArray();
+            return column;
+        }).ToArray();
 
         if (badColumns.Any()) throw new CsvColumnException(badColumns);
 
@@ -60,6 +61,8 @@ public abstract class ColumnMapping<T> : IColumnMapping
 
         return new ColumnExpression(column);
     }
+
+
 }
 
 [Serializable]

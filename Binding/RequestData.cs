@@ -1,3 +1,5 @@
+using SunamoFubuCore.Binding.Values;
+
 namespace SunamoFubuCore.Binding;
 
 // TODO -- go look at all of the usages of this thing and clean stuff up
@@ -70,7 +72,7 @@ public class RequestData : IRequestData
         return new RequestData(sources);
     }
 
-    // Living with the limitation that only *ONE* source can ever have 
+    // Living with the limitation that only *ONE* source can ever have
     public IEnumerable<IRequestData> GetEnumerableRequests(string prefixOrChild)
     {
         foreach (var valueSource in _sources)

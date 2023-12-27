@@ -1,3 +1,5 @@
+using SunamoFubuCore.Binding.Values;
+
 namespace SunamoFubuCore.Configuration;
 
 public class AppSettingsProvider : ISettingsProvider
@@ -41,7 +43,7 @@ public class AppSettingsProvider : ISettingsProvider
     {
         var key = KeyFor(property);
         return ConfigurationManager.AppSettings.AllKeys.Contains(key)
-            ? ConfigurationManager.AppSettings[key]
-            : string.Empty;
+        ? ConfigurationManager.AppSettings[key]
+        : string.Empty;
     }
 }

@@ -1,6 +1,8 @@
-using SunamoFubuCore;
+using SunamoFubuCore.Binding.Values;
 
 namespace SunamoFubuCore.Configuration;
+
+
 
 public class SettingsProvider : ISettingsProvider
 {
@@ -10,7 +12,7 @@ public class SettingsProvider : ISettingsProvider
     private readonly Lazy<SubstitutedRequestData> _substitutedData;
 
     private SettingsProvider(IObjectResolver resolver, IEnumerable<SettingsData> settings)
-        : this(resolver, new ISettingsSource[] { new SettingsSource(settings) })
+    : this(resolver, new ISettingsSource[] { new SettingsSource(settings) })
     {
     }
 
@@ -27,8 +29,8 @@ public class SettingsProvider : ISettingsProvider
         _requestData = new Lazy<SettingsRequestData>(() => new SettingsRequestData(_settings.Value));
 
         _substitutedData =
-            new Lazy<SubstitutedRequestData>(() =>
-                new SubstitutedRequestData(_requestData.Value, _requestData.Value));
+        new Lazy<SubstitutedRequestData>(() =>
+        new SubstitutedRequestData(_requestData.Value, _requestData.Value));
     }
 
     public T SettingsFor<T>() where T : class, new()

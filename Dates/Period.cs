@@ -46,8 +46,8 @@ public class Period
         if (utcTime < From.UtcTime) return false;
 
         return To != null
-            ? utcTime < To.UtcTime
-            : true;
+        ? utcTime < To.UtcTime
+        : true;
     }
 
     public bool Equals(Period other)

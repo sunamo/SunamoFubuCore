@@ -6,33 +6,33 @@ public class FubuException : Exception
     private readonly string _message;
 
     public FubuException(int errorCode, string message)
-        : base(message)
+    : base(message)
     {
         ErrorCode = errorCode;
         _message = message;
     }
 
     private FubuException(int errorCode, string message, Exception innerException)
-        : base(message, innerException)
+    : base(message, innerException)
     {
         ErrorCode = errorCode;
         _message = message;
     }
 
     protected FubuException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
+    : base(info, context)
     {
         ErrorCode = info.GetInt32("errorCode");
         _message = info.GetString("message");
     }
 
     public FubuException(int errorCode, Exception inner, string template, params string[] substitutions)
-        : this(errorCode, template.ToFormat(substitutions), inner)
+    : this(errorCode, template.ToFormat(substitutions), inner)
     {
     }
 
     public FubuException(int errorCode, string template, params string[] substitutions)
-        : this(errorCode, template.ToFormat(substitutions))
+    : this(errorCode, template.ToFormat(substitutions))
     {
     }
 

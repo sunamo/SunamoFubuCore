@@ -1,3 +1,5 @@
+using SunamoFubuCore.Binding.Values;
+
 namespace SunamoFubuCore.Binding;
 
 public interface IObjectResolver

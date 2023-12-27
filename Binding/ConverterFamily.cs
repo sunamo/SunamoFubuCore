@@ -7,7 +7,7 @@ public class ConverterFamily : IConverterFamily, DescribesItself
     private readonly Predicate<PropertyInfo> _matches;
 
     public ConverterFamily(Predicate<PropertyInfo> matches,
-        Func<IValueConverterRegistry, PropertyInfo, ValueConverter> builder, string description)
+    Func<IValueConverterRegistry, PropertyInfo, ValueConverter> builder, string description)
     {
         _matches = matches;
         _builder = builder;

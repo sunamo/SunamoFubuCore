@@ -1,3 +1,5 @@
+using SunamoFubuCore.Binding.Values;
+
 namespace SunamoFubuCore.Binding;
 
 public class InMemoryRequestData : RequestData
@@ -6,7 +8,7 @@ public class InMemoryRequestData : RequestData
 
 
     private InMemoryRequestData(IDictionary<string, object> values)
-        : base(new FlatValueSource<object>(values, "in memory"))
+    : base(new FlatValueSource<object>(values, "in memory"))
     {
         _values = new Cache<string, object>(values);
     }

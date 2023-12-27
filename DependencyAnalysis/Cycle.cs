@@ -14,7 +14,7 @@ public class Cycle
         get
         {
             return _nodes.Select(n => n.Name.ToString())
-                .Aggregate((current, next) => string.Format("{0}->{1}", current, next));
+            .Aggregate((current, next) => string.Format("{0}->{1}", current, next));
         }
     }
 
