@@ -1,15 +1,16 @@
-namespace FubuCore.Reflection.Expressions
+using SunamoFubuCore.Reflection;
+
+namespace SunamoFubuCore.Reflection.Expressions;
+
+public class StringEqualsPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
 {
-    public class StringEqualsPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
+    private static readonly MethodInfo _method =
+        ReflectionHelper.GetMethod<string>(s => s.Equals("", StringComparison.CurrentCulture));
+
+    public StringEqualsPropertyOperation()
+        : base(_method)
     {
-        private static readonly MethodInfo _method =
-            ReflectionHelper.GetMethod<string>(s => s.Equals("", StringComparison.CurrentCulture));
-
-        public StringEqualsPropertyOperation()
-            : base(_method)
-        {
-        }
-
-        public override string Text => "is";
     }
+
+    public override string Text => "is";
 }

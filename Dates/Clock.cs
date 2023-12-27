@@ -1,37 +1,38 @@
-namespace FubuCore.Dates
+using SunamoFubuCore.Dates;
+
+namespace SunamoFubuCore.Dates;
+
+public class Clock : IClock
 {
-    public class Clock : IClock
+    private Func<DateTime> _now = () => DateTime.UtcNow;
+
+    public DateTime UtcNow()
     {
-        private Func<DateTime> _now = () => DateTime.UtcNow;
+        return _now();
+    }
 
-        public DateTime UtcNow()
-        {
-            return _now();
-        }
+    public void Live()
+    {
+        _now = () => DateTime.Now;
+    }
 
-        public void Live()
-        {
-            _now = () => DateTime.Now;
-        }
+    public Clock LocalNow(DateTime localTime, TimeZoneInfo localZone = null)
+    {
+        var zone = localZone ?? TimeZoneInfo.Local;
+        var now = localTime.ToUniversalTime(zone);
 
-        public Clock LocalNow(DateTime localTime, TimeZoneInfo localZone = null)
-        {
-            var zone = localZone ?? TimeZoneInfo.Local;
-            var now = localTime.ToUniversalTime(zone);
+        _now = () => now;
+        return this;
+    }
 
-            _now = () => now;
-            return this;
-        }
+    public Clock RestartAtLocal(DateTime desiredLocalTime, TimeZoneInfo localZone = null)
+    {
+        var zone = localZone ?? TimeZoneInfo.Local;
+        var desired = desiredLocalTime.ToUniversalTime(zone);
 
-        public Clock RestartAtLocal(DateTime desiredLocalTime, TimeZoneInfo localZone = null)
-        {
-            var zone = localZone ?? TimeZoneInfo.Local;
-            var desired = desiredLocalTime.ToUniversalTime(zone);
+        var delta = desired.Subtract(DateTime.UtcNow);
+        _now = () => DateTime.UtcNow.Add(delta);
 
-            var delta = desired.Subtract(DateTime.UtcNow);
-            _now = () => DateTime.UtcNow.Add(delta);
-
-            return this;
-        }
+        return this;
     }
 }

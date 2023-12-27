@@ -1,17 +1,16 @@
-namespace FubuCore.Descriptions
+namespace SunamoFubuCore.Descriptions;
+
+public class Spacer : IPrefixSource
 {
-    public class Spacer : IPrefixSource
+    private readonly string _prefix;
+
+    public Spacer(int numberOfSpaces)
     {
-        private readonly string _prefix;
+        _prefix = "".PadRight(numberOfSpaces, ' ');
+    }
 
-        public Spacer(int numberOfSpaces)
-        {
-            _prefix = "".PadRight(numberOfSpaces, ' ');
-        }
-
-        public string GetPrefix()
-        {
-            return _prefix;
-        }
+    public string GetPrefix()
+    {
+        return _prefix;
     }
 }

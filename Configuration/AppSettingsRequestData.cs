@@ -1,11 +1,10 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public class AppSettingsRequestData
 {
-    public class AppSettingsRequestData
+    [Obsolete("Use the value on AppSettingsProvider instead")]
+    public static string GetValueFor<T>(Expression<Func<T, object>> property)
     {
-        [Obsolete("Use the value on AppSettingsProvider instead")]
-        public static string GetValueFor<T>(Expression<Func<T, object>> property)
-        {
-            return AppSettingsProvider.GetValueFor(property);
-        }
+        return AppSettingsProvider.GetValueFor(property);
     }
 }

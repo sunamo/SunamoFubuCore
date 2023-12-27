@@ -1,17 +1,16 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public class FolderAppSettingsXmlSource : ISettingsSource
 {
-    public class FolderAppSettingsXmlSource : ISettingsSource
+    private readonly string _folder;
+
+    public FolderAppSettingsXmlSource(string folder)
     {
-        private readonly string _folder;
+        _folder = folder;
+    }
 
-        public FolderAppSettingsXmlSource(string folder)
-        {
-            _folder = folder;
-        }
-
-        public IEnumerable<SettingsData> FindSettingData()
-        {
-            return Directory.GetFiles(_folder, "*.config").Select(XmlSettingsParser.Parse);
-        }
+    public IEnumerable<SettingsData> FindSettingData()
+    {
+        return Directory.GetFiles(_folder, "*.config").Select(XmlSettingsParser.Parse);
     }
 }

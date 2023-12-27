@@ -1,79 +1,80 @@
-namespace FubuCore.Binding.InMemory
+using SunamoFubuCore.Binding;
+
+namespace SunamoFubuCore.Binding.InMemory;
+
+public interface IBindingHistory
 {
-    public interface IBindingHistory
+    void Store(BindingReport report);
+}
+
+public class InMemoryBindingHistory : IBindingHistory
+{
+    private readonly IList<BindingReport> _reports = new List<BindingReport>();
+
+    public IEnumerable<BindingReport> AllReports => _reports;
+
+    public void Store(BindingReport report)
     {
-        void Store(BindingReport report);
+        _reports.Add(report);
+    }
+}
+
+public class RecordingBindingLogger : IBindingLogger
+{
+    private readonly IBindingHistory _history;
+    private readonly Stack<BindingReport> _models = new Stack<BindingReport>();
+    private Type _nextElement;
+
+    public RecordingBindingLogger(IBindingHistory history)
+    {
+        _history = history;
     }
 
-    public class InMemoryBindingHistory : IBindingHistory
+    private BindingReport currentReport => _models.Peek();
+
+    public void Chose(Type modelType, IModelBinder binder)
     {
-        private readonly IList<BindingReport> _reports = new List<BindingReport>();
-
-        public IEnumerable<BindingReport> AllReports => _reports;
-
-        public void Store(BindingReport report)
-        {
-            _reports.Add(report);
-        }
+        var report = startReport(modelType, binder);
+        _nextElement = null;
+        _models.Push(report);
     }
 
-    public class RecordingBindingLogger : IBindingLogger
+    // This acts as a de facto PushProperty
+    public void Chose(PropertyInfo property, IPropertyBinder binder)
     {
-        private readonly IBindingHistory _history;
-        private readonly Stack<BindingReport> _models = new Stack<BindingReport>();
-        private Type _nextElement;
+        // Don't do anything if this has happened in the middle of a set properties operation
+        if (_models.Any()) currentReport.AddProperty(property, binder);
+    }
 
-        public RecordingBindingLogger(IBindingHistory history)
-        {
-            _history = history;
-        }
+    public void Chose(PropertyInfo property, ValueConverter converter)
+    {
+        if (_models.Any()) currentReport.For(property).Chose(converter);
+    }
 
-        private BindingReport currentReport => _models.Peek();
+    public void PushElement(Type elementType)
+    {
+        _nextElement = elementType;
+    }
 
-        public void Chose(Type modelType, IModelBinder binder)
-        {
-            var report = startReport(modelType, binder);
-            _nextElement = null;
-            _models.Push(report);
-        }
+    public void FinishedModel()
+    {
+        if (_models.Count == 1) _history.Store(currentReport);
 
-        // This acts as a de facto PushProperty
-        public void Chose(PropertyInfo property, IPropertyBinder binder)
-        {
-            // Don't do anything if this has happened in the middle of a set properties operation
-            if (_models.Any()) currentReport.AddProperty(property, binder);
-        }
+        _models.Pop();
+    }
 
-        public void Chose(PropertyInfo property, ValueConverter converter)
-        {
-            if (_models.Any()) currentReport.For(property).Chose(converter);
-        }
+    public void UsedValue(BindingValue value)
+    {
+        if (_models.Any()) currentReport.Used(value);
+    }
 
-        public void PushElement(Type elementType)
-        {
-            _nextElement = elementType;
-        }
+    private BindingReport startReport(Type modelType, IModelBinder binder)
+    {
+        if (_nextElement != null && _models.Any())
+            return currentReport.LastProperty.AddElement(_nextElement, binder);
 
-        public void FinishedModel()
-        {
-            if (_models.Count == 1) _history.Store(currentReport);
+        if (_models.Any()) return currentReport.LastProperty.BindAsNestedChild(binder);
 
-            _models.Pop();
-        }
-
-        public void UsedValue(BindingValue value)
-        {
-            if (_models.Any()) currentReport.Used(value);
-        }
-
-        private BindingReport startReport(Type modelType, IModelBinder binder)
-        {
-            if (_nextElement != null && _models.Any())
-                return currentReport.LastProperty.AddElement(_nextElement, binder);
-
-            if (_models.Any()) return currentReport.LastProperty.BindAsNestedChild(binder);
-
-            return new BindingReport(modelType, binder);
-        }
+        return new BindingReport(modelType, binder);
     }
 }

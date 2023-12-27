@@ -1,9 +1,8 @@
-namespace FubuCore.Reflection.Expressions
+namespace SunamoFubuCore.Reflection.Expressions;
+
+public interface IPropertyOperation
 {
-    public interface IPropertyOperation
-    {
-        string OperationName { get; }
-        string Text { get; }
-        Func<object, Expression<Func<T, bool>>> GetPredicateBuilder<T>(MemberExpression propertyPath);
-    }
+    string OperationName { get; }
+    string Text { get; }
+    Func<object, Expression<Func<T, bool>>> GetPredicateBuilder<T>(MemberExpression propertyPath);
 }

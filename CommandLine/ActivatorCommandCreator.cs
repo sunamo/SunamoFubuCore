@@ -1,10 +1,11 @@
-namespace FubuCore.CommandLine
+using FubuCore;
+
+namespace SunamoFubuCore.CommandLine;
+
+public class ActivatorCommandCreator : ICommandCreator
 {
-    public class ActivatorCommandCreator : ICommandCreator
+    public IFubuCommand Create(Type commandType)
     {
-        public IFubuCommand Create(Type commandType)
-        {
-            return Activator.CreateInstance(commandType).As<IFubuCommand>();
-        }
+        return Activator.CreateInstance(commandType).As<IFubuCommand>();
     }
 }

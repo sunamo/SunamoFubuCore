@@ -1,7 +1,6 @@
-namespace FubuCore.Dates
+namespace SunamoFubuCore.Dates;
+
+public interface ITimeZoneContext
 {
-    public interface ITimeZoneContext
-    {
-        TimeZoneInfo GetTimeZone();
-    }
+    TimeZoneInfo GetTimeZone();
 }

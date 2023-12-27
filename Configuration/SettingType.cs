@@ -1,8 +1,7 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public enum SettingType
 {
-    public enum SettingType
-    {
-        Required,
-        Optional
-    }
+    Required,
+    Optional
 }

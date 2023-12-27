@@ -1,8 +1,7 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public interface IPropertyBinder
 {
-    public interface IPropertyBinder
-    {
-        bool Matches(PropertyInfo property);
-        void Bind(PropertyInfo property, IBindingContext context);
-    }
+    bool Matches(PropertyInfo property);
+    void Bind(PropertyInfo property, IBindingContext context);
 }

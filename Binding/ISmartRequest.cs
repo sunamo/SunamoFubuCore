@@ -1,42 +1,41 @@
-namespace FubuCore.Binding
-{
-    public interface ISmartRequest
-    {
-        object Value(Type type, string key);
-        bool Value(Type type, string key, Action<object> continuation);
+namespace SunamoFubuCore.Binding;
 
-        T Value<T>(string key);
-        bool Value<T>(string key, Action<T> callback);
+public interface ISmartRequest
+{
+    object Value(Type type, string key);
+    bool Value(Type type, string key, Action<object> continuation);
+
+    T Value<T>(string key);
+    bool Value<T>(string key, Action<T> callback);
+}
+
+public class InMemorySmartRequest : ISmartRequest
+{
+    private readonly InMemoryRequestData _request = new InMemoryRequestData();
+
+    public object this[string key]
+    {
+        get => _request[key];
+        set => _request[key] = value;
     }
 
-    public class InMemorySmartRequest : ISmartRequest
+    public object Value(Type type, string key)
     {
-        private readonly InMemoryRequestData _request = new InMemoryRequestData();
+        return _request.Value(key);
+    }
 
-        public object this[string key]
-        {
-            get => _request[key];
-            set => _request[key] = value;
-        }
+    public bool Value(Type type, string key, Action<object> continuation)
+    {
+        return _request.Value(key, value => continuation(value.RawValue));
+    }
 
-        public object Value(Type type, string key)
-        {
-            return _request.Value(key);
-        }
+    public T Value<T>(string key)
+    {
+        return (T)_request.Value(key);
+    }
 
-        public bool Value(Type type, string key, Action<object> continuation)
-        {
-            return _request.Value(key, value => continuation(value.RawValue));
-        }
-
-        public T Value<T>(string key)
-        {
-            return (T)_request.Value(key);
-        }
-
-        public bool Value<T>(string key, Action<T> callback)
-        {
-            return _request.Value(key, o => callback((T)o.RawValue));
-        }
+    public bool Value<T>(string key, Action<T> callback)
+    {
+        return _request.Value(key, o => callback((T)o.RawValue));
     }
 }

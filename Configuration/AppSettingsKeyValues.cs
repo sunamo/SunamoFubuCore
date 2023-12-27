@@ -1,35 +1,34 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public class AppSettingsKeyValues : IKeyValues
 {
-    public class AppSettingsKeyValues : IKeyValues
+    private readonly NameValueCollection _settings = ConfigurationManager.AppSettings;
+
+    public bool Has(string key)
     {
-        private readonly NameValueCollection _settings = ConfigurationManager.AppSettings;
+        if (!_settings.HasKeys()) return false;
 
-        public bool Has(string key)
-        {
-            if (!_settings.HasKeys()) return false;
+        return _settings.AllKeys.Contains(key);
+    }
 
-            return _settings.AllKeys.Contains(key);
-        }
+    public string Get(string key)
+    {
+        return _settings[key];
+    }
 
-        public string Get(string key)
-        {
-            return _settings[key];
-        }
+    public IEnumerable<string> GetKeys()
+    {
+        if (!_settings.HasKeys()) return Enumerable.Empty<string>();
 
-        public IEnumerable<string> GetKeys()
-        {
-            if (!_settings.HasKeys()) return Enumerable.Empty<string>();
+        return _settings.AllKeys;
+    }
 
-            return _settings.AllKeys;
-        }
+    public bool ForValue(string key, Action<string, string> callback)
+    {
+        if (!Has(key)) return false;
 
-        public bool ForValue(string key, Action<string, string> callback)
-        {
-            if (!Has(key)) return false;
+        callback(key, Get(key));
 
-            callback(key, Get(key));
-
-            return true;
-        }
+        return true;
     }
 }

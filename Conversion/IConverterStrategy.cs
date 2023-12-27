@@ -1,7 +1,6 @@
-namespace FubuCore.Conversion
+namespace SunamoFubuCore.Conversion;
+
+public interface IConverterStrategy : DescribesItself
 {
-    public interface IConverterStrategy : DescribesItself
-    {
-        object Convert(IConversionRequest request);
-    }
+    object Convert(IConversionRequest request);
 }

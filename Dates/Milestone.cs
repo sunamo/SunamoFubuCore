@@ -1,89 +1,91 @@
-namespace FubuCore.Dates
+using SunamoFubuCore;
+using SunamoFubuCore.Dates;
+
+namespace SunamoFubuCore.Dates;
+
+public class Milestone
 {
-    public class Milestone
+    private DateTime? _timestamp;
+
+    public Milestone()
     {
-        private DateTime? _timestamp;
+    }
 
-        public Milestone()
-        {
-        }
+    public Milestone(string timeString)
+    {
+        if (timeString.IsNotEmpty()) _timestamp = DateTime.Parse(timeString);
+    }
 
-        public Milestone(string timeString)
-        {
-            if (timeString.IsNotEmpty()) _timestamp = DateTime.Parse(timeString);
-        }
+    public Milestone(LocalTime time) : this(time.UtcTime)
+    {
+    }
 
-        public Milestone(LocalTime time) : this(time.UtcTime)
-        {
-        }
+    public Milestone(DateTime timestamp)
+    {
+        Capture(timestamp);
+    }
 
-        public Milestone(DateTime timestamp)
-        {
-            Capture(timestamp);
-        }
+    public DateTime? Timestamp
+    {
+        get => _timestamp;
+        set => _timestamp = value;
+    }
 
-        public DateTime? Timestamp
-        {
-            get => _timestamp;
-            set => _timestamp = value;
-        }
+    public bool IsTrue => _timestamp.HasValue;
 
-        public bool IsTrue => _timestamp.HasValue;
+    public bool IsFalse => !IsTrue;
 
-        public bool IsFalse => !IsTrue;
+    public static implicit operator bool(Milestone m)
+    {
+        if (m == null) return false;
 
-        public static implicit operator bool(Milestone m)
-        {
-            if (m == null) return false;
+        return m.IsTrue;
+    }
 
-            return m.IsTrue;
-        }
-
-        public Milestone Capture(DateTime timestamp)
-        {
-            if (timestamp.Kind != DateTimeKind.Utc)
-                _timestamp = timestamp.ToUniversalTime();
-            else
-                _timestamp = timestamp;
+    public Milestone Capture(DateTime timestamp)
+    {
+        if (timestamp.Kind != DateTimeKind.Utc)
+            _timestamp = timestamp.ToUniversalTime();
+        else
+            _timestamp = timestamp;
 
 
-            return this;
-        }
+        return this;
+    }
 
 
-        public bool HappenedBefore(DateTime time)
-        {
-            return _timestamp.HasValue ? _timestamp.Value < time : false;
-        }
+    public bool HappenedBefore(DateTime time)
+    {
+        return _timestamp.HasValue ? _timestamp.Value < time : false;
+    }
 
-        public bool Equals(Milestone other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return other._timestamp.Equals(_timestamp);
-        }
+    public bool Equals(Milestone other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return other._timestamp.Equals(_timestamp);
+    }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(Milestone)) return false;
-            return Equals((Milestone)obj);
-        }
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != typeof(Milestone)) return false;
+        return Equals((Milestone)obj);
+    }
 
-        public override int GetHashCode()
-        {
-            return _timestamp.HasValue ? _timestamp.Value.GetHashCode() : 0;
-        }
+    public override int GetHashCode()
+    {
+        return _timestamp.HasValue ? _timestamp.Value.GetHashCode() : 0;
+    }
 
-        public void Clear()
-        {
-            _timestamp = null;
-        }
+    public void Clear()
+    {
+        _timestamp = null;
+    }
 
-        public override string ToString()
-        {
-            return _timestamp.HasValue ? _timestamp.Value.ToString("s") : string.Empty;
-        }
+    public override string ToString()
+    {
+        return _timestamp.HasValue ? _timestamp.Value.ToString("s") : string.Empty;
     }
 }

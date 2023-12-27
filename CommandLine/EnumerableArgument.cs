@@ -1,38 +1,39 @@
-namespace FubuCore.CommandLine
+using SunamoFubuCore;
+
+namespace SunamoFubuCore.CommandLine;
+
+public class EnumerableArgument : Argument
 {
-    public class EnumerableArgument : Argument
+    private readonly ObjectConverter _converter;
+    private readonly PropertyInfo _property;
+
+    public EnumerableArgument(PropertyInfo property, ObjectConverter converter) : base(property, converter)
     {
-        private readonly ObjectConverter _converter;
-        private readonly PropertyInfo _property;
+        _property = property;
+        _converter = converter;
+    }
 
-        public EnumerableArgument(PropertyInfo property, ObjectConverter converter) : base(property, converter)
+    public override bool Handle(object input, Queue<string> tokens)
+    {
+        var elementType = _property.PropertyType.GetGenericArguments().First<Type>();
+        var list = typeof(List<>).CloseAndBuildAs<IList>(elementType);
+
+        var wasHandled = false;
+        while (tokens.Count > 0 && !tokens.NextIsFlag())
         {
-            _property = property;
-            _converter = converter;
+            var value = _converter.FromString(tokens.Dequeue(), elementType);
+            list.Add(value);
+
+            wasHandled = true;
         }
 
-        public override bool Handle(object input, Queue<string> tokens)
-        {
-            var elementType = _property.PropertyType.GetGenericArguments().First<Type>();
-            var list = typeof(List<>).CloseAndBuildAs<IList>(elementType);
+        if (wasHandled) _property.SetValue(input, list, null);
 
-            var wasHandled = false;
-            while (tokens.Count > 0 && !tokens.NextIsFlag())
-            {
-                var value = _converter.FromString(tokens.Dequeue(), elementType);
-                list.Add(value);
+        return wasHandled;
+    }
 
-                wasHandled = true;
-            }
-
-            if (wasHandled) _property.SetValue(input, list, null);
-
-            return wasHandled;
-        }
-
-        public override string ToUsageDescription()
-        {
-            return "[<{0}1 {0}2 {0}3 ...>]".ToFormat(_property.Name.ToLower());
-        }
+    public override string ToUsageDescription()
+    {
+        return "[<{0}1 {0}2 {0}3 ...>]".ToFormat(_property.Name.ToLower());
     }
 }

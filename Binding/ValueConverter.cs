@@ -1,30 +1,29 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public interface ValueConverter
 {
-    public interface ValueConverter
+    object Convert(IPropertyContext context);
+}
+
+public class LambdaValueConverter : ValueConverter, DescribesItself
+{
+    private readonly Func<IPropertyContext, object> _converter;
+    private readonly string _description;
+
+    public LambdaValueConverter(Func<IPropertyContext, object> converter, string description)
     {
-        object Convert(IPropertyContext context);
+        _converter = converter;
+        _description = description;
     }
 
-    public class LambdaValueConverter : ValueConverter, DescribesItself
+    public void Describe(Description description)
     {
-        private readonly Func<IPropertyContext, object> _converter;
-        private readonly string _description;
+        description.Title = "Lambda";
+        description.ShortDescription = _description;
+    }
 
-        public LambdaValueConverter(Func<IPropertyContext, object> converter, string description)
-        {
-            _converter = converter;
-            _description = description;
-        }
-
-        public void Describe(Description description)
-        {
-            description.Title = "Lambda";
-            description.ShortDescription = _description;
-        }
-
-        public object Convert(IPropertyContext context)
-        {
-            return _converter(context);
-        }
+    public object Convert(IPropertyContext context)
+    {
+        return _converter(context);
     }
 }

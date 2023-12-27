@@ -1,74 +1,75 @@
 //using System.Data;
 
-namespace FubuCore.Binding
-{
-    public class RowProcessingRequest<T>
-    {
-        public RowProcessingRequest()
-        {
-            Callback = x => { };
-        }
+using FubuCore;
 
-        public Func<IDataReader, T> Finder { get; set; }
-        public Action<T> Callback { get; set; }
-        public IDataReader Reader { get; set; }
+namespace SunamoFubuCore.Binding;
+
+public class RowProcessingRequest<T>
+{
+    public RowProcessingRequest()
+    {
+        Callback = x => { };
     }
 
-    public class ReaderBinder
+    public Func<IDataReader, T> Finder { get; set; }
+    public Action<T> Callback { get; set; }
+    public IDataReader Reader { get; set; }
+}
+
+public class ReaderBinder
+{
+    private readonly Cache<string, string> _aliases = new Cache<string, string>(key => key);
+    private readonly IObjectResolver _binder;
+    private readonly IServiceLocator _services;
+
+    public ReaderBinder(IObjectResolver binder, IServiceLocator services)
     {
-        private readonly Cache<string, string> _aliases = new Cache<string, string>(key => key);
-        private readonly IObjectResolver _binder;
-        private readonly IServiceLocator _services;
+        _binder = binder;
+        _services = services;
+    }
 
-        public ReaderBinder(IObjectResolver binder, IServiceLocator services)
+    public IEnumerable<T> Build<T>(Func<IDataReader> getReader) where T : new()
+    {
+        using (var reader = getReader())
         {
-            _binder = binder;
-            _services = services;
+            return Build<T>(reader);
         }
+    }
 
-        public IEnumerable<T> Build<T>(Func<IDataReader> getReader) where T : new()
+    public IEnumerable<T> Build<T>(IDataReader reader) where T : new()
+    {
+        var list = new List<T>();
+
+        Build(new RowProcessingRequest<T>
         {
-            using (var reader = getReader())
-            {
-                return Build<T>(reader);
-            }
-        }
+            Callback = list.Add,
+            Finder = r => new T(),
+            Reader = reader
+        });
 
-        public IEnumerable<T> Build<T>(IDataReader reader) where T : new()
+        return list;
+    }
+
+    public void Build<T>(RowProcessingRequest<T> input)
+    {
+        var reader = input.Reader;
+
+        // TODO -- awkward!  Let's do some convenience methods here and make this easier
+        var request = new DataReaderValues(reader, _aliases);
+        var context = new BindingContext(new RequestData(new FlatValueSource(request)), _services,
+            new NulloBindingLogger());
+
+        while (reader.Read())
         {
-            var list = new List<T>();
+            var target = input.Finder(reader);
+            _binder.BindProperties(target, context);
 
-            Build(new RowProcessingRequest<T>
-            {
-                Callback = list.Add,
-                Finder = r => new T(),
-                Reader = reader
-            });
-
-            return list;
+            input.Callback(target);
         }
+    }
 
-        public void Build<T>(RowProcessingRequest<T> input)
-        {
-            var reader = input.Reader;
-
-            // TODO -- awkward!  Let's do some convenience methods here and make this easier
-            var request = new DataReaderValues(reader, _aliases);
-            var context = new BindingContext(new RequestData(new FlatValueSource(request)), _services,
-                new NulloBindingLogger());
-
-            while (reader.Read())
-            {
-                var target = input.Finder(reader);
-                _binder.BindProperties(target, context);
-
-                input.Callback(target);
-            }
-        }
-
-        public void SetAlias(string name, string alias)
-        {
-            _aliases[name] = alias;
-        }
+    public void SetAlias(string name, string alias)
+    {
+        _aliases[name] = alias;
     }
 }

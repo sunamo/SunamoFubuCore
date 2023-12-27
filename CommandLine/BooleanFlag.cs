@@ -1,30 +1,31 @@
-namespace FubuCore.CommandLine
+using SunamoFubuCore;
+
+namespace SunamoFubuCore.CommandLine;
+
+public class BooleanFlag : TokenHandlerBase
 {
-    public class BooleanFlag : TokenHandlerBase
+    private readonly PropertyInfo _property;
+
+    public BooleanFlag(PropertyInfo property) : base(property)
     {
-        private readonly PropertyInfo _property;
+        _property = property;
+    }
 
-        public BooleanFlag(PropertyInfo property) : base(property)
+    public override bool Handle(object input, Queue<string> tokens)
+    {
+        if (tokens.NextIsFlagFor(_property))
         {
-            _property = property;
+            tokens.Dequeue();
+            _property.SetValue(input, true, null);
+
+            return true;
         }
 
-        public override bool Handle(object input, Queue<string> tokens)
-        {
-            if (tokens.NextIsFlagFor(_property))
-            {
-                tokens.Dequeue();
-                _property.SetValue(input, true, null);
+        return false;
+    }
 
-                return true;
-            }
-
-            return false;
-        }
-
-        public override string ToUsageDescription()
-        {
-            return "[{0}]".ToFormat(InputParser.ToFlagAliases(_property));
-        }
+    public override string ToUsageDescription()
+    {
+        return "[{0}]".ToFormat(InputParser.ToFlagAliases(_property));
     }
 }

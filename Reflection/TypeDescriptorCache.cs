@@ -1,58 +1,57 @@
-namespace FubuCore.Reflection
+namespace SunamoFubuCore.Reflection;
+
+public interface ITypeDescriptorCache
 {
-    public interface ITypeDescriptorCache
+    IDictionary<string, PropertyInfo> GetPropertiesFor<T>();
+    IDictionary<string, PropertyInfo> GetPropertiesFor(Type itemType);
+    void ForEachProperty(Type itemType, Action<PropertyInfo> action);
+    void ClearAll();
+}
+
+public class TypeDescriptorCache : ITypeDescriptorCache
+{
+    private static readonly Cache<Type, IDictionary<string, PropertyInfo>> _cache;
+
+    static TypeDescriptorCache()
     {
-        IDictionary<string, PropertyInfo> GetPropertiesFor<T>();
-        IDictionary<string, PropertyInfo> GetPropertiesFor(Type itemType);
-        void ForEachProperty(Type itemType, Action<PropertyInfo> action);
-        void ClearAll();
+        _cache = new Cache<Type, IDictionary<string, PropertyInfo>>(type =>
+        {
+            var dict = new Dictionary<string, PropertyInfo>();
+
+            foreach (var propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!propertyInfo.CanWrite) continue;
+
+                dict.Add(propertyInfo.Name, propertyInfo);
+            }
+
+            return dict;
+        });
     }
 
-    public class TypeDescriptorCache : ITypeDescriptorCache
+    public IDictionary<string, PropertyInfo> GetPropertiesFor<T>()
     {
-        private static readonly Cache<Type, IDictionary<string, PropertyInfo>> _cache;
+        return GetPropertiesFor(typeof(T));
+    }
 
-        static TypeDescriptorCache()
-        {
-            _cache = new Cache<Type, IDictionary<string, PropertyInfo>>(type =>
-            {
-                var dict = new Dictionary<string, PropertyInfo>();
+    public IDictionary<string, PropertyInfo> GetPropertiesFor(Type itemType)
+    {
+        return _cache[itemType];
+    }
 
-                foreach (var propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                {
-                    if (!propertyInfo.CanWrite) continue;
+    public void ForEachProperty(Type itemType, Action<PropertyInfo> action)
+    {
+        _cache[itemType].Values.Each(action);
+    }
 
-                    dict.Add(propertyInfo.Name, propertyInfo);
-                }
+    public void ClearAll()
+    {
+        _cache.ClearAll();
+    }
 
-                return dict;
-            });
-        }
-
-        public IDictionary<string, PropertyInfo> GetPropertiesFor<T>()
-        {
-            return GetPropertiesFor(typeof(T));
-        }
-
-        public IDictionary<string, PropertyInfo> GetPropertiesFor(Type itemType)
-        {
-            return _cache[itemType];
-        }
-
-        public void ForEachProperty(Type itemType, Action<PropertyInfo> action)
-        {
-            _cache[itemType].Values.Each(action);
-        }
-
-        public void ClearAll()
-        {
-            _cache.ClearAll();
-        }
-
-        public static PropertyInfo GetPropertyFor(Type modelType, string propertyName)
-        {
-            var dict = _cache[modelType];
-            return dict.ContainsKey(propertyName) ? dict[propertyName] : null;
-        }
+    public static PropertyInfo GetPropertyFor(Type modelType, string propertyName)
+    {
+        var dict = _cache[modelType];
+        return dict.ContainsKey(propertyName) ? dict[propertyName] : null;
     }
 }

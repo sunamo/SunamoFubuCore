@@ -1,9 +1,8 @@
-namespace FubuCore.Logging
+namespace SunamoFubuCore.Logging;
+
+public enum Level
 {
-    public enum Level
-    {
-        All,
-        DebugOnly,
-        InfoOnly
-    }
+    All,
+    DebugOnly,
+    InfoOnly
 }

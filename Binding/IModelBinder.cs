@@ -1,8 +1,7 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public interface IModelBinder
 {
-    public interface IModelBinder
-    {
-        bool Matches(Type type);
-        object Bind(Type type, IBindingContext context);
-    }
+    bool Matches(Type type);
+    object Bind(Type type, IBindingContext context);
 }

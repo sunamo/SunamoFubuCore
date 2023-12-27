@@ -1,7 +1,6 @@
-namespace FubuCore.Descriptions
+namespace SunamoFubuCore.Descriptions;
+
+public interface DescribesItself
 {
-    public interface DescribesItself
-    {
-        void Describe(Description description);
-    }
+    void Describe(Description description);
 }

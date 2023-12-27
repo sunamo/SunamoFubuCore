@@ -1,14 +1,13 @@
-namespace FubuCore.Reflection.Expressions
+namespace SunamoFubuCore.Reflection.Expressions;
+
+public class GreaterThanOrEqualPropertyOperation : BinaryComparisonPropertyOperation
 {
-    public class GreaterThanOrEqualPropertyOperation : BinaryComparisonPropertyOperation
+    public GreaterThanOrEqualPropertyOperation()
+        : base(ExpressionType.GreaterThanOrEqual)
     {
-        public GreaterThanOrEqualPropertyOperation()
-            : base(ExpressionType.GreaterThanOrEqual)
-        {
-        }
-
-        public override string OperationName => "GreaterThanOrEqual";
-
-        public override string Text => "greater than or equal to";
     }
+
+    public override string OperationName => "GreaterThanOrEqual";
+
+    public override string Text => "greater than or equal to";
 }

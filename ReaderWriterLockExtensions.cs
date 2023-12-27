@@ -1,64 +1,65 @@
-namespace FubuCore
+using SunamoFubuCore;
+
+namespace SunamoFubuCore;
+
+public static class ReaderWriterLockExtensions
 {
-    public static class ReaderWriterLockExtensions
+    public static void Write(this ReaderWriterLockSlim rwLock, Action action)
     {
-        public static void Write(this ReaderWriterLockSlim rwLock, Action action)
+        rwLock.EnterWriteLock();
+        try
         {
-            rwLock.EnterWriteLock();
-            try
-            {
-                action();
-            }
-            finally
-            {
-                rwLock.ExitWriteLock();
-            }
+            action();
         }
-
-        public static T Read<T>(this ReaderWriterLockSlim rwLock, Func<T> func)
+        finally
         {
-            rwLock.EnterReadLock();
-            try
-            {
-                return func();
-            }
-            finally
-            {
-                rwLock.ExitReadLock();
-            }
+            rwLock.ExitWriteLock();
         }
+    }
 
-        public static void MaybeWrite(this ReaderWriterLockSlim theLock, Action action)
+    public static T Read<T>(this ReaderWriterLockSlim rwLock, Func<T> func)
+    {
+        rwLock.EnterReadLock();
+        try
         {
-            try
-            {
-                theLock.EnterUpgradeableReadLock();
-                action();
-            }
-            finally
-            {
-                theLock.ExitUpgradeableReadLock();
-            }
+            return func();
         }
-
-        public static T MaybeWrite<T>(this ReaderWriterLockSlim theLock, Func<T> answer, Func<bool> missingTest,
-            Action write)
+        finally
         {
-            try
-            {
-                theLock.EnterUpgradeableReadLock();
-                if (missingTest())
-                    theLock.Write(() =>
-                    {
-                        if (missingTest()) write();
-                    });
+            rwLock.ExitReadLock();
+        }
+    }
 
-                return answer();
-            }
-            finally
-            {
-                theLock.ExitUpgradeableReadLock();
-            }
+    public static void MaybeWrite(this ReaderWriterLockSlim theLock, Action action)
+    {
+        try
+        {
+            theLock.EnterUpgradeableReadLock();
+            action();
+        }
+        finally
+        {
+            theLock.ExitUpgradeableReadLock();
+        }
+    }
+
+    public static T MaybeWrite<T>(this ReaderWriterLockSlim theLock, Func<T> answer, Func<bool> missingTest,
+        Action write)
+    {
+        try
+        {
+            theLock.EnterUpgradeableReadLock();
+            if (missingTest())
+                theLock.Write(() =>
+                {
+                    if (missingTest()) write();
+                });
+
+            return answer();
+        }
+        finally
+        {
+            theLock.ExitUpgradeableReadLock();
         }
     }
 }

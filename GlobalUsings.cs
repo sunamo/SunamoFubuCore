@@ -1,4 +1,5 @@
-﻿
+
+
 global using FubuCore.Binding.InMemory;
 global using FubuCore.Binding.Logging;
 global using FubuCore.Binding.Values;

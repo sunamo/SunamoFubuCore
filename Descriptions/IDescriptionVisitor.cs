@@ -1,11 +1,10 @@
-namespace FubuCore.Descriptions
-{
-    public interface IDescriptionVisitor
-    {
-        void Start(Description description);
-        void StartList(BulletList list);
+namespace SunamoFubuCore.Descriptions;
 
-        void EndList();
-        void End();
-    }
+public interface IDescriptionVisitor
+{
+    void Start(Description description);
+    void StartList(BulletList list);
+
+    void EndList();
+    void End();
 }

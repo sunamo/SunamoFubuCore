@@ -1,43 +1,44 @@
-namespace FubuCore.Binding
+using SunamoFubuCore;
+
+namespace SunamoFubuCore.Binding;
+
+[Description("Culture/localization/separator friendly conversion to number types")]
+public class NumericTypeFamily : StatelessConverter
 {
-    [Description("Culture/localization/separator friendly conversion to number types")]
-    public class NumericTypeFamily : StatelessConverter
+    public override bool Matches(PropertyInfo property)
     {
-        public override bool Matches(PropertyInfo property)
+        return property.PropertyType.IsNumeric();
+    }
+
+    public override object Convert(IPropertyContext context)
+    {
+        var propertyType = context.Property.PropertyType;
+
+
+        if (context.RawValueFromRequest != null)
         {
-            return property.PropertyType.IsNumeric();
-        }
+            var rawValue = context.RawValueFromRequest.RawValue;
 
-        public override object Convert(IPropertyContext context)
-        {
-            var propertyType = context.Property.PropertyType;
+            if (rawValue.GetType() == propertyType) return rawValue;
 
+            var converter = TypeDescriptor.GetConverter(propertyType);
 
-            if (context.RawValueFromRequest != null)
+            if (rawValue.ToString().IsValidNumber())
             {
-                var rawValue = context.RawValueFromRequest.RawValue;
-
-                if (rawValue.GetType() == propertyType) return rawValue;
-
-                var converter = TypeDescriptor.GetConverter(propertyType);
-
-                if (rawValue.ToString().IsValidNumber())
-                {
-                    var valueToConvert = removeNumericGroupSeparator(rawValue.ToString());
-                    return converter.ConvertFrom(valueToConvert);
-                }
-
-                return converter.ConvertFrom(rawValue);
+                var valueToConvert = removeNumericGroupSeparator(rawValue.ToString());
+                return converter.ConvertFrom(valueToConvert);
             }
 
-            return 0;
+            return converter.ConvertFrom(rawValue);
         }
 
-        private static string removeNumericGroupSeparator(string value)
-        {
-            var culture = Thread.CurrentThread.CurrentCulture;
-            var numberSeparator = culture.NumberFormat.NumberGroupSeparator;
-            return value.Replace(numberSeparator, "");
-        }
+        return 0;
+    }
+
+    private static string removeNumericGroupSeparator(string value)
+    {
+        var culture = Thread.CurrentThread.CurrentCulture;
+        var numberSeparator = culture.NumberFormat.NumberGroupSeparator;
+        return value.Replace(numberSeparator, "");
     }
 }

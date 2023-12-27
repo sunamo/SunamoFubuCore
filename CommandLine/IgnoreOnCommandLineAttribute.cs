@@ -1,7 +1,6 @@
-namespace FubuCore.CommandLine
+namespace SunamoFubuCore.CommandLine;
+
+[AttributeUsage(AttributeTargets.Property)]
+public class IgnoreOnCommandLineAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class IgnoreOnCommandLineAttribute : Attribute
-    {
-    }
 }

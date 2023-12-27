@@ -1,34 +1,33 @@
-namespace FubuCore.Binding.Values
+namespace SunamoFubuCore.Binding.Values;
+
+public class DiagnosticValue : IEnumerable<DiagnosticValueSource>
 {
-    public class DiagnosticValue : IEnumerable<DiagnosticValueSource>
+    private readonly IList<DiagnosticValueSource> _sources = new List<DiagnosticValueSource>();
+
+    public DiagnosticValue(string key)
     {
-        private readonly IList<DiagnosticValueSource> _sources = new List<DiagnosticValueSource>();
+        Key = key;
+    }
 
-        public DiagnosticValue(string key)
-        {
-            Key = key;
-        }
+    public string Key { get; private set; }
 
-        public string Key { get; private set; }
+    public IEnumerator<DiagnosticValueSource> GetEnumerator()
+    {
+        return _sources.GetEnumerator();
+    }
 
-        public IEnumerator<DiagnosticValueSource> GetEnumerator()
-        {
-            return _sources.GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    public void Add(string source, object value)
+    {
+        _sources.Add(new DiagnosticValueSource(source, value));
+    }
 
-        public void Add(string source, object value)
-        {
-            _sources.Add(new DiagnosticValueSource(source, value));
-        }
-
-        public DiagnosticValueSource First()
-        {
-            return _sources.First();
-        }
+    public DiagnosticValueSource First()
+    {
+        return _sources.First();
     }
 }

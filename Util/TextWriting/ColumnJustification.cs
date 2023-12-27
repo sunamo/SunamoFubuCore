@@ -1,8 +1,7 @@
-namespace FubuCore.Util.TextWriting
+namespace SunamoFubuCore.Util.TextWriting;
+
+public enum ColumnJustification
 {
-    public enum ColumnJustification
-    {
-        left,
-        right
-    }
+    left,
+    right
 }

@@ -1,10 +1,9 @@
-namespace FubuCore.Conversion
-{
-    public interface IConversionRequest
-    {
-        string Text { get; }
-        T Get<T>();
+namespace SunamoFubuCore.Conversion;
 
-        IConversionRequest AnotherRequest(string text);
-    }
+public interface IConversionRequest
+{
+    string Text { get; }
+    T Get<T>();
+
+    IConversionRequest AnotherRequest(string text);
 }

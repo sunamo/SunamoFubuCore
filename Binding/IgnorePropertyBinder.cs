@@ -1,23 +1,22 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+[Description("Ignores any property that it applies to")]
+public class IgnorePropertyBinder : IPropertyBinder
 {
-    [Description("Ignores any property that it applies to")]
-    public class IgnorePropertyBinder : IPropertyBinder
+    private readonly Func<PropertyInfo, bool> _filter;
+
+    public IgnorePropertyBinder(Func<PropertyInfo, bool> filter)
     {
-        private readonly Func<PropertyInfo, bool> _filter;
+        _filter = filter;
+    }
 
-        public IgnorePropertyBinder(Func<PropertyInfo, bool> filter)
-        {
-            _filter = filter;
-        }
+    public bool Matches(PropertyInfo property)
+    {
+        return _filter(property);
+    }
 
-        public bool Matches(PropertyInfo property)
-        {
-            return _filter(property);
-        }
-
-        public void Bind(PropertyInfo property, IBindingContext context)
-        {
-            // no-op
-        }
+    public void Bind(PropertyInfo property, IBindingContext context)
+    {
+        // no-op
     }
 }

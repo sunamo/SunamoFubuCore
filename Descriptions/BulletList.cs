@@ -1,24 +1,23 @@
-namespace FubuCore.Descriptions
+namespace SunamoFubuCore.Descriptions;
+
+public class BulletList
 {
-    public class BulletList
+    public BulletList()
     {
-        public BulletList()
-        {
-            Children = new List<Description>();
-        }
+        Children = new List<Description>();
+    }
 
-        public IList<Description> Children { get; }
-        public string Name { get; set; }
-        public string Label { get; set; }
-        public bool IsOrderDependent { get; set; }
+    public IList<Description> Children { get; }
+    public string Name { get; set; }
+    public string Label { get; set; }
+    public bool IsOrderDependent { get; set; }
 
-        public void AcceptVisitor(IDescriptionVisitor visitor)
-        {
-            visitor.StartList(this);
+    public void AcceptVisitor(IDescriptionVisitor visitor)
+    {
+        visitor.StartList(this);
 
-            Children.Each(x => x.AcceptVisitor(visitor));
+        Children.Each(x => x.AcceptVisitor(visitor));
 
-            visitor.EndList();
-        }
+        visitor.EndList();
     }
 }

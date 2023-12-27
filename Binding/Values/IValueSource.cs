@@ -1,18 +1,17 @@
-namespace FubuCore.Binding.Values
+namespace SunamoFubuCore.Binding.Values;
+
+public interface IValueSource
 {
-    public interface IValueSource
-    {
-        string Provenance { get; }
-        bool Has(string key);
-        object Get(string key);
+    string Provenance { get; }
+    bool Has(string key);
+    object Get(string key);
 
-        bool HasChild(string key);
-        IValueSource GetChild(string key);
+    bool HasChild(string key);
+    IValueSource GetChild(string key);
 
-        IEnumerable<IValueSource> GetChildren(string key);
+    IEnumerable<IValueSource> GetChildren(string key);
 
-        void WriteReport(IValueReport report);
+    void WriteReport(IValueReport report);
 
-        bool Value(string key, Action<BindingValue> callback);
-    }
+    bool Value(string key, Action<BindingValue> callback);
 }

@@ -1,30 +1,31 @@
-namespace FubuCore
+using SunamoFubuCore;
+
+namespace SunamoFubuCore;
+
+public static class StreamExtensions
 {
-    public static class StreamExtensions
+    public static string ReadAllText(this Stream stream)
     {
-        public static string ReadAllText(this Stream stream)
-        {
-            var reader = new StreamReader(stream);
-            return reader.ReadToEnd();
-        }
+        var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
+    }
 
 
-        public static byte[] ReadAllBytes(this Stream stream)
+    public static byte[] ReadAllBytes(this Stream stream)
+    {
+        using (var content = new MemoryStream())
         {
-            using (var content = new MemoryStream())
+            var buffer = new byte[4096];
+
+            var read = stream.Read(buffer, 0, 4096);
+            while (read > 0)
             {
-                var buffer = new byte[4096];
+                content.Write(buffer, 0, read);
 
-                var read = stream.Read(buffer, 0, 4096);
-                while (read > 0)
-                {
-                    content.Write(buffer, 0, read);
-
-                    read = stream.Read(buffer, 0, 4096);
-                }
-
-                return content.ToArray();
+                read = stream.Read(buffer, 0, 4096);
             }
+
+            return content.ToArray();
         }
     }
 }

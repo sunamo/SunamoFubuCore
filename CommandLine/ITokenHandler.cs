@@ -1,11 +1,10 @@
-namespace FubuCore.CommandLine
-{
-    public interface ITokenHandler
-    {
-        string Description { get; }
-        string PropertyName { get; }
-        bool Handle(object input, Queue<string> tokens);
+namespace SunamoFubuCore.CommandLine;
 
-        string ToUsageDescription();
-    }
+public interface ITokenHandler
+{
+    string Description { get; }
+    string PropertyName { get; }
+    bool Handle(object input, Queue<string> tokens);
+
+    string ToUsageDescription();
 }

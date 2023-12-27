@@ -1,17 +1,16 @@
-namespace FubuCore.Dates
+namespace SunamoFubuCore.Dates;
+
+public class SimpleTimeZoneContext : ITimeZoneContext
 {
-    public class SimpleTimeZoneContext : ITimeZoneContext
+    private readonly TimeZoneInfo _timeZone;
+
+    public SimpleTimeZoneContext(TimeZoneInfo timeZone)
     {
-        private readonly TimeZoneInfo _timeZone;
+        _timeZone = timeZone;
+    }
 
-        public SimpleTimeZoneContext(TimeZoneInfo timeZone)
-        {
-            _timeZone = timeZone;
-        }
-
-        public TimeZoneInfo GetTimeZone()
-        {
-            return _timeZone;
-        }
+    public TimeZoneInfo GetTimeZone()
+    {
+        return _timeZone;
     }
 }

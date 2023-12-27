@@ -1,7 +1,6 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public interface IModelBinderCache
 {
-    public interface IModelBinderCache
-    {
-        IModelBinder BinderFor(Type modelType);
-    }
+    IModelBinder BinderFor(Type modelType);
 }

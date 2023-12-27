@@ -1,19 +1,18 @@
-namespace FubuCore.Descriptions
+namespace SunamoFubuCore.Descriptions;
+
+public class NumberedPrefixSource : IPrefixSource
 {
-    public class NumberedPrefixSource : IPrefixSource
+    private readonly string _prefix;
+    private int _number;
+
+    public NumberedPrefixSource(int numberOfSpaces)
     {
-        private readonly string _prefix;
-        private int _number;
+        _prefix = "".PadRight(numberOfSpaces, ' ');
+        _number = 0;
+    }
 
-        public NumberedPrefixSource(int numberOfSpaces)
-        {
-            _prefix = "".PadRight(numberOfSpaces, ' ');
-            _number = 0;
-        }
-
-        public string GetPrefix()
-        {
-            return _prefix + (++_number).ToString().PadLeft(3) + ".) ";
-        }
+    public string GetPrefix()
+    {
+        return _prefix + (++_number).ToString().PadLeft(3) + ".) ";
     }
 }

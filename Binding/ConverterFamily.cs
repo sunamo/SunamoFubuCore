@@ -1,32 +1,31 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public class ConverterFamily : IConverterFamily, DescribesItself
 {
-    public class ConverterFamily : IConverterFamily, DescribesItself
+    private readonly Func<IValueConverterRegistry, PropertyInfo, ValueConverter> _builder;
+    private readonly string _description;
+    private readonly Predicate<PropertyInfo> _matches;
+
+    public ConverterFamily(Predicate<PropertyInfo> matches,
+        Func<IValueConverterRegistry, PropertyInfo, ValueConverter> builder, string description)
     {
-        private readonly Func<IValueConverterRegistry, PropertyInfo, ValueConverter> _builder;
-        private readonly string _description;
-        private readonly Predicate<PropertyInfo> _matches;
+        _matches = matches;
+        _builder = builder;
+        _description = description;
+    }
 
-        public ConverterFamily(Predicate<PropertyInfo> matches,
-            Func<IValueConverterRegistry, PropertyInfo, ValueConverter> builder, string description)
-        {
-            _matches = matches;
-            _builder = builder;
-            _description = description;
-        }
+    public void Describe(Description description)
+    {
+        description.ShortDescription = _description;
+    }
 
-        public void Describe(Description description)
-        {
-            description.ShortDescription = _description;
-        }
+    public bool Matches(PropertyInfo property)
+    {
+        return _matches(property);
+    }
 
-        public bool Matches(PropertyInfo property)
-        {
-            return _matches(property);
-        }
-
-        public ValueConverter Build(IValueConverterRegistry registry, PropertyInfo property)
-        {
-            return _builder(registry, property);
-        }
+    public ValueConverter Build(IValueConverterRegistry registry, PropertyInfo property)
+    {
+        return _builder(registry, property);
     }
 }

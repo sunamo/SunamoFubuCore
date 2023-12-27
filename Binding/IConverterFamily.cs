@@ -1,8 +1,7 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public interface IConverterFamily
 {
-    public interface IConverterFamily
-    {
-        bool Matches(PropertyInfo property);
-        ValueConverter Build(IValueConverterRegistry registry, PropertyInfo property);
-    }
+    bool Matches(PropertyInfo property);
+    ValueConverter Build(IValueConverterRegistry registry, PropertyInfo property);
 }

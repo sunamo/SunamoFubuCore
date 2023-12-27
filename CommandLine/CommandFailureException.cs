@@ -1,10 +1,9 @@
-namespace FubuCore.CommandLine
+namespace SunamoFubuCore.CommandLine;
+
+[Serializable]
+public class CommandFailureException : Exception
 {
-    [Serializable]
-    public class CommandFailureException : Exception
+    public CommandFailureException(string message) : base(message)
     {
-        public CommandFailureException(string message) : base(message)
-        {
-        }
     }
 }

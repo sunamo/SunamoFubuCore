@@ -1,40 +1,39 @@
-namespace FubuCore.Dates
+namespace SunamoFubuCore.Dates;
+
+public interface ISettableClock : ISystemTime
 {
-    public interface ISettableClock : ISystemTime
+    ISettableClock LocalNow(DateTime now, TimeZoneInfo timeZone = null);
+    ISettableClock LocalNow(LocalTime time);
+}
+
+public class SettableClock : ISettableClock
+{
+    private DateTime _time = DateTime.UtcNow;
+    private TimeZoneInfo _timeZone = TimeZoneInfo.Local;
+
+    public DateTime UtcNow()
     {
-        ISettableClock LocalNow(DateTime now, TimeZoneInfo timeZone = null);
-        ISettableClock LocalNow(LocalTime time);
+        return _time;
     }
 
-    public class SettableClock : ISettableClock
+    public LocalTime LocalTime()
     {
-        private DateTime _time = DateTime.UtcNow;
-        private TimeZoneInfo _timeZone = TimeZoneInfo.Local;
+        return new LocalTime(_time, _timeZone);
+    }
 
-        public DateTime UtcNow()
-        {
-            return _time;
-        }
+    public ISettableClock LocalNow(LocalTime time)
+    {
+        _timeZone = time.TimeZone;
+        _time = time.UtcTime;
 
-        public LocalTime LocalTime()
-        {
-            return new LocalTime(_time, _timeZone);
-        }
+        return this;
+    }
 
-        public ISettableClock LocalNow(LocalTime time)
-        {
-            _timeZone = time.TimeZone;
-            _time = time.UtcTime;
+    public ISettableClock LocalNow(DateTime now, TimeZoneInfo timeZone = null)
+    {
+        _timeZone = timeZone ?? TimeZoneInfo.Local;
+        _time = now.ToUniversalTime(_timeZone);
 
-            return this;
-        }
-
-        public ISettableClock LocalNow(DateTime now, TimeZoneInfo timeZone = null)
-        {
-            _timeZone = timeZone ?? TimeZoneInfo.Local;
-            _time = now.ToUniversalTime(_timeZone);
-
-            return this;
-        }
+        return this;
     }
 }

@@ -1,10 +1,9 @@
-namespace FubuCore.Binding
-{
-    public interface IValueConverterRegistry
-    {
-        ValueConverter FindConverter(PropertyInfo property);
-        IEnumerable<IConverterFamily> AllConverterFamilies();
+namespace SunamoFubuCore.Binding;
 
-        bool CanBeParsed(Type type);
-    }
+public interface IValueConverterRegistry
+{
+    ValueConverter FindConverter(PropertyInfo property);
+    IEnumerable<IConverterFamily> AllConverterFamilies();
+
+    bool CanBeParsed(Type type);
 }

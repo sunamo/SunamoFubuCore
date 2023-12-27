@@ -1,170 +1,97 @@
-namespace FubuCore.CommandLine
+using SunamoFubuCore;
+
+namespace SunamoFubuCore.CommandLine;
+
+public class CommandFactory : ICommandFactory
 {
-    public class CommandFactory : ICommandFactory
+    private static readonly string[] _helpCommands = { "help", "?" };
+
+
+    private static readonly Regex regex = new Regex("(?<name>.+)Command", RegexOptions.Compiled);
+    private readonly ICommandCreator _commandCreator;
+    private readonly Cache<string, Type> _commandTypes = new Cache<string, Type>();
+    private string _appName;
+
+    public CommandFactory()
     {
-        private static readonly string[] _helpCommands = { "help", "?" };
+        _commandCreator = new ActivatorCommandCreator();
+    }
+
+    public CommandFactory(ICommandCreator creator)
+    {
+        _commandCreator = creator;
+    }
+
+    public CommandRun BuildRun(string commandLine)
+    {
+        var args = StringTokenizer.Tokenize(commandLine);
+        return BuildRun(args);
+    }
+
+    public CommandRun BuildRun(IEnumerable<string> args)
+    {
+        if (!args.Any()) return HelpRun(new Queue<string>());
+
+        args = ArgPreprocessor.Process(args);
+
+        var queue = new Queue<string>(args);
+        var commandName = queue.Dequeue().ToLowerInvariant();
+
+        if (commandName == "dump-usages") return dumpUsagesRun(queue);
+
+        // TEMPORARY
+        if (_helpCommands.Contains(commandName)) return HelpRun(queue);
+
+        if (_commandTypes.Has(commandName)) return buildRun(queue, commandName);
+
+        return InvalidCommandRun(commandName);
+    }
 
 
-        private static readonly Regex regex = new Regex("(?<name>.+)Command", RegexOptions.Compiled);
-        private readonly ICommandCreator _commandCreator;
-        private readonly Cache<string, Type> _commandTypes = new Cache<string, Type>();
-        private string _appName;
+    public void RegisterCommands(Assembly assembly)
+    {
+        assembly
+            .GetExportedTypes()
+            .Where(x => x.Closes(typeof(FubuCommand<>)) && x.IsConcrete())
+            .Each(t => { _commandTypes[CommandNameFor(t)] = t; });
+    }
 
-        public CommandFactory()
+    public IEnumerable<IFubuCommand> BuildAllCommands()
+    {
+        return _commandTypes.Select(x => _commandCreator.Create(x));
+    }
+
+
+    public IEnumerable<Type> AllCommandTypes()
+    {
+        return _commandTypes.GetAll();
+    }
+
+    public CommandRun InvalidCommandRun(string commandName)
+    {
+        return new CommandRun
         {
-            _commandCreator = new ActivatorCommandCreator();
-        }
-
-        public CommandFactory(ICommandCreator creator)
-        {
-            _commandCreator = creator;
-        }
-
-        public CommandRun BuildRun(string commandLine)
-        {
-            var args = StringTokenizer.Tokenize(commandLine);
-            return BuildRun(args);
-        }
-
-        public CommandRun BuildRun(IEnumerable<string> args)
-        {
-            if (!args.Any()) return HelpRun(new Queue<string>());
-
-            args = ArgPreprocessor.Process(args);
-
-            var queue = new Queue<string>(args);
-            var commandName = queue.Dequeue().ToLowerInvariant();
-
-            if (commandName == "dump-usages") return dumpUsagesRun(queue);
-
-            // TEMPORARY
-            if (_helpCommands.Contains(commandName)) return HelpRun(queue);
-
-            if (_commandTypes.Has(commandName)) return buildRun(queue, commandName);
-
-            return InvalidCommandRun(commandName);
-        }
-
-
-        public void RegisterCommands(Assembly assembly)
-        {
-            assembly
-                .GetExportedTypes()
-                .Where(x => x.Closes(typeof(FubuCommand<>)) && x.IsConcrete())
-                .Each(t => { _commandTypes[CommandNameFor(t)] = t; });
-        }
-
-        public IEnumerable<IFubuCommand> BuildAllCommands()
-        {
-            return _commandTypes.Select(x => _commandCreator.Create(x));
-        }
-
-
-        public IEnumerable<Type> AllCommandTypes()
-        {
-            return _commandTypes.GetAll();
-        }
-
-        public CommandRun InvalidCommandRun(string commandName)
-        {
-            return new CommandRun
+            Command = new HelpCommand(),
+            Input = new HelpInput
             {
-                Command = new HelpCommand(),
-                Input = new HelpInput
-                {
-                    AppName = _appName,
-                    Name = commandName,
-                    CommandTypes = _commandTypes.GetAll(),
-                    InvalidCommandName = true
-                }
-            };
-        }
-
-        private CommandRun buildRun(Queue<string> queue, string commandName)
-        {
-            var command = Build(commandName);
-
-            // this is where we'll call into UsageGraph?
-            try
-            {
-                // TODO -- change the signature to take in the app name when needed
-                var usageGraph = command.Usages;
-                var input = usageGraph.BuildInput(queue);
-
-                return new CommandRun
-                {
-                    Command = command,
-                    Input = input
-                };
+                AppName = _appName,
+                Name = commandName,
+                CommandTypes = _commandTypes.GetAll(),
+                InvalidCommandName = true
             }
-            catch (InvalidUsageException e)
-            {
-                CL.ForegroundColor = ConsoleColor.Red;
-                CL.WriteLine("Invalid usage");
+        };
+    }
 
-                if (e.Message.IsNotEmpty())
-                {
-                    CL.ForegroundColor = ConsoleColor.Yellow;
-                    CL.WriteLine(e.Message);
-                }
+    private CommandRun buildRun(Queue<string> queue, string commandName)
+    {
+        var command = Build(commandName);
 
-                CL.ResetColor();
-                CL.WriteLine();
-            }
-            catch (Exception e)
-            {
-                CL.ForegroundColor = ConsoleColor.Red;
-                CL.WriteLine("Error parsing input");
-                CL.ForegroundColor = ConsoleColor.Yellow;
-                CL.WriteLine(Exceptions.TextOfExceptions(e));
-                CL.ResetColor();
-                CL.WriteLine();
-            }
-
-            return HelpRun(commandName);
-        }
-
-
-        public IFubuCommand Build(string commandName)
+        // this is where we'll call into UsageGraph?
+        try
         {
-            return _commandCreator.Create(_commandTypes[commandName.ToLower()]);
-        }
-
-
-        public CommandRun HelpRun(string commandName)
-        {
-            return HelpRun(new Queue<string>(new[] { commandName }));
-        }
-
-        public virtual CommandRun HelpRun(Queue<string> queue)
-        {
-            var input = (HelpInput)new HelpCommand().Usages.BuildInput(queue);
-            input.CommandTypes = _commandTypes.GetAll();
-
-
-            if (input.Name.IsNotEmpty())
-            {
-                input.InvalidCommandName = true;
-                input.Name = input.Name.ToLowerInvariant();
-                _commandTypes.WithValue(input.Name, type =>
-                {
-                    input.InvalidCommandName = false;
-                    input.Usage = new UsageGraph(type);
-                });
-            }
-
-            return new CommandRun
-            {
-                Command = new HelpCommand(),
-                Input = input
-            };
-        }
-
-        private CommandRun dumpUsagesRun(Queue<string> queue)
-        {
-            var command = new DumpUsagesCommand();
-            var input = command.Usages.BuildInput(queue).As<DumpUsagesInput>();
-            input.Commands = this;
+            // TODO -- change the signature to take in the app name when needed
+            var usageGraph = command.Usages;
+            var input = usageGraph.BuildInput(queue);
 
             return new CommandRun
             {
@@ -172,29 +99,103 @@ namespace FubuCore.CommandLine
                 Input = input
             };
         }
-
-        public static string CommandNameFor(Type type)
+        catch (InvalidUsageException e)
         {
-            var match = regex.Match(type.Name);
-            var name = type.Name;
-            if (match.Success) name = match.Groups["name"].Value;
+            CL.ForegroundColor = ConsoleColor.Red;
+            CL.WriteLine("Invalid usage");
 
-            type.ForAttribute<CommandDescriptionAttribute>(att => name = att.Name ?? name);
+            if (e.Message.IsNotEmpty())
+            {
+                CL.ForegroundColor = ConsoleColor.Yellow;
+                CL.WriteLine(e.Message);
+            }
 
-            return name.ToLower();
+            CL.ResetColor();
+            CL.WriteLine();
+        }
+        catch (Exception e)
+        {
+            CL.ForegroundColor = ConsoleColor.Red;
+            CL.WriteLine("Error parsing input");
+            CL.ForegroundColor = ConsoleColor.Yellow;
+            CL.WriteLine(Exceptions.TextOfExceptions(e));
+            CL.ResetColor();
+            CL.WriteLine();
         }
 
-        public static string DescriptionFor(Type type)
-        {
-            var description = type.FullName;
-            type.ForAttribute<CommandDescriptionAttribute>(att => description = att.Description);
+        return HelpRun(commandName);
+    }
 
-            return description;
+
+    public IFubuCommand Build(string commandName)
+    {
+        return _commandCreator.Create(_commandTypes[commandName.ToLower()]);
+    }
+
+
+    public CommandRun HelpRun(string commandName)
+    {
+        return HelpRun(new Queue<string>(new[] { commandName }));
+    }
+
+    public virtual CommandRun HelpRun(Queue<string> queue)
+    {
+        var input = (HelpInput)new HelpCommand().Usages.BuildInput(queue);
+        input.CommandTypes = _commandTypes.GetAll();
+
+
+        if (input.Name.IsNotEmpty())
+        {
+            input.InvalidCommandName = true;
+            input.Name = input.Name.ToLowerInvariant();
+            _commandTypes.WithValue(input.Name, type =>
+            {
+                input.InvalidCommandName = false;
+                input.Usage = new UsageGraph(type);
+            });
         }
 
-        public void SetAppName(string appName)
+        return new CommandRun
         {
-            _appName = appName;
-        }
+            Command = new HelpCommand(),
+            Input = input
+        };
+    }
+
+    private CommandRun dumpUsagesRun(Queue<string> queue)
+    {
+        var command = new DumpUsagesCommand();
+        var input = command.Usages.BuildInput(queue).As<DumpUsagesInput>();
+        input.Commands = this;
+
+        return new CommandRun
+        {
+            Command = command,
+            Input = input
+        };
+    }
+
+    public static string CommandNameFor(Type type)
+    {
+        var match = regex.Match(type.Name);
+        var name = type.Name;
+        if (match.Success) name = match.Groups["name"].Value;
+
+        type.ForAttribute<CommandDescriptionAttribute>(att => name = att.Name ?? name);
+
+        return name.ToLower();
+    }
+
+    public static string DescriptionFor(Type type)
+    {
+        var description = type.FullName;
+        type.ForAttribute<CommandDescriptionAttribute>(att => description = att.Description);
+
+        return description;
+    }
+
+    public void SetAppName(string appName)
+    {
+        _appName = appName;
     }
 }

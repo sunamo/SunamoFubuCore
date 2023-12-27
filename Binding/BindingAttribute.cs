@@ -1,8 +1,7 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+[AttributeUsage(AttributeTargets.Property)]
+public abstract class BindingAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public abstract class BindingAttribute : Attribute
-    {
-        public abstract void Bind(PropertyInfo property, IBindingContext context);
-    }
+    public abstract void Bind(PropertyInfo property, IBindingContext context);
 }

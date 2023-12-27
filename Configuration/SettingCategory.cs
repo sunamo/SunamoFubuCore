@@ -1,10 +1,9 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public enum SettingCategory
 {
-    public enum SettingCategory
-    {
-        environment,
-        package,
-        core,
-        profile
-    }
+    environment,
+    package,
+    core,
+    profile
 }

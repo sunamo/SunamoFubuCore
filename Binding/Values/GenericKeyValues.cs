@@ -1,40 +1,39 @@
-namespace FubuCore.Binding.Values
+namespace SunamoFubuCore.Binding.Values;
+
+public class GenericKeyValues : IKeyValues
 {
-    public class GenericKeyValues : IKeyValues
+    private readonly Func<IEnumerable<string>> _allKeys;
+    private readonly Func<string, string> _source;
+
+    public GenericKeyValues(Func<string, string> source, Func<IEnumerable<string>> allKeys)
     {
-        private readonly Func<IEnumerable<string>> _allKeys;
-        private readonly Func<string, string> _source;
+        _source = source;
+        _allKeys = allKeys;
+    }
 
-        public GenericKeyValues(Func<string, string> source, Func<IEnumerable<string>> allKeys)
+    public bool Has(string key)
+    {
+        return _allKeys().Contains(key);
+    }
+
+    public string Get(string key)
+    {
+        return _source(key);
+    }
+
+    public IEnumerable<string> GetKeys()
+    {
+        return _allKeys();
+    }
+
+    public bool ForValue(string key, Action<string, string> callback)
+    {
+        if (Has(key))
         {
-            _source = source;
-            _allKeys = allKeys;
+            callback(key, Get(key));
+            return true;
         }
 
-        public bool Has(string key)
-        {
-            return _allKeys().Contains(key);
-        }
-
-        public string Get(string key)
-        {
-            return _source(key);
-        }
-
-        public IEnumerable<string> GetKeys()
-        {
-            return _allKeys();
-        }
-
-        public bool ForValue(string key, Action<string, string> callback)
-        {
-            if (Has(key))
-            {
-                callback(key, Get(key));
-                return true;
-            }
-
-            return false;
-        }
+        return false;
     }
 }

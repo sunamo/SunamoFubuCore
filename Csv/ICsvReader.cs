@@ -1,7 +1,6 @@
-namespace FubuCore.Csv
+namespace SunamoFubuCore.Csv;
+
+public interface ICsvReader
 {
-    public interface ICsvReader
-    {
-        void Read<T>(CsvRequest<T> request);
-    }
+    void Read<T>(CsvRequest<T> request);
 }

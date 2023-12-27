@@ -1,80 +1,79 @@
-namespace FubuCore.Util
+namespace SunamoFubuCore.Util;
+
+public class Builder<TInput, TOutput>
 {
-    public class Builder<TInput, TOutput>
+    private readonly List<BuilderStrategy<TInput, TOutput>> _builders
+        = new List<BuilderStrategy<TInput, TOutput>>();
+
+    private readonly Func<TInput, TOutput> _defaultBuilder;
+
+    public Builder(Func<TInput, TOutput> defaultBuilder)
     {
-        private readonly List<BuilderStrategy<TInput, TOutput>> _builders
-            = new List<BuilderStrategy<TInput, TOutput>>();
-
-        private readonly Func<TInput, TOutput> _defaultBuilder;
-
-        public Builder(Func<TInput, TOutput> defaultBuilder)
-        {
-            _defaultBuilder = defaultBuilder;
-        }
-
-        public TOutput Build(TInput input)
-        {
-            return selectBuilder(input)(input);
-        }
-
-        private Func<TInput, TOutput> selectBuilder(TInput input)
-        {
-            var strategy = _builders.FirstOrDefault(x => x.Filter(input));
-            return strategy == null ? _defaultBuilder : strategy.Output;
-        }
-
-        public void Register(Func<TInput, bool> filter, Func<TInput, TOutput> output)
-        {
-            _builders.Add(new BuilderStrategy<TInput, TOutput>
-            {
-                Filter = filter,
-                Output = output
-            });
-        }
+        _defaultBuilder = defaultBuilder;
     }
 
-    public class BuilderStrategy<TInput, TOutput>
+    public TOutput Build(TInput input)
     {
-        public Func<TInput, bool> Filter;
-        public Func<TInput, TOutput> Output;
+        return selectBuilder(input)(input);
     }
 
-    public class Alteration<TBigObject, TLittleObject>
+    private Func<TInput, TOutput> selectBuilder(TInput input)
     {
-        private readonly List<AlterationStrategy<TBigObject, TLittleObject>> _alterations
-            = new List<AlterationStrategy<TBigObject, TLittleObject>>();
-
-        private readonly Action<TBigObject, TLittleObject> _defaultAlteration;
-
-        public Alteration(Action<TBigObject, TLittleObject> defaultAlteration)
-        {
-            _defaultAlteration = defaultAlteration;
-        }
-
-        public void Alter(TBigObject big, TLittleObject little)
-        {
-            findAlteration(little)(big, little);
-        }
-
-        private Action<TBigObject, TLittleObject> findAlteration(TLittleObject target)
-        {
-            var alteration = _alterations.FirstOrDefault(x => x.Filter(target));
-            return alteration == null ? _defaultAlteration : alteration.Alteration;
-        }
-
-        public void Register(Func<TLittleObject, bool> filter, Action<TBigObject, TLittleObject> alteration)
-        {
-            _alterations.Add(new AlterationStrategy<TBigObject, TLittleObject>
-            {
-                Alteration = alteration,
-                Filter = filter
-            });
-        }
+        var strategy = _builders.FirstOrDefault(x => x.Filter(input));
+        return strategy == null ? _defaultBuilder : strategy.Output;
     }
 
-    public class AlterationStrategy<TBigObject, TLittleObject>
+    public void Register(Func<TInput, bool> filter, Func<TInput, TOutput> output)
     {
-        public Action<TBigObject, TLittleObject> Alteration;
-        public Func<TLittleObject, bool> Filter;
+        _builders.Add(new BuilderStrategy<TInput, TOutput>
+        {
+            Filter = filter,
+            Output = output
+        });
     }
+}
+
+public class BuilderStrategy<TInput, TOutput>
+{
+    public Func<TInput, bool> Filter;
+    public Func<TInput, TOutput> Output;
+}
+
+public class Alteration<TBigObject, TLittleObject>
+{
+    private readonly List<AlterationStrategy<TBigObject, TLittleObject>> _alterations
+        = new List<AlterationStrategy<TBigObject, TLittleObject>>();
+
+    private readonly Action<TBigObject, TLittleObject> _defaultAlteration;
+
+    public Alteration(Action<TBigObject, TLittleObject> defaultAlteration)
+    {
+        _defaultAlteration = defaultAlteration;
+    }
+
+    public void Alter(TBigObject big, TLittleObject little)
+    {
+        findAlteration(little)(big, little);
+    }
+
+    private Action<TBigObject, TLittleObject> findAlteration(TLittleObject target)
+    {
+        var alteration = _alterations.FirstOrDefault(x => x.Filter(target));
+        return alteration == null ? _defaultAlteration : alteration.Alteration;
+    }
+
+    public void Register(Func<TLittleObject, bool> filter, Action<TBigObject, TLittleObject> alteration)
+    {
+        _alterations.Add(new AlterationStrategy<TBigObject, TLittleObject>
+        {
+            Alteration = alteration,
+            Filter = filter
+        });
+    }
+}
+
+public class AlterationStrategy<TBigObject, TLittleObject>
+{
+    public Action<TBigObject, TLittleObject> Alteration;
+    public Func<TLittleObject, bool> Filter;
 }

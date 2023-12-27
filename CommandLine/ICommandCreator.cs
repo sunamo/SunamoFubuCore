@@ -1,7 +1,6 @@
-namespace FubuCore.CommandLine
+namespace SunamoFubuCore.CommandLine;
+
+public interface ICommandCreator
 {
-    public interface ICommandCreator
-    {
-        IFubuCommand Create(Type commandType);
-    }
+    IFubuCommand Create(Type commandType);
 }

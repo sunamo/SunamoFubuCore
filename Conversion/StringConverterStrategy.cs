@@ -1,37 +1,36 @@
-namespace FubuCore.Conversion
+namespace SunamoFubuCore.Conversion;
+
+[Description("Preprocesses 'NULL' or 'EMPTY' as string values during conversion")]
+public class StringConverterStrategy : StatelessConverter<string>
 {
-    [Description("Preprocesses 'NULL' or 'EMPTY' as string values during conversion")]
-    public class StringConverterStrategy : StatelessConverter<string>
+    public const string EMPTY = "EMPTY";
+    public const string BLANK = "BLANK";
+
+    protected override string convert(string text)
     {
-        public const string EMPTY = "EMPTY";
-        public const string BLANK = "BLANK";
+        var stringValue = text;
+        if (stringValue == BLANK || stringValue == EMPTY) return string.Empty;
 
-        protected override string convert(string text)
-        {
-            var stringValue = text;
-            if (stringValue == BLANK || stringValue == EMPTY) return string.Empty;
+        if (stringValue == ObjectConverter.NULL) return null;
 
-            if (stringValue == ObjectConverter.NULL) return null;
+        return stringValue;
+    }
 
-            return stringValue;
-        }
+    public bool Equals(StringConverterStrategy other)
+    {
+        return !ReferenceEquals(null, other);
+    }
 
-        public bool Equals(StringConverterStrategy other)
-        {
-            return !ReferenceEquals(null, other);
-        }
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != typeof(StringConverterStrategy)) return false;
+        return Equals((StringConverterStrategy)obj);
+    }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(StringConverterStrategy)) return false;
-            return Equals((StringConverterStrategy)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return 0;
-        }
+    public override int GetHashCode()
+    {
+        return 0;
     }
 }

@@ -1,31 +1,32 @@
-namespace FubuCore.Binding
+using SunamoFubuCore;
+
+namespace SunamoFubuCore.Binding;
+
+[Description("Converts text by ConfigurationManager.ConnectionStrings[text] ")]
+public class ResolveConnectionStringFamily : StatelessConverter
 {
-    [Description("Converts text by ConfigurationManager.ConnectionStrings[text] ")]
-    public class ResolveConnectionStringFamily : StatelessConverter
+    public static Func<string, ConnectionStringSettings> GetConnectionStringSettings =
+        key => ConfigurationManager.ConnectionStrings[key];
+
+    public override bool Matches(PropertyInfo property)
     {
-        public static Func<string, ConnectionStringSettings> GetConnectionStringSettings =
-            key => ConfigurationManager.ConnectionStrings[key];
+        return property.HasAttribute<ConnectionStringAttribute>();
+    }
 
-        public override bool Matches(PropertyInfo property)
-        {
-            return property.HasAttribute<ConnectionStringAttribute>();
-        }
+    private static string getConnectionString(string name)
+    {
+        var connectionStringSettings = GetConnectionStringSettings(name);
+        return connectionStringSettings != null
+            ? connectionStringSettings.ConnectionString
+            : name;
+    }
 
-        private static string getConnectionString(string name)
-        {
-            var connectionStringSettings = GetConnectionStringSettings(name);
-            return connectionStringSettings != null
-                ? connectionStringSettings.ConnectionString
-                : name;
-        }
+    public override object Convert(IPropertyContext context)
+    {
+        var stringValue = context.RawValueFromRequest.RawValue as string;
 
-        public override object Convert(IPropertyContext context)
-        {
-            var stringValue = context.RawValueFromRequest.RawValue as string;
-
-            return stringValue.IsNotEmpty()
-                ? getConnectionString(stringValue)
-                : stringValue;
-        }
+        return stringValue.IsNotEmpty()
+            ? getConnectionString(stringValue)
+            : stringValue;
     }
 }

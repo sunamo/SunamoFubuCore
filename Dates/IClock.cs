@@ -1,7 +1,6 @@
-namespace FubuCore.Dates
+namespace SunamoFubuCore.Dates;
+
+public interface IClock
 {
-    public interface IClock
-    {
-        DateTime UtcNow();
-    }
+    DateTime UtcNow();
 }

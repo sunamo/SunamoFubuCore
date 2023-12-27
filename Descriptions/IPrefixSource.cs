@@ -1,22 +1,21 @@
-namespace FubuCore.Descriptions
+namespace SunamoFubuCore.Descriptions;
+
+public interface IPrefixSource
 {
-    public interface IPrefixSource
+    string GetPrefix();
+}
+
+public class LiteralPrefixSource : IPrefixSource
+{
+    private readonly string _text;
+
+    public LiteralPrefixSource(int numberOfSpacesOnLeft, string text)
     {
-        string GetPrefix();
+        _text = "".PadRight(numberOfSpacesOnLeft) + text;
     }
 
-    public class LiteralPrefixSource : IPrefixSource
+    public string GetPrefix()
     {
-        private readonly string _text;
-
-        public LiteralPrefixSource(int numberOfSpacesOnLeft, string text)
-        {
-            _text = "".PadRight(numberOfSpacesOnLeft) + text;
-        }
-
-        public string GetPrefix()
-        {
-            return _text;
-        }
+        return _text;
     }
 }

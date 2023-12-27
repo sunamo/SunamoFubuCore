@@ -1,258 +1,259 @@
-namespace FubuCore
+using SunamoFubuCore;
+
+namespace SunamoFubuCore;
+
+public static class StringExtensions
 {
-    public static class StringExtensions
+    /// <summary>
+    ///     If the path is rooted, just returns the path.  Otherwise,
+    ///     combines root & path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    public static string CombineToPath(this string path, string root)
     {
-        /// <summary>
-        ///     If the path is rooted, just returns the path.  Otherwise,
-        ///     combines root & path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="root"></param>
-        /// <returns></returns>
-        public static string CombineToPath(this string path, string root)
-        {
-            if (Path.IsPathRooted(path)) return path;
+        if (Path.IsPathRooted(path)) return path;
 
-            return Path.Combine(root, path);
-        }
+        return Path.Combine(root, path);
+    }
 
-        public static void IfNotNull(this string target, Action<string> continuation)
-        {
-            if (target != null) continuation(target);
-        }
+    public static void IfNotNull(this string target, Action<string> continuation)
+    {
+        if (target != null) continuation(target);
+    }
 
-        public static string ToFullPath(this string path)
-        {
-            return Path.GetFullPath(path);
-        }
+    public static string ToFullPath(this string path)
+    {
+        return Path.GetFullPath(path);
+    }
 
-        /// <summary>
-        ///     Retrieve the parent directory of a directory or file
-        ///     Shortcut to Path.GetDirectoryName(path)
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string ParentDirectory(this string path)
-        {
-            return Path.GetDirectoryName(path.TrimEnd(Path.DirectorySeparatorChar));
-        }
+    /// <summary>
+    ///     Retrieve the parent directory of a directory or file
+    ///     Shortcut to Path.GetDirectoryName(path)
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string ParentDirectory(this string path)
+    {
+        return Path.GetDirectoryName(path.TrimEnd(Path.DirectorySeparatorChar));
+    }
 
-        /// <summary>
-        ///     Equivalent of FileSystem.Combine( [Union of path, parts] )
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="parts"></param>
-        /// <returns></returns>
-        public static string AppendPath(this string path, params string[] parts)
+    /// <summary>
+    ///     Equivalent of FileSystem.Combine( [Union of path, parts] )
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="parts"></param>
+    /// <returns></returns>
+    public static string AppendPath(this string path, params string[] parts)
+    {
+        var list = new List<string>
         {
-            var list = new List<string>
+            path
+        };
+
+        list.AddRange(parts);
+        return FileSystem.Combine(list.ToArray());
+    }
+
+    public static string PathRelativeTo(this string path, string root)
+    {
+        var pathParts = path.getPathParts();
+        var rootParts = root.getPathParts();
+
+        var length = pathParts.Count > rootParts.Count ? rootParts.Count : pathParts.Count;
+        for (var i = 0; i < length; i++)
+            if (pathParts.First().Equals(rootParts.First(), StringComparison.OrdinalIgnoreCase))
             {
-                path
-            };
+                pathParts.RemoveAt(0);
+                rootParts.RemoveAt(0);
+            }
+            else
+            {
+                break;
+            }
 
-            list.AddRange(parts);
-            return FileSystem.Combine(list.ToArray());
-        }
+        for (var i = 0; i < rootParts.Count; i++) pathParts.Insert(0, "..");
 
-        public static string PathRelativeTo(this string path, string root)
-        {
-            var pathParts = path.getPathParts();
-            var rootParts = root.getPathParts();
+        return pathParts.Count > 0 ? FileSystem.Combine(pathParts.ToArray()) : string.Empty;
+    }
 
-            var length = pathParts.Count > rootParts.Count ? rootParts.Count : pathParts.Count;
-            for (var i = 0; i < length; i++)
-                if (pathParts.First().Equals(rootParts.First(), StringComparison.OrdinalIgnoreCase))
-                {
-                    pathParts.RemoveAt(0);
-                    rootParts.RemoveAt(0);
-                }
-                else
-                {
-                    break;
-                }
+    public static bool IsEmpty(this string stringValue)
+    {
+        return string.IsNullOrEmpty(stringValue);
+    }
 
-            for (var i = 0; i < rootParts.Count; i++) pathParts.Insert(0, "..");
+    public static bool IsNotEmpty(this string stringValue)
+    {
+        return !string.IsNullOrEmpty(stringValue);
+    }
 
-            return pathParts.Count > 0 ? FileSystem.Combine(pathParts.ToArray()) : string.Empty;
-        }
+    public static void IsNotEmpty(this string stringValue, Action<string> action)
+    {
+        if (stringValue.IsNotEmpty())
+            action(stringValue);
+    }
 
-        public static bool IsEmpty(this string stringValue)
-        {
-            return string.IsNullOrEmpty(stringValue);
-        }
+    public static bool ToBool(this string stringValue)
+    {
+        if (string.IsNullOrEmpty(stringValue)) return false;
 
-        public static bool IsNotEmpty(this string stringValue)
-        {
-            return !string.IsNullOrEmpty(stringValue);
-        }
+        return bool.Parse(stringValue);
+    }
 
-        public static void IsNotEmpty(this string stringValue, Action<string> action)
-        {
-            if (stringValue.IsNotEmpty())
-                action(stringValue);
-        }
+    public static string ToFormat(this string stringFormat, params object[] args)
+    {
+        return string.Format(stringFormat, args);
+    }
 
-        public static bool ToBool(this string stringValue)
-        {
-            if (string.IsNullOrEmpty(stringValue)) return false;
+    /// <summary>
+    ///     Performs a case-insensitive comparison of strings
+    /// </summary>
+    public static bool EqualsIgnoreCase(this string thisString, string otherString)
+    {
+        return thisString.Equals(otherString, StringComparison.InvariantCultureIgnoreCase);
+    }
 
-            return bool.Parse(stringValue);
-        }
+    /// <summary>
+    ///     Converts the string to Title Case
+    /// </summary>
+    public static string Capitalize(this string stringValue)
+    {
+        return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(stringValue);
+    }
 
-        public static string ToFormat(this string stringFormat, params object[] args)
-        {
-            return string.Format(stringFormat, args);
-        }
+    /// <summary>
+    ///     Formats a multi-line string for display on the web
+    /// </summary>
+    /// <param name="plainText"></param>
+    public static string ConvertCRLFToBreaks(this string plainText)
+    {
+        return new Regex("(\r\n|\n)").Replace(plainText, "<br/>");
+    }
 
-        /// <summary>
-        ///     Performs a case-insensitive comparison of strings
-        /// </summary>
-        public static bool EqualsIgnoreCase(this string thisString, string otherString)
-        {
-            return thisString.Equals(otherString, StringComparison.InvariantCultureIgnoreCase);
-        }
+    /// <summary>
+    ///     Returns a DateTime value parsed from the <paramref name="dateTimeValue" /> parameter.
+    /// </summary>
+    /// <param name="dateTimeValue">A valid, parseable DateTime value</param>
+    /// <returns>The parsed DateTime value</returns>
+    public static DateTime ToDateTime(this string dateTimeValue)
+    {
+        return DateTime.Parse(dateTimeValue);
+    }
 
-        /// <summary>
-        ///     Converts the string to Title Case
-        /// </summary>
-        public static string Capitalize(this string stringValue)
-        {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(stringValue);
-        }
+    public static string ToGmtFormattedDate(this DateTime date)
+    {
+        return date.ToString("yyyy'-'MM'-'dd hh':'mm':'ss tt 'GMT'");
+    }
 
-        /// <summary>
-        ///     Formats a multi-line string for display on the web
-        /// </summary>
-        /// <param name="plainText"></param>
-        public static string ConvertCRLFToBreaks(this string plainText)
-        {
-            return new Regex("(\r\n|\n)").Replace(plainText, "<br/>");
-        }
+    public static string[] ToDelimitedArray(this string content)
+    {
+        return content.ToDelimitedArray(',');
+    }
 
-        /// <summary>
-        ///     Returns a DateTime value parsed from the <paramref name="dateTimeValue" /> parameter.
-        /// </summary>
-        /// <param name="dateTimeValue">A valid, parseable DateTime value</param>
-        /// <returns>The parsed DateTime value</returns>
-        public static DateTime ToDateTime(this string dateTimeValue)
-        {
-            return DateTime.Parse(dateTimeValue);
-        }
+    public static string[] ToDelimitedArray(this string content, char delimiter)
+    {
+        var array = content.Split(delimiter);
+        for (var i = 0; i < array.Length; i++) array[i] = array[i].Trim();
 
-        public static string ToGmtFormattedDate(this DateTime date)
-        {
-            return date.ToString("yyyy'-'MM'-'dd hh':'mm':'ss tt 'GMT'");
-        }
+        return array;
+    }
 
-        public static string[] ToDelimitedArray(this string content)
-        {
-            return content.ToDelimitedArray(',');
-        }
+    public static bool IsValidNumber(this string number)
+    {
+        return IsValidNumber(number, Thread.CurrentThread.CurrentCulture);
+    }
 
-        public static string[] ToDelimitedArray(this string content, char delimiter)
-        {
-            var array = content.Split(delimiter);
-            for (var i = 0; i < array.Length; i++) array[i] = array[i].Trim();
+    public static bool IsValidNumber(this string number, CultureInfo culture)
+    {
+        var _validNumberPattern =
+            @"^-?(?:\d+|\d{1,3}(?:"
+            + culture.NumberFormat.NumberGroupSeparator +
+            @"\d{3})+)?(?:\"
+            + culture.NumberFormat.NumberDecimalSeparator +
+            @"\d+)?$";
 
-            return array;
-        }
+        return new Regex(_validNumberPattern, RegexOptions.ECMAScript).IsMatch(number);
+    }
 
-        public static bool IsValidNumber(this string number)
-        {
-            return IsValidNumber(number, Thread.CurrentThread.CurrentCulture);
-        }
+    public static IList<string> getPathParts(this string path)
+    {
+        return path.Split(new[] { Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
 
-        public static bool IsValidNumber(this string number, CultureInfo culture)
-        {
-            var _validNumberPattern =
-                @"^-?(?:\d+|\d{1,3}(?:"
-                + culture.NumberFormat.NumberGroupSeparator +
-                @"\d{3})+)?(?:\"
-                + culture.NumberFormat.NumberDecimalSeparator +
-                @"\d+)?$";
+    public static string DirectoryPath(this string path)
+    {
+        return Path.GetDirectoryName(path);
+    }
 
-            return new Regex(_validNumberPattern, RegexOptions.ECMAScript).IsMatch(number);
-        }
+    /// <summary>
+    ///     Reads text and returns an enumerable of strings for each line
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public static IEnumerable<string> ReadLines(this string text)
+    {
+        var reader = new StringReader(text);
+        string line;
+        while ((line = reader.ReadLine()) != null) yield return line;
+    }
 
-        public static IList<string> getPathParts(this string path)
-        {
-            return path.Split(new[] { Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
+    /// <summary>
+    ///     Reads text and calls back for each line of text
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public static void ReadLines(this string text, Action<string> callback)
+    {
+        var reader = new StringReader(text);
+        string line;
+        while ((line = reader.ReadLine()) != null) callback(line);
+    }
 
-        public static string DirectoryPath(this string path)
-        {
-            return Path.GetDirectoryName(path);
-        }
+    /// <summary>
+    ///     Just uses MD5 to create a repeatable hash
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public static string ToHash(this string text)
+    {
+        return MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(text)).Select(b => b.ToString("x2")).Join("");
+    }
 
-        /// <summary>
-        ///     Reads text and returns an enumerable of strings for each line
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static IEnumerable<string> ReadLines(this string text)
-        {
-            var reader = new StringReader(text);
-            string line;
-            while ((line = reader.ReadLine()) != null) yield return line;
-        }
+    /// <summary>
+    ///     Splits a camel cased string into seperate words delimitted by a space
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static string SplitCamelCase(this string str)
+    {
+        return Regex.Replace(Regex.Replace(str, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
+    }
 
-        /// <summary>
-        ///     Reads text and calls back for each line of text
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static void ReadLines(this string text, Action<string> callback)
-        {
-            var reader = new StringReader(text);
-            string line;
-            while ((line = reader.ReadLine()) != null) callback(line);
-        }
+    /// <summary>
+    ///     Splits a pascal cased string into seperate words delimitted by a space
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static string SplitPascalCase(this string str)
+    {
+        return str.SplitCamelCase();
+    }
 
-        /// <summary>
-        ///     Just uses MD5 to create a repeatable hash
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string ToHash(this string text)
-        {
-            return MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(text)).Select(b => b.ToString("x2")).Join("");
-        }
+    public static TEnum ToEnum<TEnum>(this string text) where TEnum : struct
+    {
+        var enumType = typeof(TEnum);
+        if (!enumType.IsEnum) throw new ArgumentException("{0} is not an Enum".ToFormat(enumType.Name));
+        return (TEnum)Enum.Parse(enumType, text, true);
+    }
 
-        /// <summary>
-        ///     Splits a camel cased string into seperate words delimitted by a space
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string SplitCamelCase(this string str)
-        {
-            return Regex.Replace(Regex.Replace(str, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
-        }
-
-        /// <summary>
-        ///     Splits a pascal cased string into seperate words delimitted by a space
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string SplitPascalCase(this string str)
-        {
-            return SplitCamelCase(str);
-        }
-
-        public static TEnum ToEnum<TEnum>(this string text) where TEnum : struct
-        {
-            var enumType = typeof(TEnum);
-            if (!enumType.IsEnum) throw new ArgumentException("{0} is not an Enum".ToFormat(enumType.Name));
-            return (TEnum)Enum.Parse(enumType, text, true);
-        }
-
-        /// <summary>
-        ///     Wraps a string with parantheses.  Originally used to file escape file names when making command line calls
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static string FileEscape(this string file)
-        {
-            return "\"{0}\"".ToFormat(file);
-        }
+    /// <summary>
+    ///     Wraps a string with parantheses.  Originally used to file escape file names when making command line calls
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
+    public static string FileEscape(this string file)
+    {
+        return "\"{0}\"".ToFormat(file);
     }
 }

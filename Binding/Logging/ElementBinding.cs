@@ -1,21 +1,20 @@
-namespace FubuCore.Binding.Logging
+namespace SunamoFubuCore.Binding.Logging;
+
+public class ElementBinding : BindingReport
 {
-    public class ElementBinding : BindingReport
+    public ElementBinding(int index, Type elementType, IModelBinder binder) : base(elementType, binder)
     {
-        public ElementBinding(int index, Type elementType, IModelBinder binder) : base(elementType, binder)
-        {
-            Index = index;
-        }
+        Index = index;
+    }
 
-        public int Index { get; }
+    public int Index { get; }
 
-        public override void AcceptVisitor(IBindingReportVisitor visitor)
-        {
-            visitor.Element(this);
+    public override void AcceptVisitor(IBindingReportVisitor visitor)
+    {
+        visitor.Element(this);
 
-            OrderedProperties().ToList().Each(prop => prop.AcceptVisitor(visitor));
+        OrderedProperties().ToList().Each(prop => prop.AcceptVisitor(visitor));
 
-            visitor.EndElement();
-        }
+        visitor.EndElement();
     }
 }

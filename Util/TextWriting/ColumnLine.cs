@@ -1,44 +1,43 @@
-namespace FubuCore.Util.TextWriting
+namespace SunamoFubuCore.Util.TextWriting;
+
+public class ColumnLine : Line
 {
-    public class ColumnLine : Line
+    private readonly IColumn[] _columns;
+    private readonly string[] _contents;
+
+    public ColumnLine(IEnumerable<IColumn> columns, string[] contents)
     {
-        private readonly IColumn[] _columns;
-        private readonly string[] _contents;
+        _columns = columns.ToArray();
+        _contents = contents;
 
-        public ColumnLine(IEnumerable<IColumn> columns, string[] contents)
+        for (var i = 0; i < _columns.Count(); i++)
         {
-            _columns = columns.ToArray();
-            _contents = contents;
+            var column = _columns[i];
+            var data = _contents[i];
+            column.WatchData(data);
+        }
+    }
 
-            for (var i = 0; i < _columns.Count(); i++)
-            {
-                var column = _columns[i];
-                var data = _contents[i];
-                column.WatchData(data);
-            }
+
+    public void WriteToConsole()
+    {
+        Write(CL.Out);
+    }
+
+    public void Write(TextWriter writer)
+    {
+        for (var i = 0; i < _columns.Count(); i++)
+        {
+            var column = _columns[i];
+            var data = _contents[i];
+            column.Write(writer, data);
         }
 
+        writer.WriteLine();
+    }
 
-        public void WriteToConsole()
-        {
-            Write(CL.Out);
-        }
-
-        public void Write(TextWriter writer)
-        {
-            for (var i = 0; i < _columns.Count(); i++)
-            {
-                var column = _columns[i];
-                var data = _contents[i];
-                column.Write(writer, data);
-            }
-
-            writer.WriteLine();
-        }
-
-        public int Width
-        {
-            get { return _columns.Sum(x => x.Width); }
-        }
+    public int Width
+    {
+        get { return _columns.Sum(x => x.Width); }
     }
 }

@@ -1,14 +1,13 @@
-namespace FubuCore.Reflection.Expressions
+namespace SunamoFubuCore.Reflection.Expressions;
+
+public class EqualsPropertyOperation : BinaryComparisonPropertyOperation
 {
-    public class EqualsPropertyOperation : BinaryComparisonPropertyOperation
+    public EqualsPropertyOperation()
+        : base(ExpressionType.Equal)
     {
-        public EqualsPropertyOperation()
-            : base(ExpressionType.Equal)
-        {
-        }
-
-        public override string OperationName => "Is";
-
-        public override string Text => "is";
     }
+
+    public override string OperationName => "Is";
+
+    public override string Text => "is";
 }

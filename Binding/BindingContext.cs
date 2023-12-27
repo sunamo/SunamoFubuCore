@@ -1,174 +1,175 @@
-namespace FubuCore.Binding
+using SunamoFubuCore;
+
+namespace SunamoFubuCore.Binding;
+
+public class BindingContext : IBindingContext
 {
-    public class BindingContext : IBindingContext
+    private static readonly List<Func<string, string>> _namingStrategies;
+    private readonly IServiceLocator _locator;
+    private readonly Stack<object> _objectStack = new Stack<object>();
+    private readonly IRequestData _requestData;
+    private readonly Lazy<IObjectResolver> _resolver;
+    private readonly Lazy<IContextValues> _values;
+
+
+    static BindingContext()
     {
-        private static readonly List<Func<string, string>> _namingStrategies;
-        private readonly IServiceLocator _locator;
-        private readonly Stack<object> _objectStack = new Stack<object>();
-        private readonly IRequestData _requestData;
-        private readonly Lazy<IObjectResolver> _resolver;
-        private readonly Lazy<IContextValues> _values;
-
-
-        static BindingContext()
+        _namingStrategies = new List<Func<string, string>>
         {
-            _namingStrategies = new List<Func<string, string>>
-            {
-                p => p,
-                p => p.Replace("_", "-"),
-                p => "[{0}]".ToFormat(p) // This was necessary 
-            };
-        }
+            p => p,
+            p => p.Replace("_", "-"),
+            p => "[{0}]".ToFormat(p) // This was necessary 
+        };
+    }
 
-        public BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger)
+    public BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger)
+    {
+        if (logger == null) throw new ArgumentNullException("logger");
+
+        _requestData = requestData;
+        _locator = locator;
+        Logger = logger;
+        _resolver = new Lazy<IObjectResolver>(() =>
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (_locator == null) return ObjectResolver.Basic();
 
-            _requestData = requestData;
-            _locator = locator;
-            Logger = logger;
-            _resolver = new Lazy<IObjectResolver>(() =>
-            {
-                if (_locator == null) return ObjectResolver.Basic();
+            return _locator.GetInstance<IObjectResolver>();
+        });
 
-                return _locator.GetInstance<IObjectResolver>();
-            });
-
-            _values = new Lazy<IContextValues>(() =>
-            {
-                var converter = _locator == null ? new ObjectConverter() : _locator.GetInstance<IObjectConverter>();
-                return new ContextValues(converter, _namingStrategies, _requestData, Logger);
-            });
-        }
-
-        private BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger,
-            IList<ConvertProblem> problems)
-            : this(requestData, locator, logger)
+        _values = new Lazy<IContextValues>(() =>
         {
-            Problems = problems;
-        }
+            var converter = _locator == null ? new ObjectConverter() : _locator.GetInstance<IObjectConverter>();
+            return new ContextValues(converter, _namingStrategies, _requestData, Logger);
+        });
+    }
 
-        public IBindingLogger Logger { get; }
+    private BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger,
+        IList<ConvertProblem> problems)
+        : this(requestData, locator, logger)
+    {
+        Problems = problems;
+    }
+
+    public IBindingLogger Logger { get; }
 
 
-        public IEnumerable<IRequestData> GetEnumerableRequests(string name)
+    public IEnumerable<IRequestData> GetEnumerableRequests(string name)
+    {
+        return _requestData.GetEnumerableRequests(name);
+    }
+
+    public IRequestData GetSubRequest(string name)
+    {
+        return _requestData.GetChildRequest(name);
+    }
+
+    public IBindingContext GetSubContext(string name)
+    {
+        var requestData = _requestData.GetChildRequest(name);
+        return new BindingContext(requestData, _locator, Logger, Problems);
+    }
+
+    public IList<ConvertProblem> Problems { get; } = new List<ConvertProblem>();
+
+    public T Service<T>()
+    {
+        return _locator.GetInstance<T>();
+    }
+
+    public IContextValues Data => _values.Value;
+
+
+    public bool HasChildRequest(string name)
+    {
+        return _requestData.HasChildRequest(name);
+    }
+
+    public void ForProperty(PropertyInfo property, Action<IPropertyContext> action)
+    {
+        try
         {
-            return _requestData.GetEnumerableRequests(name);
+            var propertyContext = new PropertyContext(this, _locator, property);
+            action(propertyContext);
         }
-
-        public IRequestData GetSubRequest(string name)
+        catch (Exception ex)
         {
-            return _requestData.GetChildRequest(name);
+            BindingValue value = null;
+            _requestData.Value(property.Name, o => value = o);
+            LogProblem(ex, value, property);
         }
+    }
 
-        public IBindingContext GetSubContext(string name)
+    public void ForObject(object @object, Action action)
+    {
+        StartObject(@object);
+        action();
+        FinishObject();
+    }
+
+
+    public object Object => _objectStack.Any() ? _objectStack.Peek() : null;
+
+    public void BindObject(IRequestData data, Type type, Action<object> continuation)
+    {
+        _resolver.Value.TryBindModel(type, new BindingContext(data, _locator, Logger), result =>
         {
-            var requestData = _requestData.GetChildRequest(name);
-            return new BindingContext(requestData, _locator, Logger, Problems);
-        }
+            Problems.AddRange(result.Problems);
 
-        public IList<ConvertProblem> Problems { get; } = new List<ConvertProblem>();
+            continuation(result.Value);
+        });
+    }
 
-        public T Service<T>()
+    public void BindObject(Type type, Action<object> continuation)
+    {
+        _resolver.Value.TryBindModel(type, new BindingContext(_requestData, _locator, Logger), result =>
         {
-            return _locator.GetInstance<T>();
-        }
+            Problems.AddRange(result.Problems);
 
-        public IContextValues Data => _values.Value;
+            continuation(result.Value);
+        });
+    }
 
+    public void BindProperties(object instance)
+    {
+        // Start here in the morning.  You have to use StandardModel
+        _resolver.Value.BindProperties(instance.GetType(), instance, this);
+    }
 
-        public bool HasChildRequest(string name)
+    public static void AddNamingStrategy(Func<string, string> strategy)
+    {
+        _namingStrategies.Add(strategy);
+    }
+
+    public object Service(Type typeToFind)
+    {
+        return _locator.GetInstance(typeToFind);
+    }
+
+    public void StartObject(object @object)
+    {
+        _objectStack.Push(@object);
+    }
+
+    public void FinishObject()
+    {
+        _objectStack.Pop();
+    }
+
+    public void LogProblem(Exception ex, BindingValue value = null, PropertyInfo property = null)
+    {
+        LogProblem(ex.ToString(), value, property);
+    }
+
+    public void LogProblem(string exceptionText, BindingValue value = null, PropertyInfo property = null)
+    {
+        var problem = new ConvertProblem
         {
-            return _requestData.HasChildRequest(name);
-        }
+            ExceptionText = exceptionText,
+            Item = Object,
+            Property = property,
+            Value = value
+        };
 
-        public void ForProperty(PropertyInfo property, Action<IPropertyContext> action)
-        {
-            try
-            {
-                var propertyContext = new PropertyContext(this, _locator, property);
-                action(propertyContext);
-            }
-            catch (Exception ex)
-            {
-                BindingValue value = null;
-                _requestData.Value(property.Name, o => value = o);
-                LogProblem(ex, value, property);
-            }
-        }
-
-        public void ForObject(object @object, Action action)
-        {
-            StartObject(@object);
-            action();
-            FinishObject();
-        }
-
-
-        public object Object => _objectStack.Any() ? _objectStack.Peek() : null;
-
-        public void BindObject(IRequestData data, Type type, Action<object> continuation)
-        {
-            _resolver.Value.TryBindModel(type, new BindingContext(data, _locator, Logger), result =>
-            {
-                Problems.AddRange(result.Problems);
-
-                continuation(result.Value);
-            });
-        }
-
-        public void BindObject(Type type, Action<object> continuation)
-        {
-            _resolver.Value.TryBindModel(type, new BindingContext(_requestData, _locator, Logger), result =>
-            {
-                Problems.AddRange(result.Problems);
-
-                continuation(result.Value);
-            });
-        }
-
-        public void BindProperties(object instance)
-        {
-            // Start here in the morning.  You have to use StandardModel
-            _resolver.Value.BindProperties(instance.GetType(), instance, this);
-        }
-
-        public static void AddNamingStrategy(Func<string, string> strategy)
-        {
-            _namingStrategies.Add(strategy);
-        }
-
-        public object Service(Type typeToFind)
-        {
-            return _locator.GetInstance(typeToFind);
-        }
-
-        public void StartObject(object @object)
-        {
-            _objectStack.Push(@object);
-        }
-
-        public void FinishObject()
-        {
-            _objectStack.Pop();
-        }
-
-        public void LogProblem(Exception ex, BindingValue value = null, PropertyInfo property = null)
-        {
-            LogProblem(ex.ToString(), value, property);
-        }
-
-        public void LogProblem(string exceptionText, BindingValue value = null, PropertyInfo property = null)
-        {
-            var problem = new ConvertProblem
-            {
-                ExceptionText = exceptionText,
-                Item = Object,
-                Property = property,
-                Value = value
-            };
-
-            Problems.Add(problem);
-        }
+        Problems.Add(problem);
     }
 }

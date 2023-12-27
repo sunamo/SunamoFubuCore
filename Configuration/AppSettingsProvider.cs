@@ -1,48 +1,47 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public class AppSettingsProvider : ISettingsProvider
 {
-    public class AppSettingsProvider : ISettingsProvider
+    private readonly IObjectResolver _resolver;
+    private readonly Lazy<IValueSource> _values;
+
+    public AppSettingsProvider(IObjectResolver resolver)
     {
-        private readonly IObjectResolver _resolver;
-        private readonly Lazy<IValueSource> _values;
+        _resolver = resolver;
 
-        public AppSettingsProvider(IObjectResolver resolver)
-        {
-            _resolver = resolver;
+        _values = new Lazy<IValueSource>(() => SettingsData.For(new AppSettingsKeyValues()));
+    }
 
-            _values = new Lazy<IValueSource>(() => SettingsData.For(new AppSettingsKeyValues()));
-        }
+    public T SettingsFor<T>() where T : class, new()
+    {
+        var settingsType = typeof(T);
 
-        public T SettingsFor<T>() where T : class, new()
-        {
-            var settingsType = typeof(T);
+        var value = SettingsFor(settingsType);
 
-            var value = SettingsFor(settingsType);
+        return (T)value;
+    }
 
-            return (T)value;
-        }
+    public object SettingsFor(Type settingsType)
+    {
+        var requestData = new RequestData(_values.Value.GetChild(settingsType.Name));
 
-        public object SettingsFor(Type settingsType)
-        {
-            var requestData = new RequestData(_values.Value.GetChild(settingsType.Name));
+        var result = _resolver.BindModel(settingsType, requestData);
 
-            var result = _resolver.BindModel(settingsType, requestData);
+        result.AssertNoProblems(settingsType);
 
-            result.AssertNoProblems(settingsType);
+        return result.Value;
+    }
 
-            return result.Value;
-        }
+    public static string KeyFor<T>(Expression<Func<T, object>> property)
+    {
+        return typeof(T).Name + "." + property.ToAccessor().Name;
+    }
 
-        public static string KeyFor<T>(Expression<Func<T, object>> property)
-        {
-            return typeof(T).Name + "." + property.ToAccessor().Name;
-        }
-
-        public static string GetValueFor<T>(Expression<Func<T, object>> property)
-        {
-            var key = KeyFor(property);
-            return ConfigurationManager.AppSettings.AllKeys.Contains(key)
-                ? ConfigurationManager.AppSettings[key]
-                : string.Empty;
-        }
+    public static string GetValueFor<T>(Expression<Func<T, object>> property)
+    {
+        var key = KeyFor(property);
+        return ConfigurationManager.AppSettings.AllKeys.Contains(key)
+            ? ConfigurationManager.AppSettings[key]
+            : string.Empty;
     }
 }

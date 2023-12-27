@@ -1,8 +1,7 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public interface ISettingsProvider
 {
-    public interface ISettingsProvider
-    {
-        T SettingsFor<T>() where T : class, new();
-        object SettingsFor(Type settingsType);
-    }
+    T SettingsFor<T>() where T : class, new();
+    object SettingsFor(Type settingsType);
 }

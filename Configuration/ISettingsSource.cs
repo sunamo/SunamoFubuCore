@@ -1,32 +1,31 @@
-namespace FubuCore.Configuration
+namespace SunamoFubuCore.Configuration;
+
+public interface ISettingsSource
 {
-    public interface ISettingsSource
+    IEnumerable<SettingsData> FindSettingData();
+}
+
+public class SettingsSource : ISettingsSource
+{
+    private readonly IList<SettingsData> _settings = new List<SettingsData>();
+
+    public SettingsSource(IEnumerable<SettingsData> settings)
     {
-        IEnumerable<SettingsData> FindSettingData();
+        _settings.AddRange(settings);
     }
 
-    public class SettingsSource : ISettingsSource
+    public IEnumerable<SettingsData> FindSettingData()
     {
-        private readonly IList<SettingsData> _settings = new List<SettingsData>();
+        return _settings;
+    }
 
-        public SettingsSource(IEnumerable<SettingsData> settings)
-        {
-            _settings.AddRange(settings);
-        }
+    public void Add(SettingsData data)
+    {
+        _settings.Add(data);
+    }
 
-        public IEnumerable<SettingsData> FindSettingData()
-        {
-            return _settings;
-        }
-
-        public void Add(SettingsData data)
-        {
-            _settings.Add(data);
-        }
-
-        public static SettingsSource For(params SettingsData[] data)
-        {
-            return new SettingsSource(data);
-        }
+    public static SettingsSource For(params SettingsData[] data)
+    {
+        return new SettingsSource(data);
     }
 }

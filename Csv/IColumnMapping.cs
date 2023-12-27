@@ -1,13 +1,12 @@
-namespace FubuCore.Csv
+namespace SunamoFubuCore.Csv;
+
+public interface IColumnMapping
 {
-    public interface IColumnMapping
-    {
-        IEnumerable<ColumnDefinition> Columns();
+    IEnumerable<ColumnDefinition> Columns();
 
-        ColumnDefinition ColumnFor(string alias);
-        ColumnDefinition ColumnFor(Accessor accessor);
+    ColumnDefinition ColumnFor(string alias);
+    ColumnDefinition ColumnFor(Accessor accessor);
 
-        IValueSource ValueSource(CsvData data);
-        IValueSource ValueSource(CsvData data, CsvData headers);
-    }
+    IValueSource ValueSource(CsvData data);
+    IValueSource ValueSource(CsvData data, CsvData headers);
 }

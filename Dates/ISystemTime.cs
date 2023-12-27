@@ -1,9 +1,8 @@
-namespace FubuCore.Dates
-{
-    public interface ISystemTime
-    {
-        DateTime UtcNow();
+namespace SunamoFubuCore.Dates;
 
-        LocalTime LocalTime();
-    }
+public interface ISystemTime
+{
+    DateTime UtcNow();
+
+    LocalTime LocalTime();
 }

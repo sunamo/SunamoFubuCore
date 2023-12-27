@@ -1,9 +1,8 @@
-namespace FubuCore.Binding.Values
+namespace SunamoFubuCore.Binding.Values;
+
+public class NamedKeyValues : GenericKeyValues
 {
-    public class NamedKeyValues : GenericKeyValues
+    public NamedKeyValues(NameValueCollection values) : base(key => values[key], () => values.AllKeys)
     {
-        public NamedKeyValues(NameValueCollection values) : base(key => values[key], () => values.AllKeys)
-        {
-        }
     }
 }

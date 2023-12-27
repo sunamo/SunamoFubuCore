@@ -1,10 +1,9 @@
-namespace FubuCore.Util.TextWriting
+namespace SunamoFubuCore.Util.TextWriting;
+
+public interface IColumn
 {
-    public interface IColumn
-    {
-        int Width { get; }
-        void WatchData(string contents);
-        void Write(TextWriter writer, string text);
-        void WriteToConsole(string text);
-    }
+    int Width { get; }
+    void WatchData(string contents);
+    void Write(TextWriter writer, string text);
+    void WriteToConsole(string text);
 }

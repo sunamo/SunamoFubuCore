@@ -1,46 +1,45 @@
-namespace FubuCore.CommandLine
+namespace SunamoFubuCore.CommandLine;
+
+public class TwoLineReport
 {
-    public class TwoLineReport
+    private readonly Cache<string, string> _data = new Cache<string, string>();
+    private readonly string _title;
+
+    public TwoLineReport(string title)
     {
-        private readonly Cache<string, string> _data = new Cache<string, string>();
-        private readonly string _title;
+        _title = title;
+        SecondLineColor = ConsoleColor.Cyan;
+    }
 
-        public TwoLineReport(string title)
+    public ConsoleColor SecondLineColor { get; set; }
+
+    public void Add(string first, string second)
+    {
+        _data[first] = second;
+    }
+
+    public void Add<T>(Expression<Func<T, object>> property, object target)
+    {
+        var accessor = property.ToAccessor();
+        var rawValue = accessor.GetValue(target);
+        Add(accessor.Name, rawValue == null ? "-- none --" : rawValue.ToString());
+    }
+
+    public void Write()
+    {
+        ConsoleWriter.Line();
+
+
+        ConsoleWriter.PrintHorizontalLine();
+        CL.WriteLine(_title);
+        ConsoleWriter.PrintHorizontalLine();
+
+        _data.Each((left, right) =>
         {
-            _title = title;
-            SecondLineColor = ConsoleColor.Cyan;
-        }
+            ConsoleWriter.Write(left);
+            ConsoleWriter.WriteWithIndent(SecondLineColor, 4, right);
+        });
 
-        public ConsoleColor SecondLineColor { get; set; }
-
-        public void Add(string first, string second)
-        {
-            _data[first] = second;
-        }
-
-        public void Add<T>(Expression<Func<T, object>> property, object target)
-        {
-            var accessor = property.ToAccessor();
-            var rawValue = accessor.GetValue(target);
-            Add(accessor.Name, rawValue == null ? "-- none --" : rawValue.ToString());
-        }
-
-        public void Write()
-        {
-            ConsoleWriter.Line();
-
-
-            ConsoleWriter.PrintHorizontalLine();
-            CL.WriteLine(_title);
-            ConsoleWriter.PrintHorizontalLine();
-
-            _data.Each((left, right) =>
-            {
-                ConsoleWriter.Write(left);
-                ConsoleWriter.WriteWithIndent(SecondLineColor, 4, right);
-            });
-
-            ConsoleWriter.PrintHorizontalLine();
-        }
+        ConsoleWriter.PrintHorizontalLine();
     }
 }

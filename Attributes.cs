@@ -1,13 +1,12 @@
-namespace FubuCore
-{
-    public class MarkedForTerminationAttribute : Attribute
-    {
-        public MarkedForTerminationAttribute()
-        {
-        }
+namespace SunamoFubuCore;
 
-        public MarkedForTerminationAttribute(string description)
-        {
-        }
+public class MarkedForTerminationAttribute : Attribute
+{
+    public MarkedForTerminationAttribute()
+    {
+    }
+
+    public MarkedForTerminationAttribute(string description)
+    {
     }
 }

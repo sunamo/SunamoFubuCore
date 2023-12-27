@@ -1,8 +1,7 @@
-namespace FubuCore.Binding
+namespace SunamoFubuCore.Binding;
+
+public interface IPropertyBinderCache
 {
-    public interface IPropertyBinderCache
-    {
-        IPropertyBinder BinderFor(PropertyInfo property);
-        IEnumerable<IPropertyBinder> AllPropertyBinders();
-    }
+    IPropertyBinder BinderFor(PropertyInfo property);
+    IEnumerable<IPropertyBinder> AllPropertyBinders();
 }

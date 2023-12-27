@@ -1,27 +1,28 @@
-namespace FubuCore.Csv
+using FubuCore;
+
+namespace SunamoFubuCore.Csv;
+
+public class CsvRequest<T>
 {
-    public class CsvRequest<T>
+    public CsvRequest()
     {
-        public CsvRequest()
-        {
-            HeadersExist = true;
-            UseHeaderOrdering = true;
+        HeadersExist = true;
+        UseHeaderOrdering = true;
 
-            Delimiter = ',';
+        Delimiter = ',';
 
-            OpenStream = () => new FileStream(FileName, FileMode.Open, FileAccess.Read);
-        }
-
-        public string FileName { get; set; }
-
-        public bool HeadersExist { get; set; }
-        public bool UseHeaderOrdering { get; set; }
-
-        public ColumnMapping<T> Mapping { get; set; }
-        public Action<T> Callback { get; set; }
-
-        public char Delimiter { get; set; }
-
-        public Func<Stream> OpenStream { get; set; }
+        OpenStream = () => new FileStream(FileName, FileMode.Open, FileAccess.Read);
     }
+
+    public string FileName { get; set; }
+
+    public bool HeadersExist { get; set; }
+    public bool UseHeaderOrdering { get; set; }
+
+    public ColumnMapping<T> Mapping { get; set; }
+    public Action<T> Callback { get; set; }
+
+    public char Delimiter { get; set; }
+
+    public Func<Stream> OpenStream { get; set; }
 }

@@ -1,60 +1,61 @@
-namespace FubuCore.Binding
+using FubuCore;
+
+namespace SunamoFubuCore.Binding;
+
+[MarkedForTermination("Don't think it's necessary, but awaiting approval from the list")]
+public class SmartRequest : ISmartRequest
 {
-    [MarkedForTermination("Don't think it's necessary, but awaiting approval from the list")]
-    public class SmartRequest : ISmartRequest
+    private readonly IObjectConverter _converter;
+    private readonly IRequestData _data;
+
+    public SmartRequest(IRequestData data, IObjectConverter converter)
     {
-        private readonly IObjectConverter _converter;
-        private readonly IRequestData _data;
+        _data = data;
+        _converter = converter;
+    }
 
-        public SmartRequest(IRequestData data, IObjectConverter converter)
-        {
-            _data = data;
-            _converter = converter;
-        }
+    public virtual object Value(Type type, string key)
+    {
+        object returnValue = null;
 
-        public virtual object Value(Type type, string key)
-        {
-            object returnValue = null;
+        if (_converter.CanBeParsed(type))
+            _data.Value(key, o => { returnValue = convertValue(o.RawValue, type); });
 
-            if (_converter.CanBeParsed(type))
-                _data.Value(key, o => { returnValue = convertValue(o.RawValue, type); });
+        return returnValue;
+    }
 
-            return returnValue;
-        }
-
-        public bool Value(Type type, string key, Action<object> continuation)
-        {
-            if (_converter.CanBeParsed(type))
-                return _data.Value(key, o =>
-                {
-                    var value = convertValue(o.RawValue, type);
-                    continuation(value);
-                });
-
-            return false;
-        }
-
-        public T Value<T>(string key)
-        {
-            return (T)Value(typeof(T), key);
-        }
-
-        public bool Value<T>(string key, Action<T> callback)
-        {
-            return _data.Value(key, raw =>
+    public bool Value(Type type, string key, Action<object> continuation)
+    {
+        if (_converter.CanBeParsed(type))
+            return _data.Value(key, o =>
             {
-                var value = (T)convertValue(raw.RawValue, typeof(T));
-                callback(value);
+                var value = convertValue(o.RawValue, type);
+                continuation(value);
             });
-        }
 
-        private object convertValue(object rawValue, Type type)
+        return false;
+    }
+
+    public T Value<T>(string key)
+    {
+        return (T)Value(typeof(T), key);
+    }
+
+    public bool Value<T>(string key, Action<T> callback)
+    {
+        return _data.Value(key, raw =>
         {
-            if (rawValue == null) return null;
+            var value = (T)convertValue(raw.RawValue, typeof(T));
+            callback(value);
+        });
+    }
 
-            if (rawValue.GetType().CanBeCastTo(type)) return rawValue;
+    private object convertValue(object rawValue, Type type)
+    {
+        if (rawValue == null) return null;
 
-            return _converter.FromString(rawValue.ToString(), type);
-        }
+        if (rawValue.GetType().CanBeCastTo(type)) return rawValue;
+
+        return _converter.FromString(rawValue.ToString(), type);
     }
 }

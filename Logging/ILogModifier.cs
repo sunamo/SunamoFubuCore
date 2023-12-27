@@ -1,8 +1,7 @@
-namespace FubuCore.Logging
+namespace SunamoFubuCore.Logging;
+
+public interface ILogModifier
 {
-    public interface ILogModifier
-    {
-        bool Matches(Type logType);
-        void Modify(object log);
-    }
+    bool Matches(Type logType);
+    void Modify(object log);
 }

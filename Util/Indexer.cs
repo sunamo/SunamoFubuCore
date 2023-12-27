@@ -1,20 +1,19 @@
-namespace FubuCore.Util
+namespace SunamoFubuCore.Util;
+
+public class Indexer<TKey, TValue>
 {
-    public class Indexer<TKey, TValue>
+    private readonly Func<TKey, TValue> _getter;
+    private readonly Action<TKey, TValue> _setter;
+
+    public Indexer(Func<TKey, TValue> getter, Action<TKey, TValue> setter)
     {
-        private readonly Func<TKey, TValue> _getter;
-        private readonly Action<TKey, TValue> _setter;
+        _getter = getter;
+        _setter = setter;
+    }
 
-        public Indexer(Func<TKey, TValue> getter, Action<TKey, TValue> setter)
-        {
-            _getter = getter;
-            _setter = setter;
-        }
-
-        public TValue this[TKey key]
-        {
-            get => _getter(key);
-            set => _setter(key, value);
-        }
+    public TValue this[TKey key]
+    {
+        get => _getter(key);
+        set => _setter(key, value);
     }
 }
