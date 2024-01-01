@@ -62,7 +62,7 @@ public static class ConsoleWriter
     }
 
 
-    public static void Write(string format, params object[] args)
+    public static void Write(string format, params string[] args)
     {
         var input = string.Format(format, args);
         Write(input);

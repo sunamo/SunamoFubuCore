@@ -20,12 +20,12 @@ public class Logger : ILogger
         _infoMessage.OnMissing = type => _listeners.InfoFor(type);
     }
 
-    public void Debug(string message, params object[] parameters)
+    public void Debug(string message, params string[] parameters)
     {
         Debug(() => message.ToFormat(parameters));
     }
 
-    public void Info(string message, params object[] parameters)
+    public void Info(string message, params string[] parameters)
     {
         Info(() => message.ToFormat(parameters));
     }

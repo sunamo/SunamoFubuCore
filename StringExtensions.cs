@@ -101,7 +101,7 @@ path
         return bool.Parse(stringValue);
     }
 
-    public static string ToFormat(this string stringFormat, params object[] args)
+    public static string ToFormat(this string stringFormat, params Object[] args)
     {
         return string.Format(stringFormat, args);
     }

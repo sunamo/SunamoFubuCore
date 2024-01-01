@@ -1,5 +1,3 @@
-using SunamoFubuCore.Binding.Values;
-
 namespace SunamoFubuCore.Csv;
 
 public interface IColumnMapping

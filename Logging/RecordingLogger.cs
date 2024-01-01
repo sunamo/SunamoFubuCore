@@ -40,7 +40,7 @@ public class RecordingLogger : ILogger
         }
     }
 
-    public void Debug(string message, params object[] parameters)
+    public void Debug(string message, params string[] parameters)
     {
         lock (_lock)
         {
@@ -48,7 +48,7 @@ public class RecordingLogger : ILogger
         }
     }
 
-    public void Info(string message, params object[] parameters)
+    public void Info(string message, params string[] parameters)
     {
         lock (_lock)
         {

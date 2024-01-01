@@ -4,10 +4,10 @@ namespace SunamoFubuCore.Reflection;
 
 public class MethodValueGetter : IValueGetter
 {
-    private readonly object[] _arguments;
+    private readonly Object[] _arguments;
     private readonly MethodInfo _methodInfo;
 
-    public MethodValueGetter(MethodInfo methodInfo, object[] arguments)
+    public MethodValueGetter(MethodInfo methodInfo, Object[] arguments)
     {
         if (arguments.Length > 1)
             throw new NotSupportedException(

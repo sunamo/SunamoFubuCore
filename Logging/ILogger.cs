@@ -2,8 +2,8 @@ namespace SunamoFubuCore.Logging;
 
 public interface ILogger
 {
-    void Debug(string message, params object[] parameters);
-    void Info(string message, params object[] parameters);
+    void Debug(string message, params string[] parameters);
+    void Info(string message, params string[] parameters);
     void Error(string message, Exception ex);
     void Error(object correlationId, string message, Exception ex);
 

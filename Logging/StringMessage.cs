@@ -2,7 +2,7 @@ namespace SunamoFubuCore.Logging;
 
 public class StringMessage : LogRecord
 {
-    public StringMessage(string message, params object[] parameters)
+    public StringMessage(string message, params string[] parameters)
     {
         Message = message.ToFormat(parameters);
     }

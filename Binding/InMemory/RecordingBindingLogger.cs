@@ -1,5 +1,3 @@
-using SunamoFubuCore.Binding.Logging;
-
 namespace SunamoFubuCore.Binding.InMemory;
 
 

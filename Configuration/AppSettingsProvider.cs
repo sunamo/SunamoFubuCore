@@ -1,5 +1,3 @@
-using SunamoFubuCore.Binding.Values;
-
 namespace SunamoFubuCore.Configuration;
 
 public class AppSettingsProvider : ISettingsProvider
