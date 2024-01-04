@@ -4,18 +4,22 @@ public class PropertyContext : IPropertyContext
 {
     private readonly IBindingContext _parent;
     private readonly IServiceLocator _services;
-    private readonly Lazy<BindingValue> _value;
+    private readonly PropertyInfo _property;
+    private Lazy<BindingValue> _value;
 
     public PropertyContext(IBindingContext parent, IServiceLocator services, PropertyInfo property)
     {
         _parent = parent;
         _services = services;
-        Property = property;
+        _property = property;
 
         _value = new Lazy<BindingValue>(() => _parent.Data.RawValue(Property.Name));
     }
 
-    string IConversionRequest.Text => RawValueFromRequest.RawValue as string;
+    string IConversionRequest.Text
+    {
+        get { return RawValueFromRequest.RawValue as string; }
+    }
 
     T IConversionRequest.Get<T>()
     {
@@ -27,11 +31,20 @@ public class PropertyContext : IPropertyContext
         return new ConversionRequest(text, Service);
     }
 
-    public BindingValue RawValueFromRequest => _value.Value;
+    public BindingValue RawValueFromRequest
+    {
+        get { return _value.Value; }
+    }
 
-    public PropertyInfo Property { get; }
+    public PropertyInfo Property
+    {
+        get { return _property; }
+    }
 
-    public object Object => _parent.Object;
+    public object Object
+    {
+        get { return _parent.Object; }
+    }
 
     public T Service<T>()
     {
@@ -45,17 +58,23 @@ public class PropertyContext : IPropertyContext
 
     T IPropertyContext.ValueAs<T>()
     {
-        return _parent.Data.ValueAs<T>(Property.Name);
+        return _parent.Data.ValueAs<T>(_property.Name);
     }
 
     bool IPropertyContext.ValueAs<T>(Action<T> continuation)
     {
-        return _parent.Data.ValueAs(Property.Name, continuation);
+        return _parent.Data.ValueAs(_property.Name, continuation);
     }
 
-    public IBindingLogger Logger => _parent.Logger;
+    public IBindingLogger Logger
+    {
+        get { return _parent.Logger; }
+    }
 
-    public IContextValues Data => _parent.Data;
+    public IContextValues Data
+    {
+        get { return _parent.Data; }
+    }
 
     public void SetPropertyValue(object value)
     {

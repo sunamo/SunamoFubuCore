@@ -26,7 +26,7 @@ public class BindingValue
     {
         unchecked
         {
-            var result = RawKey != null ? RawKey.GetHashCode() : 0;
+            int result = RawKey != null ? RawKey.GetHashCode() : 0;
             result = result * 397 ^ (Source != null ? Source.GetHashCode() : 0);
             result = result * 397 ^ (RawValue != null ? RawValue.GetHashCode() : 0);
             return result;

@@ -1,7 +1,5 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 [Description("Delegates to a BindingAttribute class on the property for one-off binding policies")]
 public class AttributePropertyBinder : IPropertyBinder
 {
@@ -12,6 +10,9 @@ public class AttributePropertyBinder : IPropertyBinder
 
     public void Bind(PropertyInfo property, IBindingContext context)
     {
-        property.ForAttribute<BindingAttribute>(att => { att.Bind(property, context); });
+        property.ForAttribute<BindingAttribute>(att =>
+        {
+            att.Bind(property, context);
+        });
     }
 }

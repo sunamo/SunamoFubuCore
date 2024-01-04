@@ -10,9 +10,15 @@ public class NestedObjectPropertyBinder : IPropertyBinder
 
     public void Bind(PropertyInfo property, IBindingContext context)
     {
-        if (!context.HasChildRequest(property.Name)) return;
+        if (!context.HasChildRequest(property.Name))
+        {
+            return;
+        }
 
         var childContext = context.GetSubContext(property.Name);
-        childContext.BindObject(property.PropertyType, o => { property.SetValue(context.Object, o, null); });
+        childContext.BindObject(property.PropertyType, o =>
+        {
+            property.SetValue(context.Object, o, null);
+        });
     }
 }

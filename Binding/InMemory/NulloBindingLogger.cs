@@ -1,7 +1,5 @@
 namespace SunamoFubuCore.Binding.InMemory;
 
-
-
 public class NulloBindingLogger : IBindingLogger
 {
     public void Chose(Type modelType, IModelBinder binder)
@@ -16,6 +14,19 @@ public class NulloBindingLogger : IBindingLogger
     {
     }
 
+    public void PushModel(Type modelType)
+    {
+
+    }
+
+    public void PopModel()
+    {
+    }
+
+    public void PushProperty(PropertyInfo property)
+    {
+    }
+
     public void PushElement(Type elementType)
     {
     }
@@ -25,18 +36,6 @@ public class NulloBindingLogger : IBindingLogger
     }
 
     public void UsedValue(BindingValue value)
-    {
-    }
-
-    public void PushModel(Type modelType)
-    {
-    }
-
-    public void PopModel()
-    {
-    }
-
-    public void PushProperty(PropertyInfo property)
     {
     }
 }

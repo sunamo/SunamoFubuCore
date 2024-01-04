@@ -2,22 +2,20 @@ namespace SunamoFubuCore.Binding.Values;
 
 public class DictionaryPath
 {
+    private readonly string _parent;
+    private readonly string _key;
+    private readonly IEnumerable<string> _parentParts;
+
     public DictionaryPath(string path)
     {
         var parts = path.Trim().Split('.');
-        ParentParts = parts.Reverse().Skip(1).Reverse();
-        Parent = parts.Any()
-        ? ParentParts.Join(".")
-        : string.Empty;
+        _parentParts = parts.Reverse().Skip(1).Reverse();
+        _parent = parts.Any()
+                      ? _parentParts.Join(".")
+                      : string.Empty;
 
-        Key = parts.Last();
+        _key = parts.Last();
     }
-
-    public IEnumerable<string> ParentParts { get; }
-
-    public string Parent { get; }
-
-    public string Key { get; }
 
     public void Set(SettingsData top, object value)
     {
@@ -26,30 +24,40 @@ public class DictionaryPath
 
     public SettingsData GetParentSource(SettingsData source)
     {
-        ParentParts.Each(x2 =>
+        ParentParts.Each(x =>
         {
-            var x = (string)x2;
             if (x.Contains("["))
             {
                 var parts = x.TrimEnd(']').Split('[');
                 var index = int.Parse(parts.Last());
 
-                source = source.GetChildrenElement(parts.First<string>(), index);
+                source = source.GetChildrenElement(parts.First(), index);
             }
             else
             {
                 source = source.Child(x);
             }
+
         });
 
         return source;
+    }
+
+    public IEnumerable<string> ParentParts
+    {
+        get { return _parentParts; }
+    }
+
+    public string Parent
+    {
+        get { return _parent; }
     }
 
     public bool Equals(DictionaryPath other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Equals(other.Parent, Parent);
+        return Equals(other._parent, _parent);
     }
 
     public override bool Equals(object obj)
@@ -62,6 +70,11 @@ public class DictionaryPath
 
     public override int GetHashCode()
     {
-        return Parent != null ? Parent.GetHashCode() : 0;
+        return _parent != null ? _parent.GetHashCode() : 0;
+    }
+
+    public string Key
+    {
+        get { return _key; }
     }
 }

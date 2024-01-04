@@ -17,8 +17,7 @@ public class ArrayPropertyBinder : IPropertyBinder
 
     public void Bind(PropertyInfo property, IBindingContext context)
     {
-        var builder = typeof(ArrayBuilder<>).CloseAndBuildAs<IArrayBuilder>(_conversionPropertyBinder,
-        property.PropertyType.GetElementType());
+        var builder = typeof(ArrayBuilder<>).CloseAndBuildAs<IArrayBuilder>(_conversionPropertyBinder, property.PropertyType.GetElementType());
         builder.FillValues(property, context);
     }
 
@@ -40,26 +39,28 @@ public class ArrayPropertyBinder : IPropertyBinder
         {
             if (_conversionPropertyBinder.CanBeParsed(property.PropertyType))
             {
-                var convertedAsIs = context.Data.ValueAs<string>(property.Name,
-                value => _conversionPropertyBinder.Bind(property, context));
+                bool convertedAsIs = context.Data.ValueAs<string>(property.Name, value => _conversionPropertyBinder.Bind(property, context));
                 if (convertedAsIs) return;
             }
 
             var requests = context.GetEnumerableRequests(property.Name).ToList();
 
-            // TODO -- need an end to end test on this behavior
+            // TODO -- need an end to end test on this behavior 
             if (!requests.Any()) return;
 
             var data = new T[requests.Count];
 
-            for (var i = 0; i < requests.Count; i++)
+            for (int i = 0; i < requests.Count; i++)
             {
                 var requestData = requests[i];
 
                 context.Logger.PushElement(typeof(T));
 
                 // TODO -- got to add the BindResult to context to store it later
-                context.BindObject(requestData, typeof(T), o => { data[i] = (T)o; });
+                context.BindObject(requestData, typeof(T), o =>
+                {
+                    data[i] = (T)o;
+                });
             }
 
             property.SetValue(context.Object, data, null);

@@ -1,12 +1,12 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 public class BindingContext : IBindingContext
 {
     private static readonly List<Func<string, string>> _namingStrategies;
     private readonly IServiceLocator _locator;
+    private readonly IBindingLogger _logger;
     private readonly Stack<object> _objectStack = new Stack<object>();
+    private readonly IList<ConvertProblem> _problems = new List<ConvertProblem>();
     private readonly IRequestData _requestData;
     private readonly Lazy<IObjectResolver> _resolver;
     private readonly Lazy<IContextValues> _values;
@@ -14,12 +14,11 @@ public class BindingContext : IBindingContext
 
     static BindingContext()
     {
-        _namingStrategies = new List<Func<string, string>>
-{
-p => p,
-p => p.Replace("_", "-"),
-p => "[{0}]".ToFormat(p) // This was necessary
-};
+        _namingStrategies = new List<Func<string, string>>{
+            p => p,
+            p => p.Replace("_", "-"),
+            p => "[{0}]".ToFormat(p) // This was necessary 
+        };
     }
 
     public BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger)
@@ -28,7 +27,7 @@ p => "[{0}]".ToFormat(p) // This was necessary
 
         _requestData = requestData;
         _locator = locator;
-        Logger = logger;
+        _logger = logger;
         _resolver = new Lazy<IObjectResolver>(() =>
         {
             if (_locator == null) return ObjectResolver.Basic();
@@ -39,18 +38,20 @@ p => "[{0}]".ToFormat(p) // This was necessary
         _values = new Lazy<IContextValues>(() =>
         {
             var converter = _locator == null ? new ObjectConverter() : _locator.GetInstance<IObjectConverter>();
-            return new ContextValues(converter, _namingStrategies, _requestData, Logger);
+            return new ContextValues(converter, _namingStrategies, _requestData, _logger);
         });
     }
 
-    private BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger,
-    IList<ConvertProblem> problems)
-    : this(requestData, locator, logger)
+    private BindingContext(IRequestData requestData, IServiceLocator locator, IBindingLogger logger, IList<ConvertProblem> problems)
+        : this(requestData, locator, logger)
     {
-        Problems = problems;
+        _problems = problems;
     }
 
-    public IBindingLogger Logger { get; }
+    public IBindingLogger Logger
+    {
+        get { return _logger; }
+    }
 
 
     public IEnumerable<IRequestData> GetEnumerableRequests(string name)
@@ -66,17 +67,23 @@ p => "[{0}]".ToFormat(p) // This was necessary
     public IBindingContext GetSubContext(string name)
     {
         var requestData = _requestData.GetChildRequest(name);
-        return new BindingContext(requestData, _locator, Logger, Problems);
+        return new BindingContext(requestData, _locator, _logger, _problems);
     }
 
-    public IList<ConvertProblem> Problems { get; } = new List<ConvertProblem>();
+    public IList<ConvertProblem> Problems
+    {
+        get { return _problems; }
+    }
 
     public T Service<T>()
     {
         return _locator.GetInstance<T>();
     }
 
-    public IContextValues Data => _values.Value;
+    public IContextValues Data
+    {
+        get { return _values.Value; }
+    }
 
 
     public bool HasChildRequest(string name)
@@ -107,13 +114,16 @@ p => "[{0}]".ToFormat(p) // This was necessary
     }
 
 
-    public object Object => _objectStack.Any() ? _objectStack.Peek() : null;
+    public object Object
+    {
+        get { return _objectStack.Any() ? _objectStack.Peek() : null; }
+    }
 
     public void BindObject(IRequestData data, Type type, Action<object> continuation)
     {
-        _resolver.Value.TryBindModel(type, new BindingContext(data, _locator, Logger), result =>
+        _resolver.Value.TryBindModel(type, new BindingContext(data, _locator, _logger), result =>
         {
-            Problems.AddRange(result.Problems);
+            _problems.AddRange(result.Problems);
 
             continuation(result.Value);
         });
@@ -121,9 +131,9 @@ p => "[{0}]".ToFormat(p) // This was necessary
 
     public void BindObject(Type type, Action<object> continuation)
     {
-        _resolver.Value.TryBindModel(type, new BindingContext(_requestData, _locator, Logger), result =>
+        _resolver.Value.TryBindModel(type, new BindingContext(_requestData, _locator, _logger), result =>
         {
-            Problems.AddRange(result.Problems);
+            _problems.AddRange(result.Problems);
 
             continuation(result.Value);
         });
@@ -170,6 +180,6 @@ p => "[{0}]".ToFormat(p) // This was necessary
             Value = value
         };
 
-        Problems.Add(problem);
+        _problems.Add(problem);
     }
 }

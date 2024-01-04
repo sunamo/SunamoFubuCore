@@ -1,7 +1,5 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 [Description("Delegates to IObjectConverter for the conversion")]
 public class BasicConverterFamily : IConverterFamily, DescribesItself
 {
@@ -13,12 +11,6 @@ public class BasicConverterFamily : IConverterFamily, DescribesItself
         if (library == null) throw new ArgumentNullException("library");
 
         _library = library;
-    }
-
-    public void Describe(Description description)
-    {
-        var libraryDesc = Description.For(_library);
-        description.BulletLists.AddRange(libraryDesc.BulletLists);
     }
 
     public bool Matches(PropertyInfo property)
@@ -33,6 +25,12 @@ public class BasicConverterFamily : IConverterFamily, DescribesItself
 
         var strategy = _library.StrategyFor(propertyType);
         return new BasicValueConverter(strategy, propertyType);
+    }
+
+    public void Describe(Description description)
+    {
+        var libraryDesc = Description.For(_library);
+        description.BulletLists.AddRange(libraryDesc.BulletLists);
     }
 }
 
@@ -53,42 +51,17 @@ public class BasicValueConverter : ValueConverter, DescribesItself
     {
         description.Title = "IObjectConverter:" + _propertyType.Name;
         description.ShortDescription =
-        "IObjectConverter.FromString(text, typeof({0}))".ToFormat(_propertyType.FullName);
+            "IObjectConverter.FromString(text, typeof({0}))".ToFormat(_propertyType.FullName);
     }
 
     public object Convert(IPropertyContext context)
     {
-        if (context.RawValueFromRequest == null || context.RawValueFromRequest.RawValue == null)
-            return _defaulter.Default();
+        if (context.RawValueFromRequest == null || context.RawValueFromRequest.RawValue == null) return _defaulter.Default();
 
 
         return context.RawValueFromRequest.RawValue.GetType().CanBeCastTo(_propertyType)
-        ? context.RawValueFromRequest.RawValue
-        : _strategy.Convert(context);
-    }
-
-    public bool Equals(BasicValueConverter other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return Equals(other._propertyType, _propertyType) && Equals(other._strategy, _strategy);
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != typeof(BasicValueConverter)) return false;
-        return Equals((BasicValueConverter)obj);
-    }
-
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            return (_propertyType != null ? _propertyType.GetHashCode() : 0) * 397 ^
-            (_strategy != null ? _strategy.GetHashCode() : 0);
-        }
+                   ? context.RawValueFromRequest.RawValue
+                   : _strategy.Convert(context);
     }
 
     #region Nested type: DefaultMaker
@@ -111,4 +84,27 @@ public class BasicValueConverter : ValueConverter, DescribesItself
     }
 
     #endregion
+
+    public bool Equals(BasicValueConverter other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Equals(other._propertyType, _propertyType) && Equals(other._strategy, _strategy);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != typeof(BasicValueConverter)) return false;
+        return Equals((BasicValueConverter)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            return (_propertyType != null ? _propertyType.GetHashCode() : 0) * 397 ^ (_strategy != null ? _strategy.GetHashCode() : 0);
+        }
+    }
 }

@@ -1,11 +1,7 @@
 namespace SunamoFubuCore.Binding;
 
-
-
-
 public class FlatFileReader<T>
 {
-    private readonly Cache<string, string> _aliases = new Cache<string, string>();
     private readonly IObjectResolver _resolver;
     private readonly IServiceLocator _services;
 
@@ -32,15 +28,16 @@ public class FlatFileReader<T>
         var data = new FlatFileValues(request.Concatenator, headers);
         _aliases.Each((header, alias) => data.Alias(header, alias));
 
-        BindingContext context = new BindingContext(new RequestData(new FlatValueSource(data)), _services,
-        new NulloBindingLogger());
+        var context = new BindingContext(new RequestData(new FlatValueSource(data)), _services, new NulloBindingLogger());
 
         string line;
-        while ((line = reader.ReadLine()) != null) readTargetFromLine(request, data, line, context);
+        while ((line = reader.ReadLine()) != null)
+        {
+            readTargetFromLine(request, data, line, context);
+        }
     }
 
-    private void readTargetFromLine(FlatFileRequest<T> request, FlatFileValues data, string line,
-    BindingContext context)
+    private void readTargetFromLine(FlatFileRequest<T> request, FlatFileValues data, string line, BindingContext context)
     {
         data.ReadLine(line);
 
@@ -50,6 +47,7 @@ public class FlatFileReader<T>
         request.Callback(target);
     }
 
+    private readonly Cache<string, string> _aliases = new Cache<string, string>();
     public void Alias(string header, string alias)
     {
         _aliases[header] = alias;

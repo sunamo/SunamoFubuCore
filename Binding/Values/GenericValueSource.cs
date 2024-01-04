@@ -1,20 +1,22 @@
 namespace SunamoFubuCore.Binding.Values;
 
-
-
 public class GenericValueSource : IValueSource
 {
-    private readonly Lazy<IEnumerable<string>> _keys;
+    private readonly string _name;
     private readonly Func<string, object> _source;
+    private readonly Lazy<IEnumerable<string>> _keys;
 
     public GenericValueSource(string name, Func<string, object> source, Func<IEnumerable<string>> keys)
     {
-        Provenance = name;
+        _name = name;
         _source = source;
         _keys = new Lazy<IEnumerable<string>>(keys);
     }
 
-    public string Provenance { get; }
+    public string Provenance
+    {
+        get { return _name; }
+    }
 
     public bool Has(string key)
     {

@@ -1,7 +1,6 @@
 namespace SunamoFubuCore.Binding;
 
-[Description(
-"Attempts to bind a property by finding a value matching the property name and converting the raw value to the property type")]
+[Description("Attempts to bind a property by finding a value matching the property name and converting the raw value to the property type")]
 public class ConversionPropertyBinder : IPropertyBinder, DescribesItself
 {
     private readonly Cache<PropertyInfo, ValueConverter> _cache = new Cache<PropertyInfo, ValueConverter>();
@@ -13,16 +12,14 @@ public class ConversionPropertyBinder : IPropertyBinder, DescribesItself
         _converters = converters;
     }
 
-    public void Describe(Description description)
-    {
-        var list = description.AddList("ConversionFamilies", _converters.AllConverterFamilies());
-        list.IsOrderDependent = true;
-        list.Label = "Conversion Families";
-    }
-
     public bool Matches(PropertyInfo property)
     {
         return _cache[property] != null;
+    }
+
+    public bool CanBeParsed(Type propertyType)
+    {
+        return _converters.CanBeParsed(propertyType);
     }
 
 
@@ -44,13 +41,15 @@ public class ConversionPropertyBinder : IPropertyBinder, DescribesItself
         });
     }
 
-    public bool CanBeParsed(Type propertyType)
-    {
-        return _converters.CanBeParsed(propertyType);
-    }
-
     public ValueConverter FindConverter(PropertyInfo property)
     {
         return _cache[property];
+    }
+
+    public void Describe(Description description)
+    {
+        var list = description.AddList("ConversionFamilies", _converters.AllConverterFamilies());
+        list.IsOrderDependent = true;
+        list.Label = "Conversion Families";
     }
 }

@@ -1,24 +1,26 @@
 namespace SunamoFubuCore.Binding.Values;
 
-
-
 public class FlatValueSource<T> : IValueSource
 {
+    private readonly string _provenance;
     private readonly IKeyValues<T> _values;
 
 
-    public FlatValueSource(IDictionary<string, T> dictionary, string provenance = "Anonymous") : this(
-    new DictionaryKeyValues<T>(dictionary), provenance)
+    public FlatValueSource(IDictionary<string, T> dictionary, string provenance = "Anonymous") : this(new DictionaryKeyValues<T>(dictionary), provenance)
     {
+
     }
 
     public FlatValueSource(IKeyValues<T> values, string provenance = "Anonymous")
     {
-        Provenance = provenance;
+        _provenance = provenance;
         _values = values;
     }
 
-    public string Provenance { get; }
+    public string Provenance
+    {
+        get { return _provenance; }
+    }
 
     public bool Has(string key)
     {
@@ -74,7 +76,8 @@ public class FlatValueSource<T> : IValueSource
     public class Indexer
     {
         private readonly string _name;
-        private int _index;
+        private int _index = 0;
+        private string _prefix;
 
         public Indexer(string name)
         {
@@ -82,11 +85,9 @@ public class FlatValueSource<T> : IValueSource
             setPrefix();
         }
 
-        public string Prefix { get; private set; }
-
         private void setPrefix()
         {
-            Prefix = "{0}[{1}]".ToFormat(_name, _index);
+            _prefix = "{0}[{1}]".ToFormat(_name, _index);
         }
 
         public void Increment()
@@ -94,19 +95,22 @@ public class FlatValueSource<T> : IValueSource
             _index++;
             setPrefix();
         }
+
+        public string Prefix
+        {
+            get { return _prefix; }
+        }
     }
 }
 
 
+
 public class FlatValueSource : FlatValueSource<string>
 {
-    public FlatValueSource(IDictionary<string, string> dictionary, string name = "Anonymous") : this(
-    new DictionaryKeyValues(dictionary), name)
-    {
-    }
+    public FlatValueSource(IDictionary<string, string> dictionary, string name = "Anonymous") : this(new DictionaryKeyValues(dictionary), name) { }
 
     public FlatValueSource(IKeyValues values, string name = "Anonymous")
-    : base(values, name)
+        : base(values, name)
     {
     }
 }

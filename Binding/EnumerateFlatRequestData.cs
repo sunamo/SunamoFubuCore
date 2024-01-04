@@ -16,7 +16,8 @@ public static class EnumerateFlatRequestData
     public class Indexer
     {
         private readonly string _name;
-        private int _index;
+        private int _index = 0;
+        private string _prefix;
 
         public Indexer(string name)
         {
@@ -24,17 +25,20 @@ public static class EnumerateFlatRequestData
             setPrefix();
         }
 
-        public string Prefix { get; private set; }
-
         private void setPrefix()
         {
-            Prefix = "{0}[{1}]".ToFormat(_name, _index);
+            _prefix = "{0}[{1}]".ToFormat(_name, _index);
         }
 
         public void Increment()
         {
             _index++;
             setPrefix();
+        }
+
+        public string Prefix
+        {
+            get { return _prefix; }
         }
     }
 }

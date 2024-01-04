@@ -1,12 +1,10 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 [MarkedForTermination("Don't think it's necessary, but awaiting approval from the list")]
 public class SmartRequest : ISmartRequest
 {
-    private readonly IObjectConverter _converter;
     private readonly IRequestData _data;
+    private readonly IObjectConverter _converter;
 
     public SmartRequest(IRequestData data, IObjectConverter converter)
     {
@@ -19,7 +17,12 @@ public class SmartRequest : ISmartRequest
         object returnValue = null;
 
         if (_converter.CanBeParsed(type))
-            _data.Value(key, o => { returnValue = convertValue(o.RawValue, type); });
+        {
+            _data.Value(key, o =>
+            {
+                returnValue = convertValue(o.RawValue, type);
+            });
+        }
 
         return returnValue;
     }
@@ -27,13 +30,24 @@ public class SmartRequest : ISmartRequest
     public bool Value(Type type, string key, Action<object> continuation)
     {
         if (_converter.CanBeParsed(type))
+        {
             return _data.Value(key, o =>
             {
                 var value = convertValue(o.RawValue, type);
                 continuation(value);
             });
+        }
 
         return false;
+    }
+
+    private object convertValue(object rawValue, Type type)
+    {
+        if (rawValue == null) return null;
+
+        if (rawValue.GetType().CanBeCastTo(type)) return rawValue;
+
+        return _converter.FromString(rawValue.ToString(), type);
     }
 
     public T Value<T>(string key)
@@ -48,14 +62,5 @@ public class SmartRequest : ISmartRequest
             var value = (T)convertValue(raw.RawValue, typeof(T));
             callback(value);
         });
-    }
-
-    private object convertValue(object rawValue, Type type)
-    {
-        if (rawValue == null) return null;
-
-        if (rawValue.GetType().CanBeCastTo(type)) return rawValue;
-
-        return _converter.FromString(rawValue.ToString(), type);
     }
 }

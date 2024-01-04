@@ -16,14 +16,14 @@ public class LambdaValueConverter : ValueConverter, DescribesItself
         _description = description;
     }
 
+    public object Convert(IPropertyContext context)
+    {
+        return _converter(context);
+    }
+
     public void Describe(Description description)
     {
         description.Title = "Lambda";
         description.ShortDescription = _description;
-    }
-
-    public object Convert(IPropertyContext context)
-    {
-        return _converter(context);
     }
 }

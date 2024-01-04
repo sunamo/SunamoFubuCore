@@ -12,7 +12,10 @@ public class BindResult
 
     public void AssertNoProblems(Type type)
     {
-        if (Problems.Any()) throw new BindResultAssertionException(type, Problems);
+        if (Problems.Any())
+        {
+            throw new BindResultAssertionException(type, Problems);
+        }
     }
 
     public void Merge(BindResult result)

@@ -9,16 +9,6 @@ public class RequestData : IRequestData
     {
     }
 
-    public RequestData(IValueSource source)
-    {
-        _sources.Add(source);
-    }
-
-    public RequestData(IEnumerable<IValueSource> sources)
-    {
-        _sources.AddRange(sources);
-    }
-
     public void AddValues(string name, IKeyValues values)
     {
         var source = new FlatValueSource(values, name);
@@ -43,6 +33,16 @@ public class RequestData : IRequestData
             source.WriteReport(report);
             report.EndSource();
         });
+    }
+
+    public RequestData(IValueSource source)
+    {
+        _sources.Add(source);
+    }
+
+    public RequestData(IEnumerable<IValueSource> sources)
+    {
+        _sources.AddRange(sources);
     }
 
     public object Value(string key)
@@ -70,13 +70,16 @@ public class RequestData : IRequestData
         return new RequestData(sources);
     }
 
-    // Living with the limitation that only *ONE* source can ever have
+    // Living with the limitation that only *ONE* source can ever have 
     public IEnumerable<IRequestData> GetEnumerableRequests(string prefixOrChild)
     {
         foreach (var valueSource in _sources)
         {
             var childrenSources = valueSource.GetChildren(prefixOrChild);
-            if (childrenSources.Any()) return childrenSources.Select(x => new RequestData(x)).ToList();
+            if (childrenSources.Any())
+            {
+                return childrenSources.Select(x => new RequestData(x)).ToList();
+            }
         }
 
         return Enumerable.Empty<IRequestData>();

@@ -15,8 +15,14 @@ public class InMemorySmartRequest : ISmartRequest
 
     public object this[string key]
     {
-        get => _request[key];
-        set => _request[key] = value;
+        get
+        {
+            return _request[key];
+        }
+        set
+        {
+            _request[key] = value;
+        }
     }
 
     public object Value(Type type, string key)
@@ -38,4 +44,5 @@ public class InMemorySmartRequest : ISmartRequest
     {
         return _request.Value(key, o => callback((T)o.RawValue));
     }
+
 }

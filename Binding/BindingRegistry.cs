@@ -1,37 +1,28 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 public class BindingRegistry : IModelBinderCache, IValueConverterRegistry, IPropertyBinderCache, DescribesItself
 {
     private readonly IList<IModelBinder> _binders = new List<IModelBinder>();
-
-    private readonly List<IConverterFamily> _defaultFamilies = new List<IConverterFamily>
-{
-new ExpandEnvironmentVariablesFamily(),
-new ResolveConnectionStringFamily(),
-new BooleanFamily(),
-new NumericTypeFamily(),
-new ObjectTypeFamily()
-};
+    private readonly Cache<Type, IModelBinder> _modelBinderCache = new Cache<Type, IModelBinder>();
+    private readonly Cache<PropertyInfo, IPropertyBinder> _propertyBinderCache = new Cache<PropertyInfo, IPropertyBinder>();
+    private Lazy<StandardModelBinder> _standardBinder;
+    private Lazy<IEnumerable<IPropertyBinder>> _defaultPropertyBinders;
+    private readonly IList<IPropertyBinder> _propertyBinders = new List<IPropertyBinder>();
 
     private readonly IList<IConverterFamily> _families = new List<IConverterFamily>();
-    private readonly Cache<Type, IModelBinder> _modelBinderCache = new Cache<Type, IModelBinder>();
+    private readonly List<IConverterFamily> _defaultFamilies = new List<IConverterFamily>{
+            new ExpandEnvironmentVariablesFamily(),
+            new ResolveConnectionStringFamily(),
+            new BooleanFamily(),
+            new NumericTypeFamily(),
+            new ObjectTypeFamily()
+    };
 
-    private readonly Cache<PropertyInfo, IPropertyBinder> _propertyBinderCache =
-    new Cache<PropertyInfo, IPropertyBinder>();
-
-    private readonly IList<IPropertyBinder> _propertyBinders = new List<IPropertyBinder>();
-    private Lazy<IEnumerable<IPropertyBinder>> _defaultPropertyBinders;
-    private Lazy<StandardModelBinder> _standardBinder;
-
-    public BindingRegistry() : this(new ConverterLibrary(), Enumerable.Empty<IModelBinder>(),
-    Enumerable.Empty<IPropertyBinder>(), Enumerable.Empty<IConverterFamily>())
+    public BindingRegistry() : this(new ConverterLibrary(), Enumerable.Empty<IModelBinder>(), Enumerable.Empty<IPropertyBinder>(), Enumerable.Empty<IConverterFamily>())
     {
     }
 
-    public BindingRegistry(ConverterLibrary converters, IEnumerable<IModelBinder> binders,
-    IEnumerable<IPropertyBinder> propertyBinders, IEnumerable<IConverterFamily> converterFamilies)
+    public BindingRegistry(ConverterLibrary converters, IEnumerable<IModelBinder> binders, IEnumerable<IPropertyBinder> propertyBinders, IEnumerable<IConverterFamily> converterFamilies)
     {
         configureModelBinders(binders);
         configurePropertyBinders(propertyBinders);
@@ -40,51 +31,6 @@ new ObjectTypeFamily()
 
         Converters = converters;
         _defaultFamilies.Add(new BasicConverterFamily(Converters));
-    }
-
-    public IPropertySetter PropertySetter => _standardBinder.Value;
-
-    public ConverterLibrary Converters { get; }
-
-    public void Describe(Description description)
-    {
-        description.Title = "Model Binding Graph";
-        addModelBindersDescription(description);
-    }
-
-    IModelBinder IModelBinderCache.BinderFor(Type modelType)
-    {
-        return _modelBinderCache[modelType];
-    }
-
-    public IEnumerable<IPropertyBinder> AllPropertyBinders()
-    {
-        foreach (var propertyBinder in _propertyBinders) yield return propertyBinder;
-
-        foreach (var propertyBinder in _defaultPropertyBinders.Value) yield return propertyBinder;
-    }
-
-    IPropertyBinder IPropertyBinderCache.BinderFor(PropertyInfo property)
-    {
-        return _propertyBinderCache[property];
-    }
-
-    public IEnumerable<IConverterFamily> AllConverterFamilies()
-    {
-        foreach (var family in _families) yield return family;
-
-        foreach (var family in _defaultFamilies) yield return family;
-    }
-
-    public bool CanBeParsed(Type type)
-    {
-        return Converters.CanBeParsed(type);
-    }
-
-    ValueConverter IValueConverterRegistry.FindConverter(PropertyInfo property)
-    {
-        var family = AllConverterFamilies().FirstOrDefault(x => x.Matches(property));
-        return family == null ? null : family.Build(this, property);
     }
 
     private void configurePropertyBinders(IEnumerable<IPropertyBinder> propertyBinders)
@@ -122,6 +68,14 @@ new ObjectTypeFamily()
         return new StandardModelBinder(this, new TypeDescriptorCache());
     }
 
+    public IPropertySetter PropertySetter
+    {
+        get
+        {
+            return _standardBinder.Value;
+        }
+    }
+
     public void Add(IModelBinder binder)
     {
         _binders.Add(binder);
@@ -139,9 +93,67 @@ new ObjectTypeFamily()
 
     public IEnumerable<IModelBinder> AllModelBinders()
     {
-        foreach (var binder in _binders) yield return binder;
+        foreach (var binder in _binders)
+        {
+            yield return binder;
+        }
 
         yield return _standardBinder.Value;
+    }
+
+    public IEnumerable<IPropertyBinder> AllPropertyBinders()
+    {
+        foreach (var propertyBinder in _propertyBinders)
+        {
+            yield return propertyBinder;
+        }
+
+        foreach (var propertyBinder in _defaultPropertyBinders.Value)
+        {
+            yield return propertyBinder;
+        }
+    }
+
+    public IEnumerable<IConverterFamily> AllConverterFamilies()
+    {
+        foreach (var family in _families)
+        {
+            yield return family;
+        }
+
+        foreach (var family in _defaultFamilies)
+        {
+            yield return family;
+        }
+    }
+
+    public bool CanBeParsed(Type type)
+    {
+        return Converters.CanBeParsed(type);
+    }
+
+    public ConverterLibrary Converters { private set; get; }
+
+    IModelBinder IModelBinderCache.BinderFor(Type modelType)
+    {
+        return _modelBinderCache[modelType];
+    }
+
+    ValueConverter IValueConverterRegistry.FindConverter(PropertyInfo property)
+    {
+        var family = AllConverterFamilies().FirstOrDefault(x => x.Matches(property));
+        return family == null ? null : family.Build(this, property);
+    }
+
+    IPropertyBinder IPropertyBinderCache.BinderFor(PropertyInfo property)
+    {
+        return _propertyBinderCache[property];
+    }
+
+    public void Describe(Description description)
+    {
+        description.Title = "Model Binding Graph";
+        addModelBindersDescription(description);
     }
 
     private void addModelBindersDescription(Description description)

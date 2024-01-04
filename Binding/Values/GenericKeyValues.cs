@@ -2,8 +2,8 @@ namespace SunamoFubuCore.Binding.Values;
 
 public class GenericKeyValues : IKeyValues
 {
-    private readonly Func<IEnumerable<string>> _allKeys;
     private readonly Func<string, string> _source;
+    private readonly Func<IEnumerable<string>> _allKeys;
 
     public GenericKeyValues(Func<string, string> source, Func<IEnumerable<string>> allKeys)
     {

@@ -6,8 +6,8 @@ public class KeyValues : IKeyValues
 
     public string this[string key]
     {
-        get => _values[key];
-        set => _values[key] = value;
+        get { return _values[key]; }
+        set { _values[key] = value; }
     }
 
 

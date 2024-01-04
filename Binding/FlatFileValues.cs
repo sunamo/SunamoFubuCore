@@ -9,8 +9,16 @@ public class FlatFileValues : IKeyValues
     public FlatFileValues(string concatenator, string headerLine)
     {
         _concatenator = concatenator;
-        var headers = headerLine.Split(new[] { _concatenator }, StringSplitOptions.None);
-        for (var i = 0; i < headers.Length; i++) _indices[headers[i]] = i;
+        var headers = headerLine.Split(new string[] { _concatenator }, StringSplitOptions.None);
+        for (int i = 0; i < headers.Length; i++)
+        {
+            _indices[headers[i]] = i;
+        }
+    }
+
+    public void ReadLine(string line)
+    {
+        _values = line.Split(new string[] { _concatenator }, StringSplitOptions.None);
     }
 
     public string Get(string key)
@@ -21,6 +29,11 @@ public class FlatFileValues : IKeyValues
     public bool Has(string key)
     {
         return _indices.Has(key);
+    }
+
+    public void Alias(string header, string alias)
+    {
+        _indices.WithValue(header, i => _indices[alias] = i);
     }
 
     public IEnumerable<string> GetKeys()
@@ -35,15 +48,5 @@ public class FlatFileValues : IKeyValues
         callback(key, Get(key));
 
         return true;
-    }
-
-    public void ReadLine(string line)
-    {
-        _values = line.Split(new[] { _concatenator }, StringSplitOptions.None);
-    }
-
-    public void Alias(string header, string alias)
-    {
-        _indices.WithValue(header, i => _indices[alias] = i);
     }
 }

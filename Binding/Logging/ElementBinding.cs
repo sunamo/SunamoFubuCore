@@ -2,12 +2,17 @@ namespace SunamoFubuCore.Binding.Logging;
 
 public class ElementBinding : BindingReport
 {
+    private readonly int _index;
+
     public ElementBinding(int index, Type elementType, IModelBinder binder) : base(elementType, binder)
     {
-        Index = index;
+        _index = index;
     }
 
-    public int Index { get; }
+    public int Index
+    {
+        get { return _index; }
+    }
 
     public override void AcceptVisitor(IBindingReportVisitor visitor)
     {

@@ -1,22 +1,16 @@
 namespace SunamoFubuCore.Binding.Logging;
 
-
-
 public class BindingReport
 {
+    private readonly IModelBinder _binder;
+    private readonly Type _modelType;
+    private readonly IList<PropertyBindingReport> _properties = new List<PropertyBindingReport>();
+
     public BindingReport(Type modelType, IModelBinder binder)
     {
-        ModelType = modelType;
-        Binder = binder;
+        _modelType = modelType;
+        _binder = binder;
     }
-
-    public Type ModelType { get; }
-
-    public IList<PropertyBindingReport> Properties { get; } = new List<PropertyBindingReport>();
-
-    public IModelBinder Binder { get; }
-
-    public PropertyBindingReport LastProperty => Properties.Last();
 
     public void WriteToConsole(bool showValues)
     {
@@ -26,20 +20,26 @@ public class BindingReport
 
     public IEnumerable<PropertyBindingReport> OrderedProperties()
     {
-        foreach (var prop in Properties
-        .Where(x => x.Nested == null && !x.Elements.Any())
-        .OrderBy(x => x.Property.Name))
+        foreach (var prop in _properties
+            .Where(x => x.Nested == null && !x.Elements.Any())
+            .OrderBy(x => x.Property.Name))
+        {
             yield return prop;
+        }
 
-        foreach (var prop in Properties
-        .Where(x => x.Nested != null)
-        .OrderBy(x => x.Property.Name))
+        foreach (var prop in _properties
+            .Where(x => x.Nested != null)
+            .OrderBy(x => x.Property.Name))
+        {
             yield return prop;
+        }
 
-        foreach (var prop in Properties
-        .Where(x => x.Elements.Any())
-        .OrderBy(x => x.Property.Name))
+        foreach (var prop in _properties
+            .Where(x => x.Elements.Any())
+            .OrderBy(x => x.Property.Name))
+        {
             yield return prop;
+        }
     }
 
     public virtual void AcceptVisitor(IBindingReportVisitor visitor)
@@ -51,15 +51,35 @@ public class BindingReport
         visitor.EndReport();
     }
 
+    public Type ModelType
+    {
+        get { return _modelType; }
+    }
+
+    public IList<PropertyBindingReport> Properties
+    {
+        get { return _properties; }
+    }
+
+    public IModelBinder Binder
+    {
+        get { return _binder; }
+    }
+
+    public PropertyBindingReport LastProperty
+    {
+        get { return _properties.Last(); }
+    }
+
     public void AddProperty(PropertyInfo property, IPropertyBinder binder)
     {
         var report = new PropertyBindingReport(property, binder);
-        Properties.Add(report);
+        _properties.Add(report);
     }
 
     public PropertyBindingReport For(PropertyInfo property)
     {
-        return Properties.LastOrDefault(x => property.PropertyMatches(x.Property));
+        return _properties.LastOrDefault(x => property.PropertyMatches(x.Property));
     }
 
     public PropertyBindingReport For<T>(Expression<Func<T, object>> expression)
@@ -71,6 +91,9 @@ public class BindingReport
     // TODO -- what if Value() is used outside the context of a property?
     public void Used(BindingValue value)
     {
-        if (Properties.Any()) LastProperty.Used(value);
+        if (_properties.Any())
+        {
+            LastProperty.Used(value);
+        }
     }
 }

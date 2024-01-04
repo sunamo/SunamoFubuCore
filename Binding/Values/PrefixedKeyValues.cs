@@ -1,9 +1,11 @@
 namespace SunamoFubuCore.Binding.Values;
 
+
+
 public class PrefixedKeyValues<T> : IKeyValues<T>
 {
-    private readonly IKeyValues<T> _inner;
     private readonly string _prefix;
+    private readonly IKeyValues<T> _inner;
 
     public PrefixedKeyValues(string prefix, IKeyValues<T> inner)
     {

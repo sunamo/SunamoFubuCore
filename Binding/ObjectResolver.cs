@@ -1,13 +1,11 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 public class ObjectResolver : IObjectResolver
 {
     private readonly IModelBinderCache _binders;
     private readonly IBindingLogger _logger;
-    private readonly IPropertySetter _propertySetter;
     private readonly IServiceLocator _services;
+    private readonly IPropertySetter _propertySetter;
 
     public ObjectResolver(IServiceLocator services, BindingRegistry binders, IBindingLogger logger)
     {
@@ -41,6 +39,21 @@ public class ObjectResolver : IObjectResolver
         return executeModelBinder(type, context, binder, () => binder.Bind(type, context));
     }
 
+    private IModelBinder findBinder(Type type)
+    {
+        var binder = _binders.BinderFor(type);
+
+        if (binder == null)
+        {
+            throw new FubuException(2200,
+                                    "Could not determine an IModelBinder for input type {0}. No model binders matched on this type. The standard model binder requires a parameterless constructor for the model type. Alternatively, you could implement your own IModelBinder which can process this model type.",
+                                    type.AssemblyQualifiedName);
+        }
+
+
+        return binder;
+    }
+
     public void TryBindModel(Type type, IBindingContext context, Action<BindResult> continuation)
     {
         var binder = _binders.BinderFor(type);
@@ -64,21 +77,7 @@ public class ObjectResolver : IObjectResolver
         return BindModel(type, request);
     }
 
-    private IModelBinder findBinder(Type type)
-    {
-        var binder = _binders.BinderFor(type);
-
-        if (binder == null)
-            throw new FubuException(2200,
-            "Could not determine an IModelBinder for input type {0}. No model binders matched on this type. The standard model binder requires a parameterless constructor for the model type. Alternatively, you could implement your own IModelBinder which can process this model type.",
-            type.AssemblyQualifiedName);
-
-
-        return binder;
-    }
-
-    private static BindResult executeModelBinder(Type type, IBindingContext context, IModelBinder binder,
-    Func<object> source)
+    private static BindResult executeModelBinder(Type type, IBindingContext context, IModelBinder binder, Func<object> source)
     {
         try
         {
@@ -96,7 +95,7 @@ public class ObjectResolver : IObjectResolver
         catch (Exception e)
         {
             throw new FubuException(2201, e, "Fatal error while binding model of type {0}.  See inner exception",
-            type.AssemblyQualifiedName);
+                                    type.AssemblyQualifiedName);
         }
         finally
         {

@@ -12,5 +12,4 @@ public interface IValueReport
     void StartChild(string key, int index);
 }
 
-
 // Gives you flat values

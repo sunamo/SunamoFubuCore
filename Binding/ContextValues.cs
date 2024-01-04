@@ -2,19 +2,18 @@ namespace SunamoFubuCore.Binding;
 
 public class ContextValues : IContextValues
 {
-    private readonly IObjectConverter _converter;
-    private readonly IBindingLogger _logger;
-    private readonly List<Func<string, string>> _namingStrategies;
-    private readonly IRequestData _rawData;
-
-    public ContextValues(IObjectConverter converter, List<Func<string, string>> namingStrategies,
-    IRequestData rawData, IBindingLogger logger)
+    public ContextValues(IObjectConverter converter, List<Func<string, string>> namingStrategies, IRequestData rawData, IBindingLogger logger)
     {
         _converter = converter;
         _namingStrategies = namingStrategies;
         _rawData = rawData;
         _logger = logger;
     }
+
+    private readonly IObjectConverter _converter;
+    private readonly List<Func<string, string>> _namingStrategies;
+    private readonly IRequestData _rawData;
+    private readonly IBindingLogger _logger;
 
     public T ValueAs<T>(string name)
     {
@@ -61,11 +60,14 @@ public class ContextValues : IContextValues
         BindingValue value = null;
         _namingStrategies.Any(naming =>
         {
-            var n = naming(name);
+            string n = naming(name);
             return _rawData.Value(n, x => value = x);
         });
 
-        if (value != null) _logger.UsedValue(value);
+        if (value != null)
+        {
+            _logger.UsedValue(value);
+        }
 
         return value;
     }
@@ -74,12 +76,12 @@ public class ContextValues : IContextValues
     {
         return _namingStrategies.Any(naming =>
         {
-            var n = naming(name);
+            string n = naming(name);
             return _rawData.Value(n, value =>
-    {
-        _logger.UsedValue(value);
-        continuation(value);
-    });
+            {
+                _logger.UsedValue(value);
+                continuation(value);
+            });
         });
     }
 }

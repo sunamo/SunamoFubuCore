@@ -1,7 +1,5 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 [Description("Culture/localization/separator friendly conversion to number types")]
 public class NumericTypeFamily : StatelessConverter
 {
@@ -12,14 +10,20 @@ public class NumericTypeFamily : StatelessConverter
 
     public override object Convert(IPropertyContext context)
     {
-        var propertyType = context.Property.PropertyType;
+        Type propertyType = context.Property.PropertyType;
+
+
+
 
 
         if (context.RawValueFromRequest != null)
         {
             var rawValue = context.RawValueFromRequest.RawValue;
 
-            if (rawValue.GetType() == propertyType) return rawValue;
+            if (rawValue.GetType() == propertyType)
+            {
+                return rawValue;
+            }
 
             var converter = TypeDescriptor.GetConverter(propertyType);
 

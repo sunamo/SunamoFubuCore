@@ -11,6 +11,16 @@ public class DiagnosticValue : IEnumerable<DiagnosticValueSource>
 
     public string Key { get; private set; }
 
+    public void Add(string source, object value)
+    {
+        _sources.Add(new DiagnosticValueSource(source, value));
+    }
+
+    public DiagnosticValueSource First()
+    {
+        return _sources.First();
+    }
+
     public IEnumerator<DiagnosticValueSource> GetEnumerator()
     {
         return _sources.GetEnumerator();
@@ -21,13 +31,5 @@ public class DiagnosticValue : IEnumerable<DiagnosticValueSource>
         return GetEnumerator();
     }
 
-    public void Add(string source, object value)
-    {
-        _sources.Add(new DiagnosticValueSource(source, value));
-    }
 
-    public DiagnosticValueSource First()
-    {
-        return _sources.First();
-    }
 }

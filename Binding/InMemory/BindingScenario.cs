@@ -1,8 +1,5 @@
 namespace SunamoFubuCore.Binding.InMemory;
 
-
-
-
 public class BindingScenario<T> where T : class, new()
 {
     private readonly StringWriter _writer = new StringWriter();
@@ -18,7 +15,10 @@ public class BindingScenario<T> where T : class, new()
 
         History = definition.History;
 
-        if (definition.History.AllReports.Count() == 1) Report = definition.History.AllReports.Single();
+        if (definition.History.AllReports.Count() == 1)
+        {
+            Report = definition.History.AllReports.Single();
+        }
     }
 
     public InMemoryBindingHistory History { get; private set; }
@@ -27,9 +27,12 @@ public class BindingScenario<T> where T : class, new()
 
     public IList<ConvertProblem> Problems { get; private set; }
 
-    public T Model { get; }
+    public T Model { get; private set; }
 
-    public string Log => _writer.GetStringBuilder().ToString();
+    public string Log
+    {
+        get { return _writer.GetStringBuilder().ToString(); }
+    }
 
     public static BindingScenario<T> For(Action<ScenarioDefinition> configuration)
     {
@@ -51,18 +54,17 @@ public class BindingScenario<T> where T : class, new()
     {
         public bool Matches(Type type)
         {
-            ThrowEx.NotImplementedMethod();
-            return false;
-        }
-
-        public object Bind(Type type, IBindingContext context)
-        {
-            ThrowEx.NotImplementedMethod();
-            return null;
+            throw new NotImplementedException();
         }
 
         public void BindProperties(Type type, object instance, IBindingContext context)
         {
+            throw new NotImplementedException();
+        }
+
+        public object Bind(Type type, IBindingContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -74,45 +76,60 @@ public class BindingScenario<T> where T : class, new()
     {
         private readonly IList<Action<IBindingContext>> _actions = new List<Action<IBindingContext>>();
         private readonly KeyValues _data = new KeyValues();
+        private readonly InMemoryBindingHistory _history = new InMemoryBindingHistory();
+        private readonly RecordingBindingLogger _logger;
+        private readonly BindingRegistry _registry = new BindingRegistry();
         private readonly InMemoryServiceLocator _services = new InMemoryServiceLocator();
         private IServiceLocator _customServices;
 
         public ScenarioDefinition()
         {
-            Logger = new RecordingBindingLogger(History);
+            _logger = new RecordingBindingLogger(_history);
 
-            _services.Add<IObjectResolver>(new ObjectResolver(_services, Registry, Logger));
+            _services.Add<IObjectResolver>(new ObjectResolver(_services, _registry, _logger));
         }
 
-        public InMemoryBindingHistory History { get; } = new InMemoryBindingHistory();
+        protected internal InMemoryBindingHistory History
+        {
+            get { return _history; }
+        }
 
-        public RecordingBindingLogger Logger { get; }
+        protected internal RecordingBindingLogger Logger
+        {
+            get { return _logger; }
+        }
 
-        public IRequestData RequestData => new RequestData(new FlatValueSource(_data));
+        protected internal IRequestData RequestData
+        {
+            get { return new RequestData(new FlatValueSource(_data)); }
+        }
 
-        public IServiceLocator Services => _customServices ?? _services;
+        protected internal IServiceLocator Services
+        {
+            get { return _customServices ?? _services; }
+        }
 
-        public IEnumerable<Action<IBindingContext>> Actions
+        protected internal IEnumerable<Action<IBindingContext>> Actions
         {
             get
             {
                 if (!_actions.Any())
                 {
                     if (Model != null)
-                        return new Action<IBindingContext>[]
-                        {
-context =>
-new ObjectResolver(Services, Registry, new NulloBindingLogger()).BindProperties(
-typeof(T), Model, context)
-                        };
-
-                    return new Action<IBindingContext>[]
                     {
-context =>
-{
-var resolver = new ObjectResolver(Services, Registry, Logger);
-Model = (T)resolver.BindModel(typeof(T), context).Value;
-}
+                        return new Action<IBindingContext>[]{
+                            context =>
+                            new ObjectResolver(Services, Registry, new NulloBindingLogger()).BindProperties(
+                                typeof (T), Model, context)
+                        };
+                    }
+
+                    return new Action<IBindingContext>[]{
+                        context =>
+                        {
+                            var resolver = new ObjectResolver(Services, Registry, _logger);
+                            Model = (T) resolver.BindModel(typeof (T), context).Value;
+                        }
                     };
                 }
 
@@ -123,7 +140,10 @@ Model = (T)resolver.BindModel(typeof(T), context).Value;
 
         public T Model { get; set; }
 
-        public BindingRegistry Registry { get; } = new BindingRegistry();
+        public BindingRegistry Registry
+        {
+            get { return _registry; }
+        }
 
         public void ServicesFrom(IServiceLocator services)
         {
@@ -139,13 +159,13 @@ Model = (T)resolver.BindModel(typeof(T), context).Value;
         }
 
         /// <summary>
-        ///     Allows you to force load key/value pairs in the format:
-        ///     prop1=val1
-        ///     ChildProp1=val
-        ///     Prop2=val
-        ///     Prop3=val
+        ///   Allows you to force load key/value pairs in the format:
+        ///   prop1=val1
+        ///   ChildProp1=val
+        ///   Prop2=val
+        ///   Prop3=val
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name = "text"></param>
         public void Data(string text)
         {
             _data.ReadData(text);
@@ -162,26 +182,31 @@ Model = (T)resolver.BindModel(typeof(T), context).Value;
         }
 
         public void BindPropertyWith<TBinder>(Expression<Func<T, object>> property, string rawValue = null)
-        where TBinder : IPropertyBinder, new()
+            where TBinder : IPropertyBinder, new()
         {
             BindPropertyWith(new TBinder(), property, rawValue);
         }
 
         public void BindPropertyWith(IPropertyBinder binder, Expression<Func<T, object>> property,
-        string rawValue = null)
+                                     string rawValue = null)
         {
             if (rawValue != null) Data(property, rawValue);
             var prop = property.ToAccessor().InnerProperty;
             _actions.Add(context =>
             {
-                if (Model == null) Model = new T();
+                if (Model == null)
+                {
+                    Model = new T();
+                }
 
                 context.ForObject(Model, () =>
-    {
-        Logger.Chose(typeof(T), new PropertyModelBinderStandin());
-        StandardModelBinder.PopulatePropertyWithBinder(prop, context, binder);
-        Logger.FinishedModel();
-    });
+                {
+                    Logger.Chose(typeof(T), new PropertyModelBinderStandin());
+                    StandardModelBinder.PopulatePropertyWithBinder(prop, context, binder);
+                    Logger.FinishedModel();
+                });
+
+
             });
         }
     }

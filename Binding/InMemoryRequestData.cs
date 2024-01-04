@@ -6,7 +6,7 @@ public class InMemoryRequestData : RequestData
 
 
     private InMemoryRequestData(IDictionary<string, object> values)
-    : base(new FlatValueSource<object>(values, "in memory"))
+        : base(new FlatValueSource<object>(values, "in memory"))
     {
         _values = new Cache<string, object>(values);
     }
@@ -18,8 +18,8 @@ public class InMemoryRequestData : RequestData
 
     public object this[string key]
     {
-        get => _values[key];
-        set => _values[key] = value;
+        get { return _values[key]; }
+        set { _values[key] = value; }
     }
 
     public void ReadData(string text)

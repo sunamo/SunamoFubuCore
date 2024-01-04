@@ -1,8 +1,5 @@
 namespace SunamoFubuCore.Binding;
 
-//using System.Data;
-
-
 // Tested thru ReaderBinder tests
 public class DataReaderValues : IKeyValues
 {
@@ -20,7 +17,15 @@ public class DataReaderValues : IKeyValues
     {
         _reader = reader;
         _columns = new Dictionary<string, string>();
-        for (var i = 0; i < reader.FieldCount; i++) _columns.Add(reader.GetName(i), null);
+        for (int i = 0; i < reader.FieldCount; i++)
+        {
+            _columns.Add(reader.GetName(i), null);
+        }
+    }
+
+    public void SetAlias(string name, string alias)
+    {
+        _aliases[name] = alias;
     }
 
     public bool Has(string key)
@@ -46,10 +51,5 @@ public class DataReaderValues : IKeyValues
         callback(key, Get(key));
 
         return true;
-    }
-
-    public void SetAlias(string name, string alias)
-    {
-        _aliases[name] = alias;
     }
 }

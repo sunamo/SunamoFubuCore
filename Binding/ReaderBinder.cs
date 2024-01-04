@@ -1,9 +1,5 @@
 namespace SunamoFubuCore.Binding;
 
-//using System.Data;
-
-
-
 public class RowProcessingRequest<T>
 {
     public RowProcessingRequest()
@@ -30,7 +26,7 @@ public class ReaderBinder
 
     public IEnumerable<T> Build<T>(Func<IDataReader> getReader) where T : new()
     {
-        using (var reader = getReader())
+        using (IDataReader reader = getReader())
         {
             return Build<T>(reader);
         }
@@ -52,16 +48,15 @@ public class ReaderBinder
 
     public void Build<T>(RowProcessingRequest<T> input)
     {
-        var reader = input.Reader;
+        IDataReader reader = input.Reader;
 
         // TODO -- awkward!  Let's do some convenience methods here and make this easier
         var request = new DataReaderValues(reader, _aliases);
-        var context = new BindingContext(new RequestData(new FlatValueSource(request)), _services,
-        new NulloBindingLogger());
+        var context = new BindingContext(new RequestData(new FlatValueSource(request)), _services, new NulloBindingLogger());
 
         while (reader.Read())
         {
-            var target = input.Finder(reader);
+            T target = input.Finder(reader);
             _binder.BindProperties(target, context);
 
             input.Callback(target);

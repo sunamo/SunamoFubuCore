@@ -2,9 +2,8 @@ namespace SunamoFubuCore.Binding.Values;
 
 public class ValueReport : ValueReportBase
 {
+    private readonly IList<ValueSourceReport> _reports = new List<ValueSourceReport>();
     private ValueSourceReport _currentReport;
-
-    public IList<ValueSourceReport> Reports { get; } = new List<ValueSourceReport>();
 
     protected override void store(string fullKey, object value)
     {
@@ -14,6 +13,11 @@ public class ValueReport : ValueReportBase
     protected override void startSource(IValueSource source)
     {
         _currentReport = new ValueSourceReport(source.Provenance);
-        Reports.Add(_currentReport);
+        _reports.Add(_currentReport);
+    }
+
+    public IList<ValueSourceReport> Reports
+    {
+        get { return _reports; }
     }
 }

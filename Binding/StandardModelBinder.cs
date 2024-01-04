@@ -5,8 +5,7 @@ public interface IPropertySetter
     void BindProperties(Type type, object instance, IBindingContext context);
 }
 
-[Description(
-"The standard model binding using no-arg constructors, property binding policies, and value conversion policies")]
+[Description("The standard model binding using no-arg constructors, property binding policies, and value conversion policies")]
 public class StandardModelBinder : IModelBinder, DescribesItself, IPropertySetter
 {
     private readonly IPropertyBinderCache _propertyBinders;
@@ -16,13 +15,6 @@ public class StandardModelBinder : IModelBinder, DescribesItself, IPropertySette
     {
         _propertyBinders = propertyBinders;
         _typeCache = typeCache;
-    }
-
-    public void Describe(Description description)
-    {
-        var list = description.AddList("Property Binders", _propertyBinders.AllPropertyBinders());
-        list.Label = "Property Binders";
-        list.IsOrderDependent = true;
     }
 
     public bool Matches(Type type)
@@ -61,9 +53,19 @@ public class StandardModelBinder : IModelBinder, DescribesItself, IPropertySette
     }
 
     public static void PopulatePropertyWithBinder(PropertyInfo property, IBindingContext context,
-    IPropertyBinder propertyBinder)
+                                                  IPropertyBinder propertyBinder)
     {
         context.Logger.Chose(property, propertyBinder);
-        context.ForProperty(property, propertyContext => { propertyBinder.Bind(property, context); });
+        context.ForProperty(property, propertyContext =>
+        {
+            propertyBinder.Bind(property, context);
+        });
+    }
+
+    public void Describe(Description description)
+    {
+        var list = description.AddList("Property Binders", _propertyBinders.AllPropertyBinders());
+        list.Label = "Property Binders";
+        list.IsOrderDependent = true;
     }
 }

@@ -8,11 +8,11 @@ public interface IObjectResolver
     BindResult BindModel(Type type, IBindingContext context);
 
     /// <summary>
-    ///     Use this method when the type may not have a matching IModelBinder
+    ///   Use this method when the type may not have a matching IModelBinder
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="context"></param>
-    /// <param name="onResult"></param>
+    /// <param name = "type"></param>
+    /// <param name = "context"></param>
+    /// <param name = "onResult"></param>
     [MarkedForTermination]
     void TryBindModel(Type type, IBindingContext context, Action<BindResult> continuation);
 

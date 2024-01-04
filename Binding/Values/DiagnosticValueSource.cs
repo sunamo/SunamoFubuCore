@@ -2,20 +2,26 @@ namespace SunamoFubuCore.Binding.Values;
 
 public class DiagnosticValueSource
 {
+    public string Source { get; set; }
+    public string Value { get; set; }
+
     public DiagnosticValueSource(string source, object value)
     {
         Source = source;
 
         if (value == null)
+        {
             Value = "NULL";
+        }
         else if (string.Empty.Equals(value))
+        {
             Value = "EMPTY";
+        }
         else
+        {
             Value = value.ToString();
+        }
     }
-
-    public string Source { get; set; }
-    public string Value { get; set; }
 
     public bool Equals(DiagnosticValueSource other)
     {

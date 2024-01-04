@@ -1,24 +1,21 @@
 namespace SunamoFubuCore.Binding;
 
-
-
 [Description("Converts text by ConfigurationManager.ConnectionStrings[text] ")]
 public class ResolveConnectionStringFamily : StatelessConverter
 {
-    public static Func<string, ConnectionStringSettings> GetConnectionStringSettings =
-    key => ConfigurationManager.ConnectionStrings[key];
-
     public override bool Matches(PropertyInfo property)
     {
         return property.HasAttribute<ConnectionStringAttribute>();
     }
 
+    public static Func<string, ConnectionStringSettings> GetConnectionStringSettings = key => ConfigurationManager.ConnectionStrings[key];
+
     private static string getConnectionString(string name)
     {
         var connectionStringSettings = GetConnectionStringSettings(name);
         return connectionStringSettings != null
-        ? connectionStringSettings.ConnectionString
-        : name;
+            ? connectionStringSettings.ConnectionString
+            : name;
     }
 
     public override object Convert(IPropertyContext context)
@@ -26,7 +23,7 @@ public class ResolveConnectionStringFamily : StatelessConverter
         var stringValue = context.RawValueFromRequest.RawValue as string;
 
         return stringValue.IsNotEmpty()
-        ? getConnectionString(stringValue)
-        : stringValue;
+                   ? getConnectionString(stringValue)
+                   : stringValue;
     }
 }
