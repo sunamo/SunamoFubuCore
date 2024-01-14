@@ -1,3 +1,5 @@
+
+
 namespace SunamoFubuCore.Util.TextWriting;
 
 public class Column : IColumn

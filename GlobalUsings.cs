@@ -21,7 +21,7 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using System.Xml;
 global using System.Xml.Serialization;
-
+//global using SunamoCl;
 global using SunamoExceptions;
 
 global using SunamoFubuCore;

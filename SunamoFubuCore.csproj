@@ -3,7 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Version>24.1.4.1</Version>
+    <Version>24.1.11.2</Version>
+    <Description>Wrapper around FubuCore package due to .NET5+</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
@@ -17,15 +18,14 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="SunamoCl" Version="23.12.9.2" />
-    <PackageReference Include="SunamoExceptions" Version="24.1.4.1" />
-    <PackageReference Include="SunamoExtensions" Version="24.1.4.1" />
+    <PackageReference Include="SunamoCl" Version="24.1.11.2" />
+    <PackageReference Include="SunamoExceptions" Version="24.1.11.1" />
+    <PackageReference Include="SunamoExtensions" Version="24.1.10.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0">
     </PackageReference>
     <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SunamoDateTime\SunamoDateTime.csproj" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>

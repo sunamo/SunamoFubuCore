@@ -1,3 +1,4 @@
+
 namespace SunamoFubuCore.CommandLine;
 
 public static class ConsoleWriter
