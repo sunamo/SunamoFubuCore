@@ -46,9 +46,9 @@ public class HelpCommand : FubuCommand<HelpInput>
     private void writeInvalidCommand(string commandName)
     {
         ConsoleWriter.Line();
-        CL.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.Red;
         ConsoleWriter.Write("fubu:  '{0}' is not a command.  See available commands.", commandName);
-        CL.ResetColor();
+        Console.ResetColor();
         ConsoleWriter.Line();
         ConsoleWriter.Line();
     }

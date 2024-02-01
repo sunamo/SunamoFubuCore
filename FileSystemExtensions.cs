@@ -57,7 +57,7 @@ public static class FileSystemExtensions
             var parts = propertyText.Split('=');
             file.WriteProperty(parts.First(), parts.Last());
 
-            CL.WriteLine("Contents of {0}", path);
+            Console.WriteLine("Contents of {0}", path);
             file.Sort();
 
             file.Describe();

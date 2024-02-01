@@ -31,7 +31,7 @@ public class TwoLineReport
 
 
         ConsoleWriter.PrintHorizontalLine();
-        CL.WriteLine(_title);
+        Console.WriteLine(_title);
         ConsoleWriter.PrintHorizontalLine();
 
         _data.Each((left, right) =>

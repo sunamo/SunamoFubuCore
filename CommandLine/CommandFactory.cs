@@ -101,26 +101,26 @@ public class CommandFactory : ICommandFactory
         }
         catch (InvalidUsageException e)
         {
-            CL.ForegroundColor = ConsoleColor.Red;
-            CL.WriteLine("Invalid usage");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Invalid usage");
 
             if (e.Message.IsNotEmpty())
             {
-                CL.ForegroundColor = ConsoleColor.Yellow;
-                CL.WriteLine(e.Message);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(e.Message);
             }
 
-            CL.ResetColor();
-            CL.WriteLine();
+            Console.ResetColor();
+            Console.WriteLine();
         }
         catch (Exception e)
         {
-            CL.ForegroundColor = ConsoleColor.Red;
-            CL.WriteLine("Error parsing input");
-            CL.ForegroundColor = ConsoleColor.Yellow;
-            CL.WriteLine(Exceptions.TextOfExceptions(e));
-            CL.ResetColor();
-            CL.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Error parsing input");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(Exceptions.TextOfExceptions(e));
+            Console.ResetColor();
+            Console.WriteLine();
         }
 
         return HelpRun(commandName);

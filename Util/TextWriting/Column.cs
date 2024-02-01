@@ -30,7 +30,7 @@ public class Column : IColumn
 
     public void WriteToConsole(string text)
     {
-        Write(CL.Out, text);
+        Write(Console.Out, text);
     }
 
     public bool Equals(Column other)

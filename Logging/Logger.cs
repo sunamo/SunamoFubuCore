@@ -40,7 +40,7 @@ public class Logger : ILogger
             }
             catch (Exception e)
             {
-                CL.WriteLine(e);
+                Console.WriteLine(e);
             }
         });
     }
@@ -55,7 +55,7 @@ public class Logger : ILogger
             }
             catch (Exception e)
             {
-                CL.WriteLine(e);
+                Console.WriteLine(e);
             }
         });
     }

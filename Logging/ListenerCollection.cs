@@ -45,13 +45,13 @@ public class ListenerCollection : IEnumerable<ILogListener>
             catch (Exception e)
             {
                 // It's just logging
-                CL.WriteLine(e);
+                Console.WriteLine(e);
             }
         });
                 }
                 catch (Exception e)
                 {
-                    CL.WriteLine(e);
+                    Console.WriteLine(e);
                 }
             };
         }

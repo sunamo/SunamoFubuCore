@@ -12,33 +12,33 @@ public class ConsoleListener : FilteredListener<ConsoleListener>, ILogListener
 
     public void DebugMessage(object message)
     {
-        CL.WriteLineO(message);
+        Console.WriteLine(message);
     }
 
     public void InfoMessage(object message)
     {
-        CL.WriteLineO(message);
+        Console.WriteLine(message);
     }
 
     public void Debug(string message)
     {
-        CL.WriteLine(message);
+        Console.WriteLine(message);
     }
 
     public void Info(string message)
     {
-        CL.WriteLine(message);
+        Console.WriteLine(message);
     }
 
     public void Error(string message, Exception ex)
     {
-        CL.WriteLine(message);
-        CL.WriteLine(ex);
+        Console.WriteLine(message);
+        Console.WriteLine(ex);
     }
 
     public void Error(object correlationId, string message, Exception ex)
     {
-        CL.WriteLineO(correlationId);
+        Console.WriteLine(correlationId);
         Error(message, ex);
     }
 

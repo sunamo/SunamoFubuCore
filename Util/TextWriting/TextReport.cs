@@ -57,6 +57,6 @@ public class TextReport
 
     public void WriteToConsole()
     {
-        Write(CL.Out, ConsoleWriter.ConsoleBufferWidth);
+        Write(Console.Out, ConsoleWriter.ConsoleBufferWidth);
     }
 }

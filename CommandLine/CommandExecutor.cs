@@ -1,6 +1,7 @@
+namespace SunamoFubuCore.CommandLine;
+
 //using SunamoCl;
 
-namespace SunamoFubuCore.CommandLine;
 
 public class CommandExecutor
 {
@@ -26,16 +27,16 @@ public class CommandExecutor
         }
         catch (CommandFailureException e)
         {
-            CL.ForegroundColor = ConsoleColor.Red;
-            CL.WriteLine("ERROR: " + e.Message);
-            CL.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("ERROR: " + e.Message);
+            Console.ResetColor();
             return 1;
         }
         catch (Exception ex)
         {
-            CL.ForegroundColor = ConsoleColor.Red;
-            CL.WriteLine("ERROR: " + ex);
-            CL.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("ERROR: " + ex);
+            Console.ResetColor();
             return 1;
         }
 

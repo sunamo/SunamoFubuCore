@@ -8,11 +8,11 @@ public static class ConsoleWriter
     {
         try
         {
-            ConsoleBufferWidth = CL.BufferWidth;
+            ConsoleBufferWidth = Console.BufferWidth;
         }
         catch
         {
-            // CL.BufferWidth(get) will throw exceptions in certain circumstances
+            // Console.BufferWidth(get) will throw exceptions in certain circumstances
         }
 
         if (ConsoleBufferWidth < 10) // Mono will return 0 instead of throwing an exception
@@ -27,17 +27,17 @@ public static class ConsoleWriter
 
     public static void Line()
     {
-        CL.WriteLine();
+        Console.WriteLine();
     }
 
     public static void PrintHorizontalLine()
     {
-        CL.WriteLine(HL);
+        Console.WriteLine(HL);
     }
 
     public static void PrintHorizontalLine(int indent)
     {
-        CL.WriteLine(new string(' ', indent) + HL.Substring(indent));
+        Console.WriteLine(new string(' ', indent) + HL.Substring(indent));
     }
 
     public static void Write(string stuff)
@@ -47,18 +47,18 @@ public static class ConsoleWriter
 
     public static void WriteWithIndent(ConsoleColor color, int indent, string content)
     {
-        CL.ForegroundColor = color;
+        Console.ForegroundColor = color;
         BreakIntoLines(indent, content)
         .Each(l => Console.WriteLine(l));
-        CL.ResetColor();
+        Console.ResetColor();
     }
 
     public static void Write(ConsoleColor color, string content)
     {
-        CL.ForegroundColor = color;
+        Console.ForegroundColor = color;
         BreakIntoLines(content)
-        .Each(l => CL.WriteLine(l));
-        CL.ResetColor();
+        .Each(l => Console.WriteLine(l));
+        Console.ResetColor();
     }
 
 
@@ -109,8 +109,8 @@ public static class ConsoleWriter
 
     public static void Write(ConsoleColor color, Action action)
     {
-        CL.ForegroundColor = color;
+        Console.ForegroundColor = color;
         action();
-        CL.ResetColor();
+        Console.ResetColor();
     }
 }

@@ -91,17 +91,17 @@ public class UsageGraph
     {
         if (!Usages.Any())
         {
-            CL.WriteLine("No documentation for this command");
+            Console.WriteLine("No documentation for this command");
             return;
         }
 
-        CL.WriteLine(" Usages for '{0}' ({1})", CommandName, Description);
+        Console.WriteLine(" Usages for '{0}' ({1})", CommandName, Description);
 
         if (Usages.Count() == 1)
         {
-            CL.ForegroundColor = ConsoleColor.Cyan;
-            CL.WriteLine(" " + Usages.Single().ToUsage(appName, CommandName));
-            CL.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(" " + Usages.Single().ToUsage(appName, CommandName));
+            Console.ResetColor();
         }
         else
         {

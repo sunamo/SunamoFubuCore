@@ -21,7 +21,7 @@ public class ColumnLine : Line
 
     public void WriteToConsole()
     {
-        Write(CL.Out);
+        Write(Console.Out);
     }
 
     public void Write(TextWriter writer)

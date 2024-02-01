@@ -30,10 +30,10 @@ public class TwoColumnReport
 
         var firstLength = _data.GetAllKeys().Max(x => x.Length);
 
-        CL.WriteLine();
+        Console.WriteLine();
 
         ConsoleWriter.PrintHorizontalLine(2);
-        CL.WriteLine("    " + _title);
+        Console.WriteLine("    " + _title);
         ConsoleWriter.PrintHorizontalLine(2);
 
         var format = "    {0," + firstLength + "} -> ";
@@ -43,14 +43,14 @@ public class TwoColumnReport
         {
             if (SecondColumnColor.HasValue)
             {
-                CL.Write(format, left, right);
-                CL.ForegroundColor = ConsoleColor.Cyan;
-                CL.WriteLine(right);
-                CL.ResetColor();
+                Console.Write(format, left, right);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(right);
+                Console.ResetColor();
             }
             else
             {
-                CL.WriteLine(format, left, right);
+                Console.WriteLine(format, left, right);
             }
         });
 
