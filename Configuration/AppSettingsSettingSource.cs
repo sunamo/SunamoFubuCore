@@ -11,11 +11,13 @@ public class AppSettingsSettingSource : ISettingsSource
 
     public IEnumerable<SettingsData> FindSettingData()
     {
-        var data = new SettingsData(_category);
+        //var data = new SettingsData(_category);
 
-        ConfigurationManager.AppSettings.AllKeys.Each(
-        key => { data[key] = ConfigurationManager.AppSettings[key]; });
+        //ConfigurationManager.AppSettings.AllKeys.Each(
+        //key => { data[key] = ConfigurationManager.AppSettings[key]; });
 
-        yield return data;
+        //yield return data;
+
+        return new List<SettingsData>();
     }
 }
