@@ -1,7 +1,7 @@
 namespace SunamoFubuCore.Binding;
 
 [Description("Culture/localization/separator friendly conversion to number types")]
-public class NumericTypeFamily : StatelessConverter
+public class NumericTypeFamily : StatelessConverterBinding
 {
     public override bool Matches(PropertyInfo property)
     {

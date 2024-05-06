@@ -2,7 +2,7 @@
 namespace SunamoFubuCore.Binding;
 
 [Description("Converts text by ConfigurationManager.ConnectionStrings[text] ")]
-public class ResolveConnectionStringFamily : StatelessConverter
+public class ResolveConnectionStringFamily : StatelessConverterBinding
 {
     public override bool Matches(PropertyInfo property)
     {

@@ -1,0 +1,8 @@
+Configuration
+ISettingsSource
+SettingCategory
+IEnumerable
+ConfigurationManager
+AppSettings
+AllKeys
+List

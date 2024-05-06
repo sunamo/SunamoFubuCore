@@ -1,7 +1,7 @@
 namespace SunamoFubuCore.Binding;
 
 [Description("Passthrough of System.Object properties")]
-public class ObjectTypeFamily : StatelessConverter
+public class ObjectTypeFamily : StatelessConverterBinding
 {
     public override bool Matches(PropertyInfo property)
     {

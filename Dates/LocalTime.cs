@@ -37,7 +37,7 @@ public class LocalTime : IComparable<LocalTime>
 
     public DateTime UtcTime { get; }
 
-    public Date Date => Time.ToDate();
+    public DateFubu Date => Time.ToDate();
 
     public TimeSpan TimeOfDay => Time.TimeOfDay;
 
@@ -85,7 +85,7 @@ public class LocalTime : IComparable<LocalTime>
         return BeginningOfDay().Add(time);
     }
 
-    public static LocalTime AtDayAndTime(Date date, TimeSpan time)
+    public static LocalTime AtDayAndTime(DateFubu date, TimeSpan time)
     {
         var localTime = date.AtTime(time);
         return AtMachineTime(localTime);
@@ -108,7 +108,7 @@ public class LocalTime : IComparable<LocalTime>
 
         if (parts.Count() == 1) return DateTime.Today.Add(text.ToTime());
 
-        var date = new Date(parts.First());
+        var date = new DateFubu(parts.First());
         return date.AtTime(parts.Last());
     }
 

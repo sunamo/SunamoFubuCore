@@ -1,6 +1,6 @@
 namespace SunamoFubuCore.Binding;
 
-public class PassthroughConverter<T> : StatelessConverter, DescribesItself
+public class PassthroughConverter<T> : StatelessConverterBinding, DescribesItself
 {
     public override bool Matches(PropertyInfo property)
     {

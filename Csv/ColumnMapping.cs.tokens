@@ -1,0 +1,16 @@
+Csv
+ColumnMapping
+IColumnMapping
+IList
+List
+IEnumerable
+Name
+IValueSource
+CsvData
+As
+Values
+Func
+Serializable
+Unrecognized
+SerializationInfo
+StreamingContext

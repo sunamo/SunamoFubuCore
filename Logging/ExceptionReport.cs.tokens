@@ -1,0 +1,13 @@
+Logging
+LogRecord
+DescribesItself
+Exception
+Message
+ExceptionType
+Name
+ExceptionText
+CorrelationId
+Description
+Title
+ShortDescription
+LongDescription

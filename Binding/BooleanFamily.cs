@@ -1,7 +1,7 @@
 namespace SunamoFubuCore.Binding;
 
 [Description("Converts to booean values, HTML checkbox friendly conversion")]
-public class BooleanFamily : StatelessConverter
+public class BooleanFamily : StatelessConverterBinding
 {
     private static readonly TypeConverter _converter = TypeDescriptor.GetConverter(typeof(bool));
     private static readonly IList<string> _positives = new List<string> { "yes", "y" };
