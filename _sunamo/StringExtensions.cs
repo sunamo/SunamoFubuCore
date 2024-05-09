@@ -1,4 +1,4 @@
-namespace SunamoFubuCore;
+namespace SunamoFubuCore._sunamo;
 
 
 
