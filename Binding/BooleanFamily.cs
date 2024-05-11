@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Converts to booean values, HTML checkbox friendly conversion")]
 public class BooleanFamily : StatelessConverterBinding

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.DependencyAnalysis;
+namespace SunamoFubuCore;
 
 [DebuggerDisplay("{Source}->{Target}")]
 public class Edge

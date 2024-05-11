@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Delegates to a BindingAttribute class on the property for one-off binding policies")]
 public class AttributePropertyBinder : IPropertyBinder

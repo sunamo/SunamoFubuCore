@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 [Description("Preprocesses 'NULL' or 'EMPTY' as string values during conversion")]
 public class StringConverterStrategy : StatelessConverter<string>

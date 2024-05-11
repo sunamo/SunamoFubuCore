@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding.InMemory;
+namespace SunamoFubuCore;
 
 public interface IBindingLogger
 {

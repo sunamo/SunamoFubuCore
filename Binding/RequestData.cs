@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 // TODO -- go look at all of the usages of this thing and clean stuff up
 public class RequestData : IRequestData

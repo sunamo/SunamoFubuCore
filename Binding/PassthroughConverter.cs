@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 public class PassthroughConverter<T> : StatelessConverterBinding, DescribesItself
 {

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Configuration;
+namespace SunamoFubuCore;
 
 public class AppSettingsSettingSource : ISettingsSource
 {

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Ignores any property that it applies to")]
 public class IgnorePropertyBinder : IPropertyBinder

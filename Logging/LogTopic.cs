@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Logging;
+namespace SunamoFubuCore;
 
 /// <summary>
 ///     Marker interface for audit messages that will be used in the

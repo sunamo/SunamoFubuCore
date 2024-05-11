@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Reflection.Expressions;
+namespace SunamoFubuCore;
 
 public class StringDoesNotEndWithPropertyOperation : CaseInsensitiveStringMethodPropertyOperation
 {

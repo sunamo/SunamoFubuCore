@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Passthrough of System.Object properties")]
 public class ObjectTypeFamily : StatelessConverterBinding

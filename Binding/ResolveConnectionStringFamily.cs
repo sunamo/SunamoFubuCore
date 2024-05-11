@@ -1,5 +1,5 @@
 
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Converts text by ConfigurationManager.ConnectionStrings[text] ")]
 public class ResolveConnectionStringFamily : StatelessConverterBinding

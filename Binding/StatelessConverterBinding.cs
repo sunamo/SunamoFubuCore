@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 public abstract class StatelessConverterBinding : IConverterFamily, ValueConverter
 {

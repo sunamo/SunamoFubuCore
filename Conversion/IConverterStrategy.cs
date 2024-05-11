@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 public interface IConverterStrategy : DescribesItself
 {

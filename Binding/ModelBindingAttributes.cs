@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class ExpandEnvironmentVariablesAttribute : Attribute { }

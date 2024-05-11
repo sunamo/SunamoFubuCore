@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Reflection;
+namespace SunamoFubuCore;
 
 
 

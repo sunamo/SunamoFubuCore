@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.DependencyAnalysis;
+namespace SunamoFubuCore;
 
 [DebuggerDisplay("Node:{Name}")]
 public class Node

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.DependencyAnalysis;
+namespace SunamoFubuCore;
 
 public class Cycle
 {

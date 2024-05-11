@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Logging;
+namespace SunamoFubuCore;
 
 /// <summary>
 ///     Just what it says, provides a LogListener that writes to the

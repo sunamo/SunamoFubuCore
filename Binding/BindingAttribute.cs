@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [AttributeUsage(AttributeTargets.Property)]
 public abstract class BindingAttribute : Attribute

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 /// <summary>
 ///     Uses the built in TypeDescriptor in .Net to convert objects from strings

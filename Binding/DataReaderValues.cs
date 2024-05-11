@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 // Tested thru ReaderBinder tests
 public class DataReaderValues : IKeyValues

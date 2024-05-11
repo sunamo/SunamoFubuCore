@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Logging;
+namespace SunamoFubuCore;
 
 public class DebugListener : FilteredListener<DebugListener>, ILogListener
 {

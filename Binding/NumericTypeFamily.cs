@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Culture/localization/separator friendly conversion to number types")]
 public class NumericTypeFamily : StatelessConverterBinding

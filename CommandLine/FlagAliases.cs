@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.CommandLine;
+namespace SunamoFubuCore;
 
 public class FlagAliases
 {

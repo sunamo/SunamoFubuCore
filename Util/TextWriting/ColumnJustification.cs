@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Util.TextWriting;
+namespace SunamoFubuCore;
 
 public enum ColumnJustification
 {

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Recursively binds properties of a child property for supporting deep object graphs")]
 public class NestedObjectPropertyBinder : IPropertyBinder

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Attempts to bind a property by finding a value matching the property name and converting the raw value to the property type")]
 public class ConversionPropertyBinder : IPropertyBinder, DescribesItself

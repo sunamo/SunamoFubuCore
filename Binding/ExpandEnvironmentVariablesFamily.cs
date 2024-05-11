@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Uses Environment.ExpandEnvironmentVariables(text) if the property is marked with [ExpandEnvironmentVariables]")]
 public class ExpandEnvironmentVariablesFamily : StatelessConverterBinding

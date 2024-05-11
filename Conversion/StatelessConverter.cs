@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 public abstract class StatelessConverter : IObjectConverterFamily, IConverterStrategy
 {

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Binds an array")]
 public class ArrayPropertyBinder : IPropertyBinder

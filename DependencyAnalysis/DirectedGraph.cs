@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.DependencyAnalysis;
+namespace SunamoFubuCore;
 
 /// <summary>
 ///     http://en.wikipedia.org/wiki/Directed_graph

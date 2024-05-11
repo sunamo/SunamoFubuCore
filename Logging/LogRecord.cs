@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Logging;
+namespace SunamoFubuCore;
 
 /// <summary>
 ///     Marker interface for any type of object that is recorded by ILogger.

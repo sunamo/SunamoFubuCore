@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 [Description("Uses Enum.Parse() to handle conversion to enumeration types")]
 public class EnumConverterFamily : IObjectConverterFamily

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 [Description("Converts strings to DateTime values")]
 public class DateTimeConverter : StatelessConverter<DateTime>

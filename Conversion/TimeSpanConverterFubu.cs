@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 [Description("Convert strings into TimeSpan structures")]
 public class TimeSpanConverterFubu : StatelessConverter<TimeSpan>

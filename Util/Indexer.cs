@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Util;
+namespace SunamoFubuCore;
 
 public class Indexer<TKey, TValue>
 {

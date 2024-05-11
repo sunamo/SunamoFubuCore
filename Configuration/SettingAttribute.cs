@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Configuration;
+namespace SunamoFubuCore;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class SettingAttribute : Attribute

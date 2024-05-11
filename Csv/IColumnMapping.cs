@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Csv;
+namespace SunamoFubuCore;
 
 public interface IColumnMapping
 {

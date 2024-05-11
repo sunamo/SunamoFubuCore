@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.CommandLine;
+namespace SunamoFubuCore;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class FlagAliasAttribute : Attribute

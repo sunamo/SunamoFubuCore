@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Formatting;
+namespace SunamoFubuCore;
 
 public class StringifierStrategy
 {

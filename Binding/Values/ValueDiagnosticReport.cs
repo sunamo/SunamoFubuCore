@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding.Values;
+namespace SunamoFubuCore;
 
 public class ValueDiagnosticReport : ValueReportBase
 {

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.CommandLine;
+namespace SunamoFubuCore;
 
 public abstract class TokenHandlerBase : ITokenHandler
 {

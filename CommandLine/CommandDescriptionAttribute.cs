@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.CommandLine;
+namespace SunamoFubuCore;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class CommandDescriptionAttribute : Attribute

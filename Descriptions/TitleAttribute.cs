@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Descriptions;
+namespace SunamoFubuCore;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public class TitleAttribute : Attribute

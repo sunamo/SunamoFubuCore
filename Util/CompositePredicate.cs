@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Util;
+namespace SunamoFubuCore;
 
 public class CompositePredicate<T>
 {

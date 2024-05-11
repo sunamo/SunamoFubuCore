@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Dates;
+namespace SunamoFubuCore;
 
 
 

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Delegates to IObjectConverter for the conversion")]
 public class BasicConverterFamily : IConverterFamily, DescribesItself

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Conversion;
+namespace SunamoFubuCore;
 
 [Description("Converts to a TimeZoneInfo object by calling TimeZoneInfo.FindSystemTimeZoneById(text)")]
 public class TimeZoneConverter : StatelessConverter<TimeZoneInfo>

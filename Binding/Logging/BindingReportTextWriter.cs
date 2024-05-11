@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding.Logging;
+namespace SunamoFubuCore;
 
 public class BindingReportTextWriter : IBindingReportVisitor
 {

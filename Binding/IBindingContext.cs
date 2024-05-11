@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 /// <summary>
 /// BindingContext represents the state of model binding as well

@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Binding;
+namespace SunamoFubuCore;
 
 [Description("Binds a collection or list property")]
 public class CollectionPropertyBinder : IPropertyBinder

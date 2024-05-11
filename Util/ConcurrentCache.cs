@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Util;
+namespace SunamoFubuCore;
 
 [Serializable]
 public class ConcurrentCache<TKey, TValue> : IEnumerable<TValue>

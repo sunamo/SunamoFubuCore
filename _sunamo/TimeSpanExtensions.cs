@@ -1,4 +1,4 @@
-namespace SunamoFubuCore._sunamo;
+namespace SunamoFubuCore;
 
 public static class TimeSpanExtensions
 {

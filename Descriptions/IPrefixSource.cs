@@ -1,4 +1,4 @@
-namespace SunamoFubuCore.Descriptions;
+namespace SunamoFubuCore;
 
 public interface IPrefixSource
 {
