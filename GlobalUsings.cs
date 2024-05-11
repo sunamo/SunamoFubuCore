@@ -5,8 +5,8 @@ global using System.Linq;
 global using System.Text;
 global using System.Collections;
 global using System.Globalization;
-global using SunamoExceptions.InSunamoIsDerivedFrom;
-global using SunamoExceptions.OnlyInSE;
+
+
 global using System.IO;
 global using System.Threading.Tasks;
 global using System.Diagnostics;
@@ -14,7 +14,7 @@ global using System.Linq.Expressions;
 global using System.Threading;
 global using System.Data;
 global using System.Text.RegularExpressions;
-global using SunamoExtensions;
+
 global using System.Collections.ObjectModel;
 global using System.Collections.Specialized;
 global using System.ComponentModel;
