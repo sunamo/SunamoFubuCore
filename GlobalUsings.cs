@@ -40,3 +40,6 @@ global using SunamoFubuCore.CommandLine;
 global using SunamoFubuCore.Csv;
 global using SunamoFubuCore.Util.TextWriting;
 global using System.Collections.Immutable;
+global using System.Collections.Generic;
+global using System.Collections;
+
