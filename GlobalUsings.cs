@@ -24,21 +24,21 @@ global using System.Collections.Concurrent;
 global using System.Configuration;
 global using System.Runtime.Serialization;
 global using System.Xml.Serialization;
-global using SunamoFubuCore;
-global using SunamoFubuCore.Binding;
-global using SunamoFubuCore.Binding.InMemory;
-global using SunamoFubuCore.Configuration;
-global using SunamoFubuCore.Conversion;
-global using SunamoFubuCore.Dates;
-global using SunamoFubuCore.Descriptions;
-global using SunamoFubuCore.Reflection;
-global using SunamoFubuCore.Reflection.Expressions;
-global using SunamoFubuCore.Util;
-global using SunamoFubuCore.Binding.Logging;
-global using SunamoFubuCore.Binding.Values;
-global using SunamoFubuCore.CommandLine;
-global using SunamoFubuCore.Csv;
-global using SunamoFubuCore.Util.TextWriting;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 global using System.Collections.Immutable;
 global using System.Collections.Generic;
 global using System.Collections;
