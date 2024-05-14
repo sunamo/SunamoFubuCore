@@ -27,6 +27,14 @@
     <Compile Include="..\SunamoExceptions\OnlyInSE\Exc.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exc.cs" />
     <Compile Include="..\SunamoExceptions\OnlyInSE\Types.cs" Link="_linked\SunamoExceptions\OnlyInSE\Types.cs" />
     <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
+    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
+    <Compile Include="..\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Template.cs" Link="_linked\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Template.cs" />
+    <Compile Include="..\SunamoParsing\Parse.cs" Link="_linked\SunamoParsing\Parse.cs" />
+    <Compile Include="..\SunamoHtml\Delegates\Delegates.cs" Link="_linked\SunamoHtml\Delegates\Delegates.cs" />
+    <Compile Include="..\SunamoFubuCsProjFile\_NotMine\None.cs" Link="_linked\SunamoFubuCsProjFile\_NotMine\None.cs" />
+    <Compile Include="..\SunamoCl\Reader.cs" Link="_linked\SunamoCl\Reader.cs" />
+    <Compile Include="..\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Input.cs" Link="_linked\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Input.cs" />
+    <Compile Include="..\SunamoShared\Entity\Timestamp.cs" Link="_linked\SunamoShared\Entity\Timestamp.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
