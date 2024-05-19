@@ -1,4 +1,10 @@
-namespace SunamoFubuCore;
+namespace
+#if SunamoData
+SunamoData
+#else
+SunamoFubuCore
+#endif
+;
 
 public interface IColumn
 {
