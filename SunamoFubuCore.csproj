@@ -15,26 +15,6 @@
   <ItemGroup>
     <Compile Remove="WannaKillAttribute.cs">
     </Compile>
-    <Compile Include="..\SunamoData\Data\Date.cs" Link="_linked\SunamoData\Data\Date.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\ThrowEx.cs" Link="_linked\SunamoExceptions\OnlyInSE\ThrowEx.cs" />
-    <Compile Include="..\SunamoValues\Consts.cs" Link="_linked\SunamoValues\Consts.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Exceptions.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exceptions.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\TranslateAble.cs" Link="_linked\SunamoExceptions\OnlyInSE\TranslateAble.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
-    <Compile Include="..\SunamoValues\AllStrings.cs" Link="_linked\SunamoValues\AllStrings.cs" />
-    <Compile Include="..\SunamoValues\AllChars.cs" Link="_linked\SunamoValues\AllChars.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Exc.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exc.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Types.cs" Link="_linked\SunamoExceptions\OnlyInSE\Types.cs" />
-    <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
-    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
-    <Compile Include="..\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Template.cs" Link="_linked\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Template.cs" />
-    <Compile Include="..\SunamoParsing\Parse.cs" Link="_linked\SunamoParsing\Parse.cs" />
-    <Compile Include="..\SunamoHtml\Delegates\Delegates.cs" Link="_linked\SunamoHtml\Delegates\Delegates.cs" />
-    <Compile Include="..\SunamoFubuCsProjFile\_NotMine\None.cs" Link="_linked\SunamoFubuCsProjFile\_NotMine\None.cs" />
-    <Compile Include="..\SunamoCl\Reader.cs" Link="_linked\SunamoCl\Reader.cs" />
-    <Compile Include="..\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Input.cs" Link="_linked\SunamoFubuCsProjFile\_NotMine\Templating\Graph\Input.cs" />
-    <Compile Include="..\SunamoShared\Entity\Timestamp.cs" Link="_linked\SunamoShared\Entity\Timestamp.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
