@@ -1,5 +1,11 @@
-namespace SunamoFubuCore;
 
+namespace
+#if SunamoFubuCsProjFile
+SunamoFubuCsProjFile
+#else
+    SunamoFubuCore
+#endif
+;
 
 
 public static class StringExtensions

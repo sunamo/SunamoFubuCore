@@ -1,7 +1,10 @@
-namespace SunamoFubuCore;
-
-
-
+namespace
+#if SunamoFubuCsProjFile
+SunamoFubuCsProjFile
+#else
+SunamoFubuCore
+#endif
+;
 public class FileSet
 {
     public FileSet()
@@ -9,13 +12,9 @@ public class FileSet
         Include = "*.*";
         DeepSearch = true;
     }
-
-    [XmlAttribute] public string Include { get; set; }
-
-    [XmlAttribute] public string Exclude { get; set; }
-
+    public string Include { get; set; }
+     public string Exclude { get; set; }
     public bool DeepSearch { get; set; }
-
     /// <summary>
     ///     Does a deep search in the folder
     /// </summary>
@@ -31,7 +30,6 @@ public class FileSet
             Include = include
         };
     }
-
     /// <summary>
     ///     Does a shallow search in the immediate folder for files matching the path search
     /// </summary>
@@ -47,17 +45,14 @@ public class FileSet
             Include = include
         };
     }
-
     public void AppendInclude(string include)
     {
         if (Include == "*.*") Include = string.Empty;
-
         if (Include.IsEmpty())
             Include = include;
         else
             Include += ";" + include;
     }
-
     public void AppendExclude(string exclude)
     {
         if (Exclude.IsEmpty())
@@ -65,36 +60,29 @@ public class FileSet
         else
             Exclude += ";" + exclude;
     }
-
     public IEnumerable<string> IncludedFilesFor(string path)
     {
         var directory = new DirectoryInfo(path);
-
         return directory.Exists
         ? getAllDistinctFiles(path, Include.IsEmpty() ? "*.*" : Include)
         : new string[0];
     }
-
     private IEnumerable<string> getAllDistinctFiles(string path, string pattern)
     {
         if (pattern.IsEmpty()) return new string[0];
-
         return pattern.Split(';').SelectMany(x =>
         {
             var fullPath = path;
             var dirParts = x.Replace("\\", "/").Split('/');
             var filePattern = x;
-
             if (dirParts.Length > 1)
             {
                 var subFolder = dirParts.Take(dirParts.Length - 1).Join(Path.DirectorySeparatorChar.ToString());
                 fullPath = Path.Combine(fullPath, subFolder);
                 filePattern = dirParts.Last();
             }
-
             var directory = new DirectoryInfo(fullPath);
             var searchOption = DeepSearch ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-
             try
             {
                 return directory.Exists
@@ -107,12 +95,10 @@ public class FileSet
             }
         }).Distinct();
     }
-
     public IEnumerable<string> ExcludedFilesFor(string path)
     {
         return getAllDistinctFiles(path, Exclude);
     }
-
     public static FileSet ForAssemblyNames(IEnumerable<string> assemblyNames)
     {
         return new FileSet
@@ -122,7 +108,6 @@ public class FileSet
             Include = assemblyNames.OrderBy(x => x).Select(x => "{0}.dll;{0}.exe".ToFormat(x)).Join(";")
         };
     }
-
     public static FileSet ForAssemblyDebugFiles(IEnumerable<string> assemblyNames)
     {
         return new FileSet
@@ -132,7 +117,6 @@ public class FileSet
             Include = assemblyNames.OrderBy(x => x).Select(x => "{0}.pdb".ToFormat(x)).Join(";")
         };
     }
-
     public bool Equals(FileSet other)
     {
         if (ReferenceEquals(null, other)) return false;
@@ -140,7 +124,6 @@ public class FileSet
         return Equals(other.Include, Include) && Equals(other.Exclude, Exclude) &&
         other.DeepSearch.Equals(DeepSearch);
     }
-
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj)) return false;
@@ -148,7 +131,6 @@ public class FileSet
         if (obj.GetType() != typeof(FileSet)) return false;
         return Equals((FileSet)obj);
     }
-
     public override int GetHashCode()
     {
         unchecked
@@ -159,12 +141,10 @@ public class FileSet
             return result;
         }
     }
-
     public override string ToString()
     {
         return string.Format("Include: {0}, Exclude: {1}", Include, Exclude);
     }
-
     public static FileSet Everything()
     {
         return new FileSet { DeepSearch = true, Include = "*.*" };
