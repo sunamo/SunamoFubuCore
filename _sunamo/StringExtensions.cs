@@ -1,9 +1,10 @@
 
+
 namespace
 #if SunamoFubuCsProjFile
 SunamoFubuCsProjFile
 #else
-    SunamoFubuCore
+SunamoFubuCore
 #endif
 ;
 
