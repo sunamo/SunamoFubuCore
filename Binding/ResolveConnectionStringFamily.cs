@@ -12,7 +12,8 @@ public class ResolveConnectionStringFamily : StatelessConverterBinding
     //public static Func<string, ConnectionStringSettings> GetConnectionStringSettings = key => ConfigurationManager.ConnectionStrings[key];
     private static object GetConnectionStringSettings(string name)
     {
-        throw new NotImplementedException();
+        ThrowEx.NotImplementedMethod();
+        return null;
     }
     private static string getConnectionString(string name)
     {

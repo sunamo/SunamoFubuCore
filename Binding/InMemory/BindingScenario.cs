@@ -54,17 +54,19 @@ public class BindingScenario<T> where T : class, new()
     {
         public bool Matches(Type type)
         {
-            throw new NotImplementedException();
+            ThrowEx.NotImplementedMethod();
+            return false;
         }
 
         public void BindProperties(Type type, object instance, IBindingContext context)
         {
-            throw new NotImplementedException();
+            ThrowEx.NotImplementedMethod();
         }
 
         public object Bind(Type type, IBindingContext context)
         {
-            throw new NotImplementedException();
+            ThrowEx.NotImplementedMethod();
+            return null;
         }
     }
 
